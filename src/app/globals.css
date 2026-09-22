@@ -300,6 +300,17 @@ img {
   margin-bottom: 1.5rem;
 }
 
+/* Two lines from content; the first must never wrap on its own, so the
+   size tracks the viewport until the desktop size is reached. */
+.hero__headline {
+  font-size: clamp(1.15rem, 5.2vw, 2.75rem);
+  text-wrap: initial;
+}
+
+.hero__line--first {
+  white-space: nowrap;
+}
+
 .hero__body {
   max-width: var(--measure);
   margin-top: 1.5rem;

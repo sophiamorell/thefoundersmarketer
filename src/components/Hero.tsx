@@ -1,12 +1,24 @@
+import { Fragment } from "react";
 import { hero } from "@/content";
 
-/** 1 · Hero: wordmark, headline, lead, three bullets, close, two buttons, microcopy. No image. */
+/**
+ * 1 · Hero: wordmark, headline on two lines, lead, three bullets, close, two
+ * buttons, microcopy. No image. The first headline line never wraps on its
+ * own; the h1 scales down on narrow screens so it fits.
+ */
 export function Hero() {
   return (
     <section className="section hero" aria-labelledby="hero-heading">
       <div className="container">
         <p className="hero__wordmark">{hero.wordmark}</p>
-        <h1 id="hero-heading">{hero.headline}</h1>
+        <h1 id="hero-heading" className="hero__headline">
+          {hero.headlineLines.map((line, i) => (
+            <Fragment key={line}>
+              {i > 0 && <br />}
+              <span className={i === 0 ? "hero__line hero__line--first" : "hero__line"}>{line}</span>
+            </Fragment>
+          ))}
+        </h1>
         <div className="hero__body">
           <p>{hero.lead}</p>
           <ul className="list">

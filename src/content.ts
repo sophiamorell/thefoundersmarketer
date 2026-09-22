@@ -125,7 +125,8 @@ export const nav = {
 
 export const hero = {
   wordmark: "The Founder's Marketer",
-  headline: "You built something people buy. Let's build the marketing to sell more of it.",
+  // One h1 on two lines; the first line never wraps on its own
+  headlineLines: ["You built something people buy.", "Let's build the marketing to sell more of it."],
   lead: "Sales works. Marketing is still nobody's job.",
   bullets: [
     "Who you sell to lives in your head.",
@@ -135,7 +136,7 @@ export const hero = {
   close: "Three fixed-price phases. We build it, you run it. Start with the free diagnostic.",
   primaryCta: { label: "See what to fix first", href: `#${anchors.diagnostic}` },
   secondaryCta: { label: "How it works", href: `#${anchors.howItWorks}` },
-  microcopy: "Ten questions. Five minutes. Free.", // small text under the buttons
+  microcopy: "Ten questions, free.", // small text under the buttons
 };
 
 /* ------------------------------------------------------------------ */
@@ -143,7 +144,7 @@ export const hero = {
 /* ------------------------------------------------------------------ */
 
 export const whyNow = {
-  heading: "Product first. Sales second. Marketing is next.",
+  heading: "Product first, then sales. Now it's time for marketing.",
   left: {
     title: "Where you are",
     bullets: [
@@ -169,14 +170,14 @@ export const whyNow = {
 /* ------------------------------------------------------------------ */
 
 export const checklist = {
-  heading: "Do you have the problem?",
+  heading: "Does this sound like you?",
   items: [
-    "Every rep, and every slide, describes the product a little differently",
-    "Your win rate is a number nobody actually believes",
-    "Most wins come from referrals, and referrals happen by accident",
-    "The ICP lives in the founder's head",
-    "The CRM has thousands of contacts and no way to tell which ones matter",
-    "You've written the positioning three times and it still doesn't stick",
+    "Your reps, slides and website all describe the product a little differently.",
+    "Your win rate is squishy.",
+    "Most of your wins come from referrals, and referrals are unpredictable.",
+    "Ask three people on your team who the ideal customer is and you'll get three answers.",
+    "Your CRM has thousands of contacts and no way to tell which ones matter.",
+    "You've written the positioning three times and it still doesn't stick.",
   ],
   threshold: 3,
   ctaBefore: "Three or more?",
