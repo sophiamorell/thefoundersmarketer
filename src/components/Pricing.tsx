@@ -1,5 +1,6 @@
 import { anchors, phases, pricing, release } from "@/content";
 import { fill, formatPrice, mutedClass } from "@/lib/copy";
+import { TierPicker } from "@/components/TierPicker";
 
 /**
  * 6 · Pricing: heading, a table whose columns are the tiers and whose rows
@@ -7,8 +8,8 @@ import { fill, formatPrice, mutedClass } from "@/lib/copy";
  * least one tier has a price for it; a null cell in a shown row renders as
  * `emptyPrice`. With every price null the table is tier labels, who-line and
  * the CTA. `floorLabel` renders only when `floor` is set; terms and add-ons
- * only when release.showPricingTerms. On mobile the table becomes three
- * stacked cards with the same rules.
+ * only when release.showPricingTerms. Below 600px the table becomes a
+ * segmented tier picker with one stacked card (the design system's pattern).
  */
 export function Pricing() {
   const phaseRows = phases
@@ -23,7 +24,7 @@ export function Pricing() {
   return (
     <section id={anchors.pricing} className="section" aria-labelledby="pricing-heading">
       <div className="container">
-        <h2 id="pricing-heading" className="section__heading">
+        <h2 id="pricing-heading" className="section__heading pricing__heading">
           {pricing.heading}
         </h2>
 
@@ -42,7 +43,7 @@ export function Pricing() {
             <tr>
               <th scope="row">{pricing.rowLabels.who}</th>
               {pricing.tiers.map((tier) => (
-                <td key={tier.id} className={[whoMuted, mutedClass(tier.whoLine)].filter(Boolean).join(" ") || undefined}>
+                <td key={tier.id} className={["who", whoMuted, mutedClass(tier.whoLine)].filter(Boolean).join(" ")}>
                   {tier.whoLine}
                 </td>
               ))}
@@ -60,26 +61,18 @@ export function Pricing() {
           </tbody>
         </table>
 
-        <div className="tier-cards">
-          {pricing.tiers.map((tier) => (
-            <div key={tier.id} className="card tier-card">
-              <h3>{tier.label}</h3>
-              <p className={["tier-card__who", whoMuted, mutedClass(tier.whoLine)].filter(Boolean).join(" ")}>
-                {tier.whoLine}
-              </p>
-              {phaseRows.length > 0 && (
-                <dl>
-                  {phaseRows.map((row) => (
-                    <div key={row.id} style={{ display: "contents" }}>
-                      <dt>{row.label}</dt>
-                      <dd>{formatPrice(tier.prices[row.key], pricing.emptyPrice)}</dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
-            </div>
-          ))}
-        </div>
+        <TierPicker
+          tiers={pricing.tiers.map((tier) => ({
+            id: tier.id,
+            label: tier.label,
+            whoLine: tier.whoLine,
+            whoClass: [whoMuted, mutedClass(tier.whoLine)].filter(Boolean).join(" ") || undefined,
+            prices: phaseRows.map((row) => ({
+              label: row.label,
+              value: formatPrice(tier.prices[row.key], pricing.emptyPrice),
+            })),
+          }))}
+        />
 
         {pricing.floor !== null && (
           <p className="pricing__floor">

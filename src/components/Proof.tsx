@@ -27,12 +27,14 @@ export function Proof() {
         )}
 
         <div className="before-after">
-          {!beforeAfter.permission && <p className="before-after__caption">{beforeAfter.companyLabel}</p>}
+          {!beforeAfter.permission && <p className="before-after__caption note">{beforeAfter.companyLabel}</p>}
           <ul className="before-after__rows">
             {beforeAfter.rows.map((row) => (
               <li key={row.before} className="before-after__row">
                 <span>{row.before}</span>
-                <span aria-hidden="true">→</span>
+                <span className="before-after__arrow" aria-hidden="true">
+                  →
+                </span>
                 <span className="before-after__after">{row.after}</span>
               </li>
             ))}

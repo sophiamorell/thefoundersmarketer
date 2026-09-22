@@ -25,7 +25,7 @@ export function Footer() {
             )}
           </ul>
         )}
-        <p className={["footer__privacy", mutedClass(footer.privacyNote)].filter(Boolean).join(" ")}>
+        <p className={["footer__privacy", "note", mutedClass(footer.privacyNote)].filter(Boolean).join(" ")}>
           {footer.privacyNote}
         </p>
       </div>

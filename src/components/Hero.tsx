@@ -36,7 +36,7 @@ export function Hero() {
             {hero.secondaryCta.label}
           </a>
         </div>
-        <p className="hero__microcopy">{hero.microcopy}</p>
+        <p className="hero__microcopy note">{hero.microcopy}</p>
       </div>
     </section>
   );
