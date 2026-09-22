@@ -35,7 +35,7 @@ const usd = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-/** A price from content.ts: null renders as `emptyPrice` ("$—"). */
+/** A price from content.ts: null renders as `emptyPrice`. */
 export function formatPrice(price: number | null, emptyPrice: string): string {
   return price === null ? emptyPrice : usd.format(price);
 }

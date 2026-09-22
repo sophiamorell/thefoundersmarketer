@@ -2,17 +2,22 @@ import { anchors, phases, pricing, release } from "@/content";
 import { fill, formatPrice, mutedClass } from "@/lib/copy";
 
 /**
- * 6 · Pricing: heading, subheading, a table whose columns are the tiers and
- * whose rows are Phase 1–3 prices. Null prices render as `emptyPrice`.
- * `floorLabel` renders only when `floor` is set; terms and add-ons only when
- * release.showPricingTerms. On mobile the table becomes three stacked cards.
+ * 6 · Pricing: heading, a table whose columns are the tiers and whose rows
+ * are the who-line and Phase 1-3 prices. A phase row renders only when at
+ * least one tier has a price for it; a null cell in a shown row renders as
+ * `emptyPrice`. With every price null the table is tier labels, who-line and
+ * the CTA. `floorLabel` renders only when `floor` is set; terms and add-ons
+ * only when release.showPricingTerms. On mobile the table becomes three
+ * stacked cards with the same rules.
  */
 export function Pricing() {
-  const phaseRows = phases.map((phase) => ({
-    id: phase.id,
-    label: fill(pricing.rowLabels.phase, { n: phase.id }),
-    key: `phase${phase.id}` as const,
-  }));
+  const phaseRows = phases
+    .map((phase) => ({
+      id: phase.id,
+      label: fill(pricing.rowLabels.phase, { n: phase.id }),
+      key: `phase${phase.id}` as const,
+    }))
+    .filter((row) => pricing.tiers.some((tier) => tier.prices[row.key] !== null));
   const whoMuted = mutedClass("", pricing.whoLinesStatus);
 
   return (
@@ -21,7 +26,6 @@ export function Pricing() {
         <h2 id="pricing-heading" className="section__heading">
           {pricing.heading}
         </h2>
-        <p className="section__intro">{pricing.subheading}</p>
 
         <table className="pricing-table">
           <thead>
@@ -63,14 +67,16 @@ export function Pricing() {
               <p className={["tier-card__who", whoMuted, mutedClass(tier.whoLine)].filter(Boolean).join(" ")}>
                 {tier.whoLine}
               </p>
-              <dl>
-                {phaseRows.map((row) => (
-                  <div key={row.id} style={{ display: "contents" }}>
-                    <dt>{row.label}</dt>
-                    <dd>{formatPrice(tier.prices[row.key], pricing.emptyPrice)}</dd>
-                  </div>
-                ))}
-              </dl>
+              {phaseRows.length > 0 && (
+                <dl>
+                  {phaseRows.map((row) => (
+                    <div key={row.id} style={{ display: "contents" }}>
+                      <dt>{row.label}</dt>
+                      <dd>{formatPrice(tier.prices[row.key], pricing.emptyPrice)}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
             </div>
           ))}
         </div>

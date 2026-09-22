@@ -3,8 +3,8 @@ import { mutedClass } from "@/lib/copy";
 
 /**
  * 4 · How it works: heading, three connected cards (question, duration,
- * summary), then the footnote. Phases are a real sequence, so they are
- * numbered. Cards stack vertically on mobile.
+ * summary) that lead straight into the phase accordion. Phases are a real
+ * sequence, so they are numbered. Cards stack vertically on mobile.
  */
 export function HowItWorks({
   id,
@@ -40,7 +40,6 @@ export function HowItWorks({
             </li>
           ))}
         </ol>
-        <p className="footnote">{howItWorks.footnote}</p>
       </div>
     </section>
   );

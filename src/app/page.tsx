@@ -1,7 +1,7 @@
 import { release } from "@/content";
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
-import { TwoWaysIn } from "@/components/TwoWaysIn";
+import { WhyNow } from "@/components/WhyNow";
 import { Checklist } from "@/components/Checklist";
 import { Phases } from "@/components/Phases";
 import { Pricing } from "@/components/Pricing";
@@ -23,7 +23,7 @@ export default function HomePage() {
       <Nav />
       <main id="main">
         <Hero />
-        <TwoWaysIn />
+        <WhyNow />
         <Checklist />
         {/* Sections 4 and 5 share state: a card click opens the matching panel. */}
         <Phases />

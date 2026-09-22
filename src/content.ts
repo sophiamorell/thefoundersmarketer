@@ -1,12 +1,13 @@
 /**
- * The Founder's Marketer — site content
+ * The Founder's Marketer: site content
  *
  * Single source of truth for every string, price, placeholder and diagnostic
  * rule on the page. Components read from here and never carry copy of their own.
- * Brief: "The Founder's Marketer — website brief v2 (v0 / v1 releases)".
+ * Brief: "The Founder's Marketer: website brief v2 (v0 / v1 releases)".
+ * Edits: site-edits.md (American English, no em dashes, CTA set).
  *
  * Conventions
- *   null price          not decided yet — render "$—", or pricing.floor if set
+ *   null price          not decided yet: the phase row is hidden until a tier has a price; pricing.emptyPrice fills the rest
  *   TODO(sophie)        copy Sophie owns; the placeholder ships if still open at build
  *   VERBATIM(pkg …)     drafted here; replace with the exact text from the package doc v3
  *   status: "draft"     same idea for whole entries
@@ -53,6 +54,7 @@ export interface DiagnosticQuestion {
   kind: "single" | "twoNumbers" | "freeText";
   options?: DiagnosticOption[];
   fields?: { id: string; label: string }[]; // twoNumbers
+  required?: boolean; // default true; Q10 is optional
   gap?: string; // what a low score means
   freeFix?: string; // the free-fix line in the results email
   phase?: string; // which phase addresses it
@@ -71,7 +73,7 @@ export interface FaqItem {
 
 export const release = {
   version: "v0" as "v0" | "v1",
-  diagnostic: "form" as "form" | "stepper", // v0: one screen, Netlify Form; v1: one question per step
+  diagnostic: "stepper" as "form" | "stepper", // "form": one screen; "stepper": one question per step (site-edits.md). Both post to the same Netlify Form
   directDiagnosticRoute: false, // /diagnostic (v1)
   showWhatYouGet: false, // section 7 (v1)
   showProof: false, // section 9 (v1)
@@ -87,13 +89,13 @@ export const release = {
 export const site = {
   name: "The Founder's Marketer",
   domain: "thefoundersmarketer.com",
-  title: "The Founder's Marketer — a marketing function for B2B companies that aren't ready to hire a marketer",
+  title: "The Founder's Marketer: marketing for B2B companies before their first marketing hire",
   description:
-    "A fixed-scope, fixed-price programme that builds the marketing function for B2B companies with founder-led sales, in three phases, and leaves you running it.",
+    "A fixed-scope, fixed-price program that builds the marketing function for B2B companies with founder-led sales, in three phases, and leaves you running it.",
   location: "Durango, Colorado",
   email: null as string | null, // TODO(sophie)
   linkedin: null as string | null, // TODO(sophie)
-  bookingUrl: null as string | null, // TODO(sophie) — Calendly or equivalent; used in thank-you state and results email only
+  bookingUrl: null as string | null, // TODO(sophie): Calendly or equivalent; used in thank-you state and results email only
   bookingLabel: "Book the free 45-minute walkthrough",
 };
 
@@ -114,7 +116,7 @@ export const nav = {
     { label: "Pricing", href: `#${anchors.pricing}` },
     { label: "About", href: `#${anchors.about}` },
   ],
-  cta: { label: "Take the diagnostic", href: `#${anchors.diagnostic}` },
+  cta: { label: "What to fix first", href: `#${anchors.diagnostic}` },
 };
 
 /* ------------------------------------------------------------------ */
@@ -123,39 +125,43 @@ export const nav = {
 
 export const hero = {
   wordmark: "The Founder's Marketer",
-  headline: "A marketing function for B2B companies that aren't ready to hire a marketer.",
-  body:
-    "You have a product people buy and sales that works, mostly because the founder is in every deal. What you don't have is anyone who owns who you sell to, what you say, and whether the CRM can be trusted. This is a fixed-scope, fixed-price programme that builds that function in three phases and leaves you running it.",
-  primaryCta: { label: "Take the free diagnostic", href: `#${anchors.diagnostic}` },
-  secondaryCta: { label: "See what you get", href: `#${anchors.howItWorks}` },
+  headline: "You built something people buy. Let's build the marketing to sell more of it.",
+  lead: "Sales works. Marketing is still nobody's job.",
+  bullets: [
+    "Who you sell to lives in your head.",
+    "What you say changes with every deck.",
+    "The CRM is a contact list, not a pipeline.",
+  ],
+  close: "Three fixed-price phases. We build it, you run it. Start with the free diagnostic.",
+  primaryCta: { label: "See what to fix first", href: `#${anchors.diagnostic}` },
+  secondaryCta: { label: "How it works", href: `#${anchors.howItWorks}` },
+  microcopy: "Ten questions. Five minutes. Free.", // small text under the buttons
 };
 
 /* ------------------------------------------------------------------ */
-/*  2 · Two ways in                                                    */
+/*  2 · Why now                                                        */
 /* ------------------------------------------------------------------ */
 
-export const twoWaysIn = {
-  heading: "Two ways companies get here",
-  cards: [
-    {
-      title: "You grew here organically",
-      bullets: [
-        "Revenue came from referrals and the founder's network. Marketing has never been anyone's job.",
-        "The CRM is full of contacts nobody qualified.",
-        "You know who your best customers are — it's just not written down.",
-      ],
-      status: "draft" as CopyStatus, // VERBATIM(pkg §Two ways in)
-    },
-    {
-      title: "You just raised — or were just acquired",
-      bullets: [
-        "The money, or the new owner, is in place and the growth curve is expected to change shape.",
-        "You need pipeline that doesn't depend on the founder's calendar.",
-        "You'll hire a marketer eventually; you can't wait 3–4 months and $180k+.",
-      ],
-      status: "draft" as CopyStatus, // VERBATIM(pkg §Two ways in), first bullet is new
-    },
-  ],
+export const whyNow = {
+  heading: "Product first. Sales second. Marketing is next.",
+  left: {
+    title: "Where you are",
+    bullets: [
+      "You found product-market fit. People buy what you built, and they keep buying.",
+      "You built product and sales first, because a company can't start without them.",
+      "Sales is founder-led, or close to it. You know who buys and why. It's just not written down.",
+      "You haven't narrowed who you sell to yet. \"We won't turn anyone away.\"",
+      "The CRM is neglected, or there isn't one.",
+      "Leads that don't close get forgotten.",
+    ],
+  },
+  right: {
+    title: "Why it's time",
+    paragraphs: [
+      "Marketing gets passed around like a hot potato. Nobody owns it, so it's a chore instead of a function. That's the small problem.",
+      "The big one: you're not building the pipeline you could, and it's throttling growth. Marketing is the next function to build, for the same reason sales came after product. It's the one that sells more of what you built.",
+    ],
+  },
 };
 
 /* ------------------------------------------------------------------ */
@@ -167,7 +173,7 @@ export const checklist = {
   items: [
     "Every rep, and every slide, describes the product a little differently",
     "Your win rate is a number nobody actually believes",
-    "Most wins come from referrals — and referrals happen by accident",
+    "Most wins come from referrals, and referrals happen by accident",
     "The ICP lives in the founder's head",
     "The CRM has thousands of contacts and no way to tell which ones matter",
     "You've written the positioning three times and it still doesn't stick",
@@ -175,7 +181,7 @@ export const checklist = {
   threshold: 3,
   ctaBefore: "Three or more?",
   ctaCounted: "That's {n}.", // {n} = checked count; shown once count >= threshold
-  ctaLabel: "Take the diagnostic",
+  ctaLabel: "See what to fix first",
   ctaHref: `#${anchors.diagnostic}`,
 };
 
@@ -184,9 +190,7 @@ export const checklist = {
 /* ------------------------------------------------------------------ */
 
 export const howItWorks = {
-  heading: "Three phases. Buy them in order.",
-  footnote:
-    "Phase 1 is always first. It's short enough and priced low enough to be a no-regret decision, and it produces the evidence that tells you whether Phases 2 and 3 are worth it. Each phase stands alone — stop after any one.",
+  heading: "Three phases.", // "phases" everywhere on the page; "steps" is not used
 };
 
 export const phases: Phase[] = [
@@ -218,17 +222,17 @@ export const phases: Phase[] = [
   {
     id: 2,
     question: "Who do we sell to, and how?",
-    duration: "4–8 weeks",
+    duration: "4-8 weeks",
     summary: "ICP, personas, qualifiers, sales stages, clean CRM",
     job: "Turn Phase 1's provisional decisions into systems the company runs without us.",
     youGetHeading: "What gets built",
     youGet: [
-      "CRM foundation — undeliverables archived, unused fields retired, ICP score and qualification fields added",
-      "Qualification — a written MQL→SQL gate whose questions double as discovery questions",
+      "CRM foundation: undeliverables archived, unused fields retired, ICP score and qualification fields added",
+      "Qualification: a written MQL→SQL gate whose questions double as discovery questions",
       "Buyer personas and the ICP written where sales uses it",
-      "Contact acquisition — an enrichment pilot on the highest-value segment before any vendor contract",
-      "Messaging and proof — the ROI model rebuilt before any cost figure enters copy; the competitive set updated",
-      "Compliance — cold outreach routed off the marketing-email tool onto a dedicated sending domain",
+      "Contact acquisition: an enrichment pilot on the highest-value segment before any vendor contract",
+      "Messaging and proof: the ROI model rebuilt before any cost figure enters copy; the competitive set updated",
+      "Compliance: cold outreach routed off the marketing-email tool onto a dedicated sending domain",
     ],
     yourTime: null, // TODO(sophie)
     status: "draft", // VERBATIM(pkg §The three phases)
@@ -236,14 +240,14 @@ export const phases: Phase[] = [
   {
     id: 3,
     question: "How do we reach them?",
-    duration: "4–8 weeks",
+    duration: "4-8 weeks",
     summary: "Segments activated, dashboard, handoff",
     job: "Activate the segments, put a dashboard in front of the team, and hand the function off.",
     youGetHeading: "What gets built",
     youGet: [
       "Campaigns running across the tiered segments, not just the first one",
       "A pipeline dashboard the team reads without you",
-      "The handoff playbook — rubric, framework, fields and campaign maps, documented",
+      "The handoff playbook: rubric, framework, fields and campaign maps, documented",
       "The job description for your first marketer, written from the function that now exists",
     ],
     yourTime: null, // TODO(sophie)
@@ -256,11 +260,10 @@ export const phases: Phase[] = [
 /* ------------------------------------------------------------------ */
 
 export const pricing = {
-  heading: "Priced by where you are, not by the hour", // candidate; works for maturity or CRM-size tiers
-  subheading: "Same deliverables at every tier.",
-  floor: null as number | null, // TODO(sophie) — Phase 1 "from $—"; the one number v0 needs
+  heading: "Three tiers, based on where marketing stands today",
+  floor: null as number | null, // TODO(sophie): Phase 1 "from {price}"; the one number v0 needs
   floorLabel: "Phase 1 from {price}",
-  emptyPrice: "$—",
+  emptyPrice: "TBD", // fills a null cell in a phase row that another tier has priced
   tiers: [
     {
       id: "who",
@@ -281,9 +284,9 @@ export const pricing = {
       prices: { phase1: null, phase2: null, phase3: null },
     },
   ] as Tier[],
-  whoLinesStatus: "draft" as CopyStatus, // TODO(sophie) — read in voice
-  rowLabels: { who: "Who", phase: "Phase {n}" },
-  cta: { label: "Take the diagnostic to find your tier", href: `#${anchors.diagnostic}` },
+  whoLinesStatus: "draft" as CopyStatus, // TODO(sophie): read in voice
+  rowLabels: { who: "Who", phase: "Phase {n}" }, // PROPOSED: who → "Sounds like"
+  cta: { label: "Find your tier and what to fix first", href: `#${anchors.diagnostic}` },
   // Hidden while release.showPricingTerms is false
   terms: "50% of each phase at kickoff, 50% on delivery. Net 15.",
   addOnsIntro: "Add-ons by change order:",
@@ -314,8 +317,8 @@ export const about = {
   heading: "I'm Sophie.",
   photo: "/images/sophie.jpg", // TODO(sophie)
   paragraphs: [
-    // TODO(sophie) — outline only; write in voice
-    "[eMentorConnect: co-founded and ran an enterprise mentoring software company for 11 years, through acquisition by Chronus. Wrote the positioning, built the decks, ran the launches, closed the deals — the whole marketing job before there was a title.]",
+    // TODO(sophie): outline only; write in voice
+    "[eMentorConnect: co-founded and ran an enterprise mentoring software company for 11 years, through acquisition by Chronus. Wrote the positioning, built the decks, ran the launches, closed the deals, the whole marketing job before there was a title.]",
     "[Chronus: Director of Product Marketing, built the function from zero inside the acquirer.]",
     "[Why this practice: the founder who had to do it without a marketer, and the marketer who built it after. Durango, CO.]",
   ],
@@ -329,7 +332,7 @@ export const about = {
 export const proof = {
   testimonials: [] as { quote: string; name: string; title: string; company: string }[],
   beforeAfter: {
-    permission: false, // Shareable — ask in October; anonymised if numbers but not name
+    permission: false, // Shareable: ask in October; anonymized if numbers but not name
     companyLabel: "a healthcare software company", // used when permission covers numbers only
     rows: [
       { before: "17,000 contacts", after: "902 tiered accounts" },
@@ -377,7 +380,7 @@ export const faq = {
     {
       question: "Will you talk to our customers?",
       answer:
-        "Not on your behalf. Phase 1 gives you the reference and quote requests, written in your voice, and you send them — the relationship is yours and it should stay that way.",
+        "Not on your behalf. Phase 1 gives you the reference and quote requests, written in your voice, and you send them. The relationship is yours and it should stay that way.",
       status: "draft",
       show: true,
     },
@@ -391,7 +394,7 @@ export const faq = {
     {
       question: "Who is this not for?",
       answer:
-        "Companies without a product people already buy, agencies and pure services, and companies that already have a marketer — the diagnostic will say so if that's you.",
+        "Companies without a product people already buy, agencies and pure services, and companies that already have a marketer. The diagnostic will say so if that's you.",
       status: "draft",
       show: true,
     },
@@ -404,7 +407,7 @@ export const faq = {
     },
     {
       question: "What don't you do?",
-      answer: "[Placeholder — four exclusions, one line each, with the change-order or partner route for each.]",
+      answer: "[Placeholder: four exclusions, one line each, with the change-order or partner route for each.]",
       status: "placeholder",
       show: release.showExclusionsFaq,
     },
@@ -416,26 +419,27 @@ export const faq = {
 /* ------------------------------------------------------------------ */
 
 export const diagnostic = {
-  heading: "Where does your marketing function actually stand?",
+  heading: "What should you fix first?",
   intro:
-    "Ten questions. Five minutes. Results by email within two business days — your three biggest gaps, what to fix this week for free, and whether Phase 1 is the right next step. Sometimes it isn't, and we'll say so.",
+    "Ten questions, five minutes. Within two business days you'll get an email with the three things to fix first, how to fix them for free this week, and whether Phase 1 is the right next step. Sometimes it isn't, and we'll say so.",
   stageNote: "We ask about your stage, not your revenue.",
   netlifyFormName: "diagnostic",
-  progressLabel: "{current} of {total}", // stepper only
+  progressLabel: "Question {current} of {total}", // stepper only
+  lastStepLabel: "Last step", // stepper only: the contact screen
   nextLabel: "Next",
   backLabel: "Back",
   contact: {
-    heading: "Where should we send your results?",
+    heading: "Where should we send it?",
     fields: [
       { id: "name", label: "Name", type: "text", required: true },
       { id: "company", label: "Company", type: "text", required: true },
       { id: "email", label: "Work email", type: "email", required: true },
     ],
-    submitLabel: "Send my results",
+    submitLabel: "Send me what to fix first",
   },
   thankYou: {
-    heading: "Results are on their way.",
-    body: "You'll have them within two business days. Want to walk through them together?",
+    heading: "It's on its way.",
+    body: "Within two business days you'll have the three things to fix first. Want to walk through them together?",
     bookingLabel: site.bookingLabel,
   },
 
@@ -465,7 +469,7 @@ export const diagnostic = {
         { id: "outbound", label: "Outbound", score: 2 },
         { id: "inbound", label: "Inbound", score: 2 },
       ],
-      gap: "Winning motion isn't systematised or known",
+      gap: "Winning motion isn't systematized or known",
       freeFix: "Write down the source of your last ten wins.",
       phase: "1",
     },
@@ -497,7 +501,7 @@ export const diagnostic = {
     },
     {
       id: 5,
-      prompt: "How many contacts in your CRM — and how many would you email tomorrow?",
+      prompt: "How many contacts are in your CRM, and how many would you email tomorrow?",
       kind: "twoNumbers",
       fields: [
         { id: "contactsTotal", label: "Contacts in the CRM" },
@@ -562,12 +566,13 @@ export const diagnostic = {
       id: 10,
       prompt: "What one number do you want to move in 90 days?",
       kind: "freeText",
+      required: false, // optional in the stepper (site-edits.md)
       gap: "Their words",
       phase: "1 kickoff",
     },
   ] as DiagnosticQuestion[],
 
-  /* Scoring — applied by hand in v0, in code in v1 */
+  /* Scoring: applied by hand in v0, in code in v1 */
   scoring: {
     scoredQuestions: [1, 2, 3, 4, 5, 6, 7, 8],
     maxScore: 16,
@@ -577,14 +582,14 @@ export const diagnostic = {
       { belowRatio: 0.75, score: 1 },
       { belowRatio: Infinity, score: 2 },
     ],
-    // Three lowest-scoring of Q1–Q8; ties broken in this order (data, then who, then message, then system)
+    // Three lowest-scoring of Q1-Q8; ties broken in this order (data, then who, then message, then system)
     gapTieBreak: [3, 4, 2, 6, 7, 5, 8, 1],
     gapsReported: 3,
     verdicts: [
-      { minScore: 0, maxScore: 5, id: "notYet", label: "Not yet — do the free fixes first" },
+      { minScore: 0, maxScore: 5, id: "notYet", label: "Not yet: do the free fixes first" },
       { minScore: 6, maxScore: 12, id: "phase1", label: "Phase 1 is the right next step" },
-      { minScore: 13, maxScore: 16, id: "dontNeed", label: "You don't need this programme", requires: { q1: "marketer" } },
-      { minScore: 13, maxScore: 16, id: "phase1", label: "Phase 1 is the right next step" }, // 13–16 without a marketer
+      { minScore: 13, maxScore: 16, id: "dontNeed", label: "You don't need this program", requires: { q1: "marketer" } },
+      { minScore: 13, maxScore: 16, id: "phase1", label: "Phase 1 is the right next step" }, // 13-16 without a marketer
     ],
     // Evaluated in order; first match wins. Option ids refer to questions[].options[].id
     tierRules: [
@@ -596,11 +601,11 @@ export const diagnostic = {
     q9MaybeNote: "Noted in the results email as the hiring conversation to have after Phase 1.",
   },
 
-  /* Results email — hand-written in v0, templated in v1 */
+  /* Results email: hand-written in v0, templated in v1 */
   resultsEmail: {
     includes: [
       "Stage label (the tier)",
-      "Three ranked gaps, one line each on what they cost",
+      "The three things to fix first, one line each on what they cost",
       "The free-fix list in full",
       "The verdict",
       "One link: book the free 45-minute walkthrough",
@@ -625,7 +630,8 @@ export const footer = {
 /* ------------------------------------------------------------------ */
 
 export const analytics = {
-  v0: ["diagnostic_submit", "booking_click"],
+  // diagnostic_start: first answer given; diagnostic_step: each advance, with the step number
+  v0: ["diagnostic_start", "diagnostic_step", "diagnostic_submit", "booking_click"],
   v1: ["diagnostic_start", "diagnostic_step", "diagnostic_submit", "booking_click"],
 };
 
@@ -639,7 +645,7 @@ export const content = {
   anchors,
   nav,
   hero,
-  twoWaysIn,
+  whyNow,
   checklist,
   howItWorks,
   phases,
