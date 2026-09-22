@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/content";
 
-/* A plain favicon: the wordmark's initial letter (BUILD.md, "Meta"). */
+/* A plain favicon: the wordmark's initial letter on the primary fill. */
 
 export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
@@ -17,11 +17,11 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#111111",
-          color: "#ffffff",
+          background: "#e36849",
+          color: "#fff8ef",
           fontSize: 44,
           fontWeight: 700,
-          fontFamily: "sans-serif",
+          fontFamily: "serif",
         }}
       >
         {initial}

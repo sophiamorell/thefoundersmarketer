@@ -4,9 +4,10 @@ import { mutedClass } from "@/lib/copy";
 import { publicFileExists } from "@/lib/public-file";
 
 /**
- * 8 · About: photo left, heading and three paragraphs right; stacked on
- * mobile. The photo path may 404 in v0, so a neutral block of the same
- * aspect is rendered when the file isn't in public/ at build time.
+ * 8 · About: the arched portrait left, heading and three paragraphs right;
+ * stacked under 900px. The photo path may 404, so a hatched bone placeholder
+ * of the same 3:4 aspect is rendered when the file isn't in public/ at
+ * build time.
  */
 export function About() {
   const hasPhoto = publicFileExists(about.photo);
@@ -14,13 +15,16 @@ export function About() {
   return (
     <section id={anchors.about} className="section" aria-labelledby="about-heading">
       <div className="container about">
-        <div className="about__photo" aria-hidden={!hasPhoto || undefined}>
+        <div
+          className={["about__photo", hasPhoto ? "about__photo--image" : undefined].filter(Boolean).join(" ")}
+          aria-hidden={!hasPhoto || undefined}
+        >
           {hasPhoto && (
             <Image
               src={about.photo}
               alt={about.heading}
               fill
-              sizes="(min-width: 768px) 22rem, 100vw"
+              sizes="(min-width: 900px) 260px, 100vw"
               style={{ objectFit: "cover" }}
             />
           )}

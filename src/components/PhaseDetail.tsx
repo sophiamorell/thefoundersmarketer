@@ -1,6 +1,6 @@
 import type { Ref } from "react";
-import { release, type Phase, type PhaseId } from "@/content";
-import { mutedClass } from "@/lib/copy";
+import { pricing, release, type Phase, type PhaseId } from "@/content";
+import { fill, mutedClass } from "@/lib/copy";
 
 /**
  * 5 · Phase detail: accordion, one panel per phase, Phase 1 open by default.
@@ -39,10 +39,11 @@ export function PhaseDetail({
                     onClick={() => onToggle(phase.id)}
                   >
                     <span>
-                      {phase.id}. {phase.question}
+                      <span className="accordion__tag">{fill(pricing.rowLabels.phase, { n: phase.id })}</span>
+                      {phase.question}
                     </span>
                     <span className="accordion__marker" aria-hidden="true">
-                      {open ? "−" : "+"}
+                      +
                     </span>
                   </button>
                 </h3>
@@ -55,7 +56,7 @@ export function PhaseDetail({
                 >
                   <p>{phase.job}</p>
                   <h4>{phase.youGetHeading}</h4>
-                  <ul className="list">
+                  <ul className="dash-list">
                     {phase.youGet.map((item) => (
                       <li key={item} className={mutedClass(item)}>
                         {item}
