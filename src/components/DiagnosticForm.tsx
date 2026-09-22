@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent,
+} from "react";
 import { analytics, diagnostic, site, type DiagnosticQuestion } from "@/content";
 import { fill, mutedClass } from "@/lib/copy";
 import { track } from "@/lib/track";
@@ -8,25 +15,28 @@ import { track } from "@/lib/track";
 /**
  * The diagnostic form.
  *
- * mode "form" (v0): all ten questions on one screen, then the contact fields.
- * mode "stepper" (v1): one question per step, progress, back button. The
- * stepper's client-side scoring (diagnostic.scoring) is v1 work and is not
- * built here; the seam is `mode` plus the `questions` prop.
+ * mode "stepper" (site-edits.md): a wizard, one question per screen, then the
+ * contact step. Single-choice questions advance on their own shortly after a
+ * tap; Q5, Q10 and the contact step use Next. Back restores the previous
+ * answer. Answers live in React state only and are posted once at the end.
+ *
+ * mode "form": every question on one screen, then the contact fields.
  *
  * Field names are the long-run contract for the v1 scoring function:
- * q1…q10 (radio value = option id), q5_contactsTotal / q5_contactsEmailable,
+ * q1…q10 (choice value = option id), q5_contactsTotal / q5_contactsEmailable,
  * and name / company / email. They must match public/__forms.html.
  *
  * Submission goes to Netlify Forms: a urlencoded POST, including form-name,
- * to the static form definition in public/__forms.html.
+ * to the static form definition in public/__forms.html. No scoring, verdict
+ * or results email happens in the browser; that is v1.
  */
 
 export type DiagnosticMode = "form" | "stepper";
 type Status = "idle" | "submitting" | "success" | "error";
 type Answers = Record<string, string>;
 
-/* analytics.v0 = ["diagnostic_submit", "booking_click"] */
-const [SUBMIT_EVENT, BOOKING_EVENT] = analytics.v0;
+/* analytics.v0 = ["diagnostic_start", "diagnostic_step", "diagnostic_submit", "booking_click"] */
+const [START_EVENT, STEP_EVENT, SUBMIT_EVENT, BOOKING_EVENT] = analytics.v0;
 
 /* content.ts has no copy for the failure state (BUILD.md asks for a plain
    inline message). Listed in the build report as missing from content.ts. */
@@ -34,12 +44,22 @@ const SEND_FAILED = "That didn't send. Please try again, or email Sophie directl
 const SEND_FAILED_AT = " at ";
 
 const FORM_ENDPOINT = "/__forms.html";
+const AUTO_ADVANCE_MS = 250;
 
 export function fieldNamesFor(question: DiagnosticQuestion): string[] {
   if (question.kind === "twoNumbers") {
     return (question.fields ?? []).map((field) => `q${question.id}_${field.id}`);
   }
   return [`q${question.id}`];
+}
+
+function isRequired(question: DiagnosticQuestion): boolean {
+  return question.required !== false;
+}
+
+function questionAnswered(question: DiagnosticQuestion, answers: Answers): boolean {
+  if (!isRequired(question)) return true;
+  return fieldNamesFor(question).every((name) => (answers[name] ?? "").trim() !== "");
 }
 
 export function DiagnosticForm({
@@ -52,6 +72,9 @@ export function DiagnosticForm({
   const uid = useId();
   const formRef = useRef<HTMLFormElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
+  const stepHeadingRef = useRef<HTMLParagraphElement>(null);
+  const advanceTimer = useRef<number | null>(null);
+  const started = useRef(false);
   const [answers, setAnswers] = useState<Answers>({});
   const [status, setStatus] = useState<Status>("idle");
   const [step, setStep] = useState(0);
@@ -61,30 +84,57 @@ export function DiagnosticForm({
   const contactFieldNames = contact.fields.map((field) => field.id);
   const allFieldNames = [...questionFieldNames, ...contactFieldNames];
 
-  /* Stepper: one step per question, then the contact step. */
-  const totalSteps = questions.length + 1;
+  /* Stepper: one screen per question, then the contact step. */
   const isStepper = mode === "stepper";
-  const lastStep = step === totalSteps - 1;
+  const contactStep = questions.length;
+  const onContactStep = step === contactStep;
+  const currentQuestion = onContactStep ? null : questions[step];
 
   useEffect(() => {
     if (status === "success" || status === "error") statusRef.current?.focus();
   }, [status]);
 
-  const set = (name: string, value: string) =>
+  /* Announce each new screen and clear any pending auto-advance. */
+  useEffect(() => {
+    if (!isStepper) return;
+    if (step > 0) stepHeadingRef.current?.focus();
+    return () => {
+      if (advanceTimer.current !== null) {
+        window.clearTimeout(advanceTimer.current);
+        advanceTimer.current = null;
+      }
+    };
+  }, [isStepper, step]);
+
+  const set = (name: string, value: string) => {
+    if (!started.current && value.trim() !== "") {
+      started.current = true;
+      track(START_EVENT);
+    }
     setAnswers((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const advance = () => {
+    track(STEP_EVENT, { step: step + 1 });
+    setStep((s) => Math.min(s + 1, contactStep));
+  };
 
   const next = () => {
-    if (formRef.current?.reportValidity()) setStep((s) => Math.min(s + 1, totalSteps - 1));
+    if (formRef.current?.reportValidity()) advance();
   };
 
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (isStepper && !lastStep) {
-      next();
-      return;
-    }
+  const choose = (name: string, value: string) => {
+    set(name, value);
+    if (advanceTimer.current !== null) window.clearTimeout(advanceTimer.current);
+    advanceTimer.current = window.setTimeout(() => {
+      advanceTimer.current = null;
+      advance();
+    }, AUTO_ADVANCE_MS);
+  };
+
+  const send = async () => {
     setStatus("submitting");
     try {
       const body = new URLSearchParams({ "form-name": netlifyFormName });
@@ -100,6 +150,15 @@ export function DiagnosticForm({
     } catch {
       setStatus("error");
     }
+  };
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isStepper && !onContactStep) {
+      next();
+      return;
+    }
+    void send();
   };
 
   if (status === "success") {
@@ -122,11 +181,24 @@ export function DiagnosticForm({
     );
   }
 
-  const renderQuestion = (question: DiagnosticQuestion) => (
-    <QuestionField key={question.id} uid={uid} question={question} answers={answers} set={set} />
+  const contactComplete = contact.fields.every(
+    (field) => !field.required || (answers[field.id] ?? "").trim() !== "",
   );
 
-  const renderContact = () => (
+  const errorMessage = status === "error" && (
+    <p className="form__error" role="alert" tabIndex={-1} ref={statusRef}>
+      {SEND_FAILED}
+      {site.email !== null && (
+        <>
+          {SEND_FAILED_AT}
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </>
+      )}
+      .
+    </p>
+  );
+
+  const contactFields = (
     <div className="contact">
       <h3>{contact.heading}</h3>
       <div className="contact__fields">
@@ -156,6 +228,79 @@ export function DiagnosticForm({
     </div>
   );
 
+  if (isStepper) {
+    const showNext = currentQuestion !== null && currentQuestion.kind !== "single";
+    const canAdvance = currentQuestion !== null && questionAnswered(currentQuestion, answers);
+
+    return (
+      <form
+        ref={formRef}
+        className="diagnostic stepper"
+        name={netlifyFormName}
+        method="POST"
+        action={FORM_ENDPOINT}
+        onSubmit={onSubmit}
+      >
+        <input type="hidden" name="form-name" value={netlifyFormName} />
+        <p className="diagnostic__note">{stageNote}</p>
+
+        <div className="stepper__header">
+          {step > 0 && (
+            <button type="button" className="button stepper__back" onClick={back}>
+              {diagnostic.backLabel}
+            </button>
+          )}
+          <p className="stepper__progress" ref={stepHeadingRef} tabIndex={-1} aria-live="polite">
+            {onContactStep
+              ? diagnostic.lastStepLabel
+              : fill(diagnostic.progressLabel, { current: step + 1, total: questions.length })}
+          </p>
+        </div>
+
+        {currentQuestion !== null && currentQuestion.kind === "single" && (
+          <ChoiceStep
+            uid={uid}
+            question={currentQuestion}
+            value={answers[`q${currentQuestion.id}`]}
+            onChoose={(value) => choose(`q${currentQuestion.id}`, value)}
+          />
+        )}
+        {currentQuestion !== null && currentQuestion.kind !== "single" && (
+          <QuestionField
+            uid={uid}
+            question={currentQuestion}
+            answers={answers}
+            set={set}
+            onEnter={next}
+            autoFocus
+          />
+        )}
+        {onContactStep && contactFields}
+
+        {showNext && (
+          <div className="stepper__actions">
+            <button type="submit" className="button button--primary" disabled={!canAdvance}>
+              {diagnostic.nextLabel}
+            </button>
+          </div>
+        )}
+        {onContactStep && (
+          <div className="stepper__actions">
+            <button
+              type="submit"
+              className="button button--primary"
+              disabled={!contactComplete || status === "submitting"}
+            >
+              {contact.submitLabel}
+            </button>
+          </div>
+        )}
+
+        {errorMessage}
+      </form>
+    );
+  }
+
   return (
     <form
       ref={formRef}
@@ -163,58 +308,20 @@ export function DiagnosticForm({
       name={netlifyFormName}
       method="POST"
       action={FORM_ENDPOINT}
-      onSubmit={(e) => void onSubmit(e)}
+      onSubmit={onSubmit}
     >
       <input type="hidden" name="form-name" value={netlifyFormName} />
       <p className="diagnostic__note">{stageNote}</p>
-
-      {isStepper ? (
-        <>
-          <p className="stepper__progress">
-            {fill(diagnostic.progressLabel, { current: step + 1, total: totalSteps })}
-          </p>
-          {lastStep ? renderContact() : renderQuestion(questions[step])}
-          <div className="stepper__actions">
-            {step > 0 && (
-              <button type="button" className="button" onClick={back}>
-                {diagnostic.backLabel}
-              </button>
-            )}
-            {lastStep ? (
-              <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-                {contact.submitLabel}
-              </button>
-            ) : (
-              <button type="button" className="button button--primary" onClick={next}>
-                {diagnostic.nextLabel}
-              </button>
-            )}
-          </div>
-        </>
-      ) : (
-        <>
-          {questions.map(renderQuestion)}
-          {renderContact()}
-          <div className="form__actions">
-            <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-              {contact.submitLabel}
-            </button>
-          </div>
-        </>
-      )}
-
-      {status === "error" && (
-        <p className="form__error" role="alert" tabIndex={-1} ref={statusRef}>
-          {SEND_FAILED}
-          {site.email !== null && (
-            <>
-              {SEND_FAILED_AT}
-              <a href={`mailto:${site.email}`}>{site.email}</a>
-            </>
-          )}
-          .
-        </p>
-      )}
+      {questions.map((question) => (
+        <QuestionField key={question.id} uid={uid} question={question} answers={answers} set={set} />
+      ))}
+      {contactFields}
+      <div className="form__actions">
+        <button type="submit" className="button button--primary" disabled={status === "submitting"}>
+          {contact.submitLabel}
+        </button>
+      </div>
+      {errorMessage}
     </form>
   );
 }
@@ -232,18 +339,88 @@ function autoCompleteFor(fieldId: string): string | undefined {
   }
 }
 
+/**
+ * Stepper screen for a single-choice question. Options are a radio group
+ * with roving focus: arrow keys move between options without selecting,
+ * Space or Enter (or a tap) selects, and selecting advances the wizard.
+ */
+function ChoiceStep({
+  uid,
+  question,
+  value,
+  onChoose,
+}: {
+  uid: string;
+  question: DiagnosticQuestion;
+  value: string | undefined;
+  onChoose: (value: string) => void;
+}) {
+  const options = question.options ?? [];
+  const groupRef = useRef<HTMLDivElement>(null);
+  const labelId = `${uid}-q${question.id}-label`;
+  const focusIndex = Math.max(
+    0,
+    options.findIndex((option) => option.id === value),
+  );
+
+  const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let target: number | null = null;
+    if (event.key === "ArrowDown" || event.key === "ArrowRight") target = (index + 1) % options.length;
+    if (event.key === "ArrowUp" || event.key === "ArrowLeft") target = (index - 1 + options.length) % options.length;
+    if (event.key === "Home") target = 0;
+    if (event.key === "End") target = options.length - 1;
+    if (target === null) return;
+    event.preventDefault();
+    const buttons = groupRef.current?.querySelectorAll<HTMLButtonElement>("[role=radio]");
+    buttons?.[target]?.focus();
+  };
+
+  return (
+    <div className="question">
+      <p id={labelId} className={["question__label", mutedClass(question.prompt)].filter(Boolean).join(" ")}>
+        {question.prompt}
+      </p>
+      <div ref={groupRef} role="radiogroup" aria-labelledby={labelId} className="choice">
+        {options.map((option, index) => {
+          const checked = option.id === value;
+          return (
+            <button
+              key={option.id}
+              type="button"
+              role="radio"
+              aria-checked={checked}
+              tabIndex={index === focusIndex ? 0 : -1}
+              className="choice__option"
+              onClick={() => onChoose(option.id)}
+              onKeyDown={(event) => onKeyDown(event, index)}
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/** A question rendered with native controls (form mode, and Q5 / Q10 in the stepper). */
 function QuestionField({
   uid,
   question,
   answers,
   set,
+  onEnter,
+  autoFocus = false,
 }: {
   uid: string;
   question: DiagnosticQuestion;
   answers: Answers;
   set: (name: string, value: string) => void;
+  onEnter?: () => void;
+  autoFocus?: boolean;
 }) {
   const promptClass = mutedClass(question.prompt);
+  const required = isRequired(question);
 
   if (question.kind === "single") {
     const name = `q${question.id}`;
@@ -261,7 +438,7 @@ function QuestionField({
                     type="radio"
                     name={name}
                     value={option.id}
-                    required
+                    required={required}
                     checked={answers[name] === option.id}
                     onChange={() => set(name, option.id)}
                   />
@@ -280,7 +457,7 @@ function QuestionField({
       <fieldset className="question">
         <legend className={promptClass}>{question.prompt}</legend>
         <div className="numbers">
-          {(question.fields ?? []).map((field) => {
+          {(question.fields ?? []).map((field, index) => {
             const name = `q${question.id}_${field.id}`;
             const id = `${uid}-${name}`;
             return (
@@ -294,7 +471,8 @@ function QuestionField({
                   min={0}
                   step={1}
                   name={name}
-                  required
+                  required={required}
+                  autoFocus={autoFocus && index === 0}
                   value={answers[name] ?? ""}
                   onChange={(e) => set(name, e.target.value)}
                 />
@@ -317,10 +495,17 @@ function QuestionField({
         id={id}
         className="input"
         name={name}
-        required
+        required={required}
         rows={3}
+        autoFocus={autoFocus}
         value={answers[name] ?? ""}
         onChange={(e) => set(name, e.target.value)}
+        onKeyDown={(e) => {
+          if (onEnter && e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            onEnter();
+          }
+        }}
       />
     </div>
   );

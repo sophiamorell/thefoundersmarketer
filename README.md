@@ -9,7 +9,11 @@ deployed on Netlify. Built to `BUILD.md`; every word on the page comes from
 Edit `src/content.ts`. Components never carry copy of their own, so that file
 is the only place text, prices, lists and the diagnostic questions live.
 
-- A `null` price renders as `$—`. Set `pricing.floor` to show "Phase 1 from …".
+- A phase's price row only appears once at least one tier has a price for it;
+  any remaining `null` in that row renders as `pricing.emptyPrice`. Set
+  `pricing.floor` to show "Phase 1 from …".
+- `release.diagnostic` switches the diagnostic between the wizard ("stepper")
+  and the single-screen form ("form"). Both post to the same Netlify form.
 - Text in `[square brackets]` or marked `status: "placeholder"` renders muted so
   it's obvious on the preview what still needs writing.
 - `release.*` flags turn v1 sections on. The components already exist.
