@@ -1,0 +1,21 @@
+# Netlify build settings, so nothing has to be typed into the dashboard.
+# Same shape as the account's other Next.js site (flowing-rivers).
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Next.js writes the build environment into its cache under .next/cache,
+  # which is never served; skip it (and node_modules) in the secret scanner.
+  SECRETS_SCAN_OMIT_PATHS = ".next/cache/**,node_modules/**"
+
+# Netlify's Next.js Runtime. Without this the build output (.next) is served
+# as plain static files, which 404s on every URL.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# The diagnostic uses Netlify Forms (public/__forms.html, form name
+# "diagnostic"). Turn on form detection in the Netlify dashboard and add an
+# email notification there. The custom domain (thefoundersmarketer.com) is
+# also configured in the dashboard, not here.
