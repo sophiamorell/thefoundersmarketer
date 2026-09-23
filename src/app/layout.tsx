@@ -1,33 +1,44 @@
 import type { Metadata, Viewport } from "next";
-import { Alfa_Slab_One, Hanken_Grotesk, Space_Mono } from "next/font/google";
+import { Alfa_Slab_One, Lato, Libre_Franklin, Montserrat } from "next/font/google";
 import "./globals.css";
 import { site } from "@/content";
 
-/* The Groovy design system's three faces, self-hosted by next/font and
-   subset to latin. Alfa Slab One is the wordmark only; Hanken Grotesk is
-   headings, body and UI; Space Mono is kickers, labels, prices and notes. */
-const display = Alfa_Slab_One({
+/* The v2 design system's four faces (all Google Fonts, OFL), self-hosted by
+   next/font and subset to latin:
+   FM Slab  = Alfa Slab One 400   (logo, numerals, quote marks)
+   FM Head  = Montserrat 600/700/800 (headings, nav, buttons)
+   FM Body  = Lato 400/700        (body copy)
+   FM Label = Libre Franklin 600  (uppercase kickers and labels) */
+const slab = Alfa_Slab_One({
   subsets: ["latin"],
   weight: "400",
   display: "swap",
-  variable: "--font-alfa",
-  fallback: ["Rockwell", "Georgia", "serif"],
+  variable: "--font-slab",
+  fallback: ["Georgia", "serif"],
 });
 
-const body = Hanken_Grotesk({
+const head = Montserrat({
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: ["600", "700", "800"],
   display: "swap",
-  variable: "--font-hanken",
-  fallback: ["system-ui", "-apple-system", "sans-serif"],
+  variable: "--font-head",
+  fallback: ["system-ui", "sans-serif"],
 });
 
-const mono = Space_Mono({
+const body = Lato({
   subsets: ["latin"],
   weight: ["400", "700"],
   display: "swap",
-  variable: "--font-space-mono",
-  fallback: ["ui-monospace", "Menlo", "monospace"],
+  variable: "--font-body",
+  fallback: ["system-ui", "sans-serif"],
+});
+
+const label = Libre_Franklin({
+  subsets: ["latin"],
+  weight: "600",
+  display: "swap",
+  variable: "--font-label",
+  fallback: ["system-ui", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -50,7 +61,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    <html lang="en" className={`${slab.variable} ${head.variable} ${body.variable} ${label.variable}`}>
       <body>{children}</body>
     </html>
   );

@@ -1,29 +1,24 @@
-import { nav, site } from "@/content";
+import { nav } from "@/content";
+import { Logo } from "@/components/Logo";
 
 /**
- * Sticky nav: wordmark left, three anchor links, one button to #diagnostic.
- * Below 768px the links are hidden by CSS and only wordmark + button remain.
+ * Sticky header: the sticker logo left, nav links and the terracotta CTA
+ * right. Below 900px only the logo and CTA remain.
  */
 export function Nav() {
   return (
     <header className="nav">
-      <div className="container nav__inner">
-        <a href="#main" className="nav__wordmark">
-          {site.name}
-        </a>
-        <nav>
-          <ul className="nav__links">
-            {nav.links.map((link) => (
-              <li key={link.href}>
-                <a href={link.href}>{link.label}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <a href={nav.cta.href} className="button button--primary nav__cta">
+      <Logo />
+      <nav className="nav__links">
+        {nav.links.map((link) => (
+          <a key={link.href} href={link.href}>
+            {link.label}
+          </a>
+        ))}
+        <a href={nav.cta.href} className="nav__cta">
           {nav.cta.label}
         </a>
-      </div>
+      </nav>
     </header>
   );
 }
