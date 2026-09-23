@@ -170,7 +170,7 @@ export function DiagnosticForm({
           <p className="form__actions">
             <a
               href={site.bookingUrl}
-              className="button button--primary"
+              className="button button--primary button--small"
               onClick={() => track(BOOKING_EVENT)}
             >
               {thankYou.bookingLabel}
@@ -235,22 +235,22 @@ export function DiagnosticForm({
     return (
       <form
         ref={formRef}
-        className="diagnostic stepper"
+        className="wizard stepper"
         name={netlifyFormName}
         method="POST"
         action={FORM_ENDPOINT}
         onSubmit={onSubmit}
       >
         <input type="hidden" name="form-name" value={netlifyFormName} />
-        <p className="diagnostic__note note">{stageNote}</p>
+        <p className="wizard__note">{stageNote}</p>
 
         <div className="stepper__header">
           {step > 0 && (
-            <button type="button" className="button button--small stepper__back" onClick={back}>
+            <button type="button" className="button button--outline button--small stepper__back" onClick={back}>
               {diagnostic.backLabel}
             </button>
           )}
-          <p className="stepper__progress mono" ref={stepHeadingRef} tabIndex={-1} aria-live="polite">
+          <p className="label stepper__progress" ref={stepHeadingRef} tabIndex={-1} aria-live="polite">
             {onContactStep
               ? diagnostic.lastStepLabel
               : fill(diagnostic.progressLabel, { current: step + 1, total: questions.length })}
@@ -279,7 +279,7 @@ export function DiagnosticForm({
 
         {showNext && (
           <div className="stepper__actions">
-            <button type="submit" className="button button--primary" disabled={!canAdvance}>
+            <button type="submit" className="button button--yellow button--small" disabled={!canAdvance}>
               {diagnostic.nextLabel}
             </button>
           </div>
@@ -289,7 +289,7 @@ export function DiagnosticForm({
             {/* The one gold button on the page: the send, on the teal band. */}
             <button
               type="submit"
-              className="button button--loud"
+              className="button button--yellow button--small"
               disabled={!contactComplete || status === "submitting"}
             >
               {contact.submitLabel}
@@ -305,20 +305,20 @@ export function DiagnosticForm({
   return (
     <form
       ref={formRef}
-      className="diagnostic"
+      className="wizard"
       name={netlifyFormName}
       method="POST"
       action={FORM_ENDPOINT}
       onSubmit={onSubmit}
     >
       <input type="hidden" name="form-name" value={netlifyFormName} />
-      <p className="diagnostic__note note">{stageNote}</p>
+      <p className="wizard__note">{stageNote}</p>
       {questions.map((question) => (
         <QuestionField key={question.id} uid={uid} question={question} answers={answers} set={set} />
       ))}
       {contactFields}
       <div className="form__actions">
-        <button type="submit" className="button button--primary" disabled={status === "submitting"}>
+        <button type="submit" className="button button--yellow button--small" disabled={status === "submitting"}>
           {contact.submitLabel}
         </button>
       </div>

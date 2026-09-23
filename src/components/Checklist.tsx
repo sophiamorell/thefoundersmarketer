@@ -1,50 +1,67 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useState } from "react";
 import { checklist } from "@/content";
-import { fill, mutedClass } from "@/lib/copy";
+import { fill } from "@/lib/copy";
 
 /**
- * 3 · Does this sound like you? Six checkboxes in the sage tint block.
- * Below them one line: `ctaBefore` + the CTA button; once the checked count
- * reaches `threshold` the line becomes `ctaCounted` with {n} replaced.
- * State lives in React only.
+ * 3 · Does this sound like you? A teal band of six toggle checkboxes; checked
+ * boxes fill coral. The verdict bar below changes with the count: sage at
+ * zero, butter at one or two, yellow at three or more. State lives in React.
  */
 export function Checklist() {
-  const uid = useId();
-  const [checked, setChecked] = useState<boolean[]>(() => checklist.items.map(() => false));
-  const count = checked.filter(Boolean).length;
-  const reached = count >= checklist.threshold;
+  const [on, setOn] = useState<boolean[]>(() => checklist.items.map(() => false));
+  const count = on.filter(Boolean).length;
+  const total = checklist.items.length;
 
-  const toggle = (index: number) =>
-    setChecked((prev) => prev.map((value, i) => (i === index ? !value : value)));
+  const toggle = (index: number) => setOn((prev) => prev.map((v, i) => (i === index ? !v : v)));
+
+  let verdict: string;
+  let tone: "none" | "some" | "many";
+  if (count === 0) {
+    verdict = fill(checklist.verdicts.none, { n: count, total });
+    tone = "none";
+  } else if (count === 1) {
+    verdict = fill(checklist.verdicts.one, { n: count, total });
+    tone = "some";
+  } else if (count < checklist.threshold) {
+    verdict = fill(checklist.verdicts.two, { n: count, total });
+    tone = "some";
+  } else {
+    verdict = fill(checklist.verdicts.threeOrMore, { n: count, total });
+    tone = "many";
+  }
 
   return (
     <section className="section" aria-labelledby="checklist-heading">
-      <div className="container">
-        <div className="tintblock">
-          <h2 id="checklist-heading" className="section__heading">
+      <div className="checklist">
+        <div className="checklist__top">
+          <h2 id="checklist-heading" className="checklist__heading">
             {checklist.heading}
           </h2>
+          <p className="checklist__sub">{checklist.subheading}</p>
           <ul className="checklist__items">
-            {checklist.items.map((item, i) => {
-              const id = `${uid}-item-${i}`;
-              return (
-                <li key={item}>
-                  <label htmlFor={id} className={["checklist__item", mutedClass(item)].filter(Boolean).join(" ")}>
-                    <input id={id} type="checkbox" checked={checked[i]} onChange={() => toggle(i)} />
-                    <span>{item}</span>
-                  </label>
-                </li>
-              );
-            })}
+            {checklist.items.map((item, i) => (
+              <li key={item}>
+                <button type="button" className="checklist__item" aria-pressed={on[i]} onClick={() => toggle(i)}>
+                  <span className="checklist__box" aria-hidden="true">
+                    {on[i] && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff8ef" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    )}
+                  </span>
+                  <span className="checklist__text">{item}</span>
+                </button>
+              </li>
+            ))}
           </ul>
-          <p className="checklist__cta" aria-live="polite">
-            <span>{reached ? fill(checklist.ctaCounted, { n: count }) : checklist.ctaBefore}</span>
-            <a href={checklist.ctaHref} className="button button--primary">
-              {checklist.ctaLabel}
-            </a>
-          </p>
+        </div>
+        <div className={`verdict verdict--${tone}`}>
+          <p aria-live="polite">{verdict}</p>
+          <a href={checklist.ctaHref} className="button button--primary button--small">
+            {checklist.ctaLabel}
+          </a>
         </div>
       </div>
     </section>

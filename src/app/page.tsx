@@ -3,38 +3,38 @@ import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
 import { WhyNow } from "@/components/WhyNow";
 import { Checklist } from "@/components/Checklist";
-import { Phases } from "@/components/Phases";
+import { HowItWorks } from "@/components/HowItWorks";
+import { Deliverables } from "@/components/Deliverables";
 import { Pricing } from "@/components/Pricing";
-import { WhatYouGet } from "@/components/WhatYouGet";
 import { About } from "@/components/About";
-import { Proof } from "@/components/Proof";
 import { Faq } from "@/components/Faq";
+import { Testimonials } from "@/components/Testimonials";
 import { Diagnostic } from "@/components/Diagnostic";
 import { Footer } from "@/components/Footer";
 
 /**
- * The one route. Eleven sections in the order BUILD.md gives; the hidden
- * ones (7 and 9 in v0) exist in code and render only when their release flag
- * is true.
+ * The one route, in the v2 design's order: header, hero, why now, the
+ * checklist, how it works, what you get, pricing, about, FAQ, testimonials,
+ * the diagnostic, footer. Sections behind a release flag exist in code and
+ * render only when the flag is true.
  */
 export default function HomePage() {
   return (
-    <>
+    <div className="page">
       <Nav />
       <main id="main">
         <Hero />
         <WhyNow />
         <Checklist />
-        {/* Sections 4 and 5 share state: a card click opens the matching panel. */}
-        <Phases />
+        <HowItWorks />
+        {release.showWhatYouGet && <Deliverables />}
         <Pricing />
-        {release.showWhatYouGet && <WhatYouGet />}
         <About />
-        {release.showProof && <Proof />}
         <Faq />
+        {release.showProof && <Testimonials />}
         <Diagnostic />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

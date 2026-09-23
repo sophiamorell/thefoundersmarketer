@@ -4,39 +4,36 @@ import { mutedClass } from "@/lib/copy";
 import { publicFileExists } from "@/lib/public-file";
 
 /**
- * 8 · About: the arched portrait left, heading and three paragraphs right;
- * stacked under 900px. The photo path may 404, so a hatched bone placeholder
- * of the same 3:4 aspect is rendered when the file isn't in public/ at
- * build time.
+ * 7 · About (#about): the arch-topped portrait (a captioned placeholder
+ * until the photo lands in public/), the kicker, heading, two paragraphs
+ * and the testimonial slot.
  */
 export function About() {
   const hasPhoto = publicFileExists(about.photo);
 
   return (
     <section id={anchors.about} className="section" aria-labelledby="about-heading">
-      <div className="container about">
-        <div
-          className={["about__photo", hasPhoto ? "about__photo--image" : undefined].filter(Boolean).join(" ")}
-          aria-hidden={!hasPhoto || undefined}
-        >
-          {hasPhoto && (
-            <Image
-              src={about.photo}
-              alt={about.heading}
-              fill
-              sizes="(min-width: 900px) 260px, 100vw"
-              style={{ objectFit: "cover" }}
-            />
+      <div className="about">
+        <div className="portrait" aria-hidden={!hasPhoto || undefined}>
+          {hasPhoto ? (
+            <Image src={about.photo} alt={about.heading} fill sizes="(max-width: 900px) 100vw, 300px" style={{ objectFit: "cover" }} />
+          ) : (
+            <span>{about.photoPlaceholder}</span>
           )}
         </div>
         <div className="about__text">
-          <h2 id="about-heading">{about.heading}</h2>
-          <div className="prose">
-            {about.paragraphs.map((paragraph) => (
-              <p key={paragraph} className={mutedClass(paragraph, about.status)}>
-                {paragraph}
-              </p>
-            ))}
+          <p className="kicker">{about.kicker}</p>
+          <h2 id="about-heading" className="h2 about__heading">
+            {about.heading}
+          </h2>
+          {about.paragraphs.map((paragraph) => (
+            <p key={paragraph} className={["about__para", mutedClass(paragraph, about.status)].filter(Boolean).join(" ")}>
+              {paragraph}
+            </p>
+          ))}
+          <div className="quote-slot">
+            <span className="label">{about.testimonialSlot.label}</span>
+            <p>{about.testimonialSlot.quote}</p>
           </div>
         </div>
       </div>

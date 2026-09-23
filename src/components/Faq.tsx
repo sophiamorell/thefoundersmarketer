@@ -1,31 +1,56 @@
+"use client";
+
+import { useState } from "react";
 import { faq } from "@/content";
 import { mutedClass } from "@/lib/copy";
 
 /**
- * 10 · FAQ: native <details>/<summary> accordion. Renders the items whose
- * `show` is true (the exclusions item follows release.showExclusionsFaq).
+ * 8 · FAQ: an accordion of the items whose `show` is true, all closed by
+ * default, one open at a time, with a terracotta +/−.
  */
 export function Faq() {
   const items = faq.items.filter((item) => item.show);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
     <section className="section" aria-labelledby="faq-heading">
-      <div className="container">
-        <h2 id="faq-heading" className="section__heading">
-          {faq.heading}
-        </h2>
-        <div className="faq">
-          {items.map((item) => (
-            <details key={item.question} className="faq__item">
-              <summary className={["faq__question", mutedClass(item.question, item.status)].filter(Boolean).join(" ")}>
-                {item.question}
-              </summary>
-              <p className={["faq__answer", mutedClass(item.answer, item.status)].filter(Boolean).join(" ")}>
+      <h2 id="faq-heading" className="h2 faq__heading">
+        {faq.heading}
+      </h2>
+      <div className="faq">
+        {items.map((item, i) => {
+          const open = openIndex === i;
+          const panelId = `faq-panel-${i}`;
+          const triggerId = `faq-trigger-${i}`;
+          return (
+            <div key={item.question} className="faq__item">
+              <h3>
+                <button
+                  type="button"
+                  id={triggerId}
+                  className="faq__trigger"
+                  aria-expanded={open}
+                  aria-controls={panelId}
+                  onClick={() => setOpenIndex(open ? null : i)}
+                >
+                  <span className={mutedClass(item.question, item.status)}>{item.question}</span>
+                  <span className="faq__sign" aria-hidden="true">
+                    {open ? "−" : "+"}
+                  </span>
+                </button>
+              </h3>
+              <p
+                id={panelId}
+                role="region"
+                aria-labelledby={triggerId}
+                className={["faq__answer", mutedClass(item.answer, item.status)].filter(Boolean).join(" ")}
+                hidden={!open}
+              >
                 {item.answer}
               </p>
-            </details>
-          ))}
-        </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
