@@ -37,7 +37,7 @@ export function WhyNow() {
                 {step.numeral} · {step.status}
               </p>
               <h3 className={step.current ? "step__title--here" : undefined}>{step.title}</h3>
-              <p>
+              <p className="step__body">
                 <b>{step.lead}</b>
                 <br />
                 {step.body}

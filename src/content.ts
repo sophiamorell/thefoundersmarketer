@@ -79,7 +79,7 @@ export const release = {
   directDiagnosticRoute: false, // /diagnostic
   showWhatYouGet: true, // the deliverables grid (titles final, bodies and screenshots pending)
   showProof: true, // testimonials (placeholders until quotes arrive)
-  showPricingTerms: true, // payment terms + add-ons under the tiers
+  showPricingTerms: false, // payment terms + add-ons under the tiers
   showPhase1WeekByWeek: false,
   showExclusionsFaq: false, // until exclusions are decided
 };
@@ -94,9 +94,8 @@ export const site = {
   title: "The Founder's Marketer: marketing for B2B companies before their first marketing hire",
   description:
     "A fixed-scope, fixed-price program that builds the marketing function for B2B software companies with founder-led sales, in three steps, and leaves you running it.",
-  tagline: "Fractional marketing leadership for B2B software founders.",
-  location: "Durango, Colorado",
-  email: null as string | null, // TODO(sophie)
+  tagline: "Fractional marketing leadership for B2B software companies.",
+  email: "sophie@thefoundersmarketer.com" as string | null,
   linkedin: null as string | null, // TODO(sophie)
   bookingUrl: null as string | null, // TODO(sophie): Calendly or equivalent; used in thank-you state and results email only
   bookingLabel: "Book the free 45-minute walkthrough",
@@ -149,7 +148,6 @@ export const hero = {
   ],
   primaryCta: { label: "See what to fix first", href: `#${anchors.diagnostic}` },
   secondaryCta: { label: "How it works", href: `#${anchors.howItWorks}` },
-  microcopy: "Ten questions, free",
   // The quiz preview card on the right: question 5's prompt and fields, with sample values
   preview: {
     label: "Question 1/10",
@@ -361,8 +359,8 @@ export const whatYouGet = {
 
 export const pricing = {
   kicker: "Pricing",
-  heading: "Fixed scope. Fixed price. Three tiers.",
-  intro: "The tier is set by where marketing stands today, not by your headcount. Prices are per step.",
+  heading: "Pricing based on where your marketing is",
+  intro: "Tiers are set by where your marketing stands today, not headcount, revenue or number of contacts.",
   badge: "Most founders start here", // on the featured tier
   emptyPrice: "TBD", // fills a null price
   tiers: [
@@ -524,16 +522,15 @@ export const proof = {
 /* ------------------------------------------------------------------ */
 
 export const diagnostic = {
-  kicker: "Free · No call required",
   heading: "What should you fix first?",
   intro:
-    "Ten questions, five minutes. Within two business days you'll get an email with the three things to fix first, how to fix them for free this week, and whether Step 1 is the right next step. Sometimes it isn't, and we'll say so.",
-  startLabel: "Start the diagnostic",
+    "Complete ten questions and you'll get an email with the three things to fix first, how to fix them.",
+  startLabel: "See what to fix first",
   comesBack: {
     label: "What comes back",
     items: [
-      "Your three biggest gaps, named and ranked",
-      "One fix per gap you can run yourself this week",
+      "Your three biggest gaps, prioritized",
+      "One fix per gap you can run yourself",
       "Your tier, and a straight yes or no on Step 1",
     ],
     note: "Your answers are used to write your results and nothing else.",
@@ -736,9 +733,8 @@ export const diagnostic = {
 /* ------------------------------------------------------------------ */
 
 export const footer = {
-  taglineLines: [site.tagline, `${site.location}.`],
+  taglineLines: [site.tagline],
   cta: { label: "See what to fix first", href: `#${anchors.diagnostic}` },
-  microcopy: "Ten questions, five minutes, free.",
 };
 
 /* ------------------------------------------------------------------ */
