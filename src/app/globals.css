@@ -198,6 +198,10 @@ img {
   max-width: 72ch;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 /* Copy that still needs writing: rendered as-is, muted. */
 .placeholder {
   color: var(--muted);
@@ -1192,6 +1196,14 @@ textarea.input {
   font-size: 15.5px;
   line-height: 1.5;
   color: var(--ink-2);
+}
+
+/* "Built in Step 2": the label style, which .tool p would otherwise override */
+.tool .tool__step {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--teal-deep);
+  margin-bottom: 8px;
 }
 
 @media (max-width: 900px) {
