@@ -10,8 +10,8 @@ function MailIcon() {
 }
 
 /**
- * Footer: the FM coin and wordmark with the tagline, the nav list (plus the
- * LinkedIn and email links when set), and the CTA.
+ * Footer: the FM coin and wordmark, the email (when set) and the tagline,
+ * the nav list (plus LinkedIn when set), and the CTA.
  */
 export function Footer() {
   return (
@@ -25,6 +25,12 @@ export function Footer() {
             {logo.lead} <span>{logo.highlight}</span>
           </span>
         </div>
+        {site.email !== null && (
+          <a href={`mailto:${site.email}`} className="footer__email">
+            <MailIcon />
+            {site.email}
+          </a>
+        )}
         <p className="footer__tagline">
           {footer.taglineLines.map((line, i) => (
             <span key={line}>
@@ -45,14 +51,6 @@ export function Footer() {
             <a href={site.linkedin} rel="me">
               {/* content.ts has no label for this link; the network's name is used. */}
               LinkedIn
-            </a>
-          </li>
-        )}
-        {site.email !== null && (
-          <li>
-            <a href={`mailto:${site.email}`} className="footer__email">
-              <MailIcon />
-              {site.email}
             </a>
           </li>
         )}

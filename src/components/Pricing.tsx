@@ -15,7 +15,7 @@ export function Pricing() {
       <h2 id="pricing-heading" className="h2">
         {pricing.heading}
       </h2>
-      <p className="intro">{pricing.intro}</p>
+      <p className="intro pricing__intro">{pricing.intro}</p>
       <ul className="tiers">
         {pricing.tiers.map((tier) => {
           const rows = phases.map((phase) => ({

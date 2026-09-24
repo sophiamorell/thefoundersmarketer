@@ -79,7 +79,7 @@ export const release = {
   directDiagnosticRoute: false, // /diagnostic
   showWhatYouGet: true, // the deliverables grid (titles final, bodies and screenshots pending)
   showProof: true, // testimonials (placeholders until quotes arrive)
-  showPricingTerms: true, // payment terms + add-ons under the tiers
+  showPricingTerms: false, // payment terms + add-ons under the tiers
   showPhase1WeekByWeek: false,
   showExclusionsFaq: false, // until exclusions are decided
 };
@@ -360,7 +360,7 @@ export const whatYouGet = {
 export const pricing = {
   kicker: "Pricing",
   heading: "Pricing based on where your marketing is",
-  intro: "The tier is set by where marketing stands today, not by your headcount. Prices are per step.",
+  intro: "Tiers are set by where your marketing stands today, not headcount, revenue or number of contacts.",
   badge: "Most founders start here", // on the featured tier
   emptyPrice: "TBD", // fills a null price
   tiers: [
@@ -524,13 +524,13 @@ export const proof = {
 export const diagnostic = {
   heading: "What should you fix first?",
   intro:
-    "Ten questions, five minutes. Within two business days you'll get an email with the three things to fix first, how to fix them for free this week, and whether Step 1 is the right next step. Sometimes it isn't, and we'll say so.",
-  startLabel: "Start the diagnostic",
+    "Complete ten questions and you'll get an email with the three things to fix first, how to fix them.",
+  startLabel: "See what to fix first",
   comesBack: {
     label: "What comes back",
     items: [
-      "Your three biggest gaps, named and ranked",
-      "One fix per gap you can run yourself this week",
+      "Your three biggest gaps, prioritized",
+      "One fix per gap you can run yourself",
       "Your tier, and a straight yes or no on Step 1",
     ],
     note: "Your answers are used to write your results and nothing else.",

@@ -1226,6 +1226,10 @@ textarea.input {
   color: var(--ink);
 }
 
+.pricing__intro {
+  max-width: none;
+}
+
 .pricing__terms {
   margin-top: 26px;
 }
@@ -1754,6 +1758,15 @@ textarea.input {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 10px;
+  font-family: var(--fm-head);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink-2);
+}
+
+.footer__email:hover {
+  color: var(--teal-deep);
 }
 
 .footer__email svg {
