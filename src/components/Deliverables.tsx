@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { anchors, whatYouGet } from "@/content";
-import { mutedClass } from "@/lib/copy";
+import { fill, mutedClass } from "@/lib/copy";
 import { publicFileExists } from "@/lib/public-file";
 
 /**
  * 5 · What you get (#deliverables): six deliverables in a three-column grid,
- * each with a 4:3 image slot. A slot shows its caption until the screenshot
+ * each with a 4:3 image slot, a title, the step that builds it and a body. A slot shows its caption until the screenshot
  * exists in public/. Bracketed titles and bodies render muted.
  */
 export function Deliverables() {
@@ -34,6 +34,7 @@ export function Deliverables() {
                 </span>
                 <h3 className={mutedClass(item.title)}>{item.title}</h3>
               </div>
+              <p className="label tool__step">{fill(whatYouGet.stepLabel, { n: item.step })}</p>
               <p className={mutedClass(item.body)}>{item.body}</p>
             </li>
           );

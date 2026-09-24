@@ -39,7 +39,7 @@ export function HowItWorks() {
                   </span>
                   <span className="accordion__head">
                     <span className="label accordion__tag">
-                      {phase.tag} · {phase.duration}
+                      {phase.tag} · <span className="nowrap">{phase.duration}</span>
                     </span>
                     <span className={["accordion__title", mutedClass(phase.question, phase.status)].filter(Boolean).join(" ")}>
                       {phase.question}

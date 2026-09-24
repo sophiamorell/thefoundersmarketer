@@ -55,7 +55,7 @@ export interface DiagnosticQuestion {
   prompt: string;
   kind: "single" | "twoNumbers" | "freeText";
   options?: DiagnosticOption[];
-  fields?: { id: string; label: string }[]; // twoNumbers
+  fields?: { id: string; label: string; placeholder?: string }[]; // twoNumbers
   required?: boolean; // default true; Q10 is optional
   gap?: string; // what a low score means
   freeFix?: string; // the free-fix line in the results email
@@ -75,7 +75,6 @@ export interface FaqItem {
 
 export const release = {
   version: "v1" as "v0" | "v1",
-  diagnostic: "stepper" as "form" | "stepper", // "form": one screen; "stepper": one question per step. Both post to the same Netlify Form
   directDiagnosticRoute: false, // /diagnostic
   showWhatYouGet: true, // the deliverables grid (titles final, bodies and screenshots pending)
   showProof: true, // testimonials (placeholders until quotes arrive)
@@ -148,13 +147,16 @@ export const hero = {
   ],
   primaryCta: { label: "See what to fix first", href: `#${anchors.diagnostic}` },
   secondaryCta: { label: "How it works", href: `#${anchors.howItWorks}` },
-  // The quiz preview card on the right: question 5's prompt and fields, with sample values
-  preview: {
-    label: "Question 1/10",
-    questionId: 5,
-    values: ["17,000", "900"],
-    nextLabel: "Next",
-    nextHref: `#${anchors.diagnostic}`,
+  // The clickable card on the right: a picture of question 1 that opens the diagnostic popup
+  card: {
+    ariaLabel: "See what to fix first: start the 10-question diagnostic",
+    progressLabel: "Question 1 of 10",
+    timeLabel: "About 5 min",
+    prompt: "Who owns marketing at your company today?",
+    options: ["Nobody. Marketing, who?", "Someone, on the side", "We're about to hire for it"], // the three tier names
+    selectedIndex: 1, // drawn as selected
+    buttonLabel: "See what to fix first",
+    caption: "Nine more like this.",
   },
 };
 
@@ -238,60 +240,60 @@ export const phases: Phase[] = [
   {
     id: 1,
     numeral: "01",
-    tag: "Step 1",
+    tag: "Step 1 · Quick Wins",
     duration: "4 weeks",
     question: "What can we win now?",
     summary:
-      "Get something revenue-facing into market inside a month, and make the decisions everything else depends on.",
+      "Get a campaign into market inside a month, built on the proof you already have, and see first results before you decide on Step 2.",
     yourTime: "About 5 hours in meetings, plus async approvals.",
     youGet: [
-      "An adversarial read of your own data",
-      "An ICP decision and scoring rubric",
-      "A messaging framework",
-      "One campaign in market",
-      "Provisional sales stages",
-      "A written note on what we kept out of market",
+      "A triage of your contact database: what's usable, what isn't, what to suppress",
+      "Provisional sales stages and lead qualification criteria",
+      "A prioritized list of near-term segments",
+      "One campaign live, built from the proof you already have",
+      "A campaign dashboard and baseline report",
     ],
     weekByWeek: [
       { period: "Pre", activity: "Diagnostic results, intake, CRM exports" },
-      { period: "Week 1", activity: "Kickoff; systems walkthrough" },
-      { period: "Week 2", activity: "ICP rubric built; targets segmented" },
-      { period: "Week 3", activity: "Campaign review; assets written" },
-      { period: "Week 4", activity: "Launch; readout" },
+      { period: "Week 1", activity: "Kickoff, systems walkthrough, database triage" },
+      { period: "Week 2", activity: "Provisional stages and qualifications; segments chosen; campaign drafted" },
+      { period: "Week 3", activity: "Build, QA and launch" },
+      { period: "Week 4", activity: "Dashboard, baseline report and first-results readout" },
     ],
     status: "final",
   },
   {
     id: 2,
     numeral: "02",
-    tag: "Step 2",
+    tag: "Step 2 · CRM & Documentation",
     duration: "4-8 weeks",
     question: "Who do we sell to, and how?",
-    summary: "Turn the Step 1 decisions into the definitions, stages and CRM hygiene the sales team runs on.",
+    summary:
+      "Turn what Step 1 learned into the proof, ICP and qualification your sales team runs on, built into your CRM.",
     yourTime: "About 8 hours, mostly with you and whoever owns the CRM.",
     youGet: [
-      "ICP and persona definitions",
-      "A scored qualification rubric",
+      "Your Product Market Fit & Customer Proof Study",
+      "Your ICP rubric and AI evaluator",
+      "A deal qualifying framework, built into your CRM",
       "Sales stages with entry criteria",
       "A CRM you can report from",
-      "Objection and proof library",
     ],
     status: "final",
   },
   {
     id: 3,
     numeral: "03",
-    tag: "Step 3",
+    tag: "Step 3 · Segments & Campaigns",
     duration: "4-8 weeks",
     question: "How do we reach them?",
-    summary: "Activate the segments, build the referral motion, and hand the whole function over.",
+    summary: "Activate the segments, write the messaging on proven ground, and hand the whole function over.",
     yourTime: "About 6 hours, plus one weekly 30-minute review.",
     youGet: [
-      "Activated segments",
-      "A referral motion you run monthly",
-      "A weekly dashboard",
-      "A handoff playbook",
-      "A 90-day plan for whoever takes it on",
+      "Activated segments and a referral motion you run monthly",
+      "A competitive intel agent",
+      "Your product marketing toolkit: messaging, personas, objections and proof",
+      "A marketing budget and a plan for your first hire",
+      "A handoff playbook and a 90-day plan",
     ],
     status: "final",
   },
@@ -303,54 +305,61 @@ export const phases: Phase[] = [
 
 export const whatYouGet = {
   kicker: "What you get",
-  heading: "[Marketing Tools]", // TODO(sophie)
-  intro: "[TBD]", // TODO(sophie)
+  heading: "The tools you keep",
+  intro: "Step 1 ships results. Steps 2 and 3 ship the tools, built on your data, and they stay with you when we're done.",
+  stepLabel: "Built in Step {n}",
   items: [
     {
       numeral: "01",
       title: "Product Market Fit & Customer Proof Study",
       slot: "Screenshot: PMF & proof study",
-      body: "[TBD]",
+      step: 2 as PhaseId,
+      body: "Where your wins actually come from, how fast they close, and why you lose. Plus the customer quotes and references that prove it, cleared for use.",
       image: "/images/deliverables/pmf-proof-study.png",
     },
     {
       numeral: "02",
       title: "Your ICP Rubric & AI Evaluator",
       slot: "Screenshot: ICP rubric & evaluator",
-      body: "[TBD]",
+      step: 2 as PhaseId,
+      body: "A weighted scoring rubric for your best-fit customer, built into a tool your team can run on any prospect in under a minute.",
       image: "/images/deliverables/icp-rubric-evaluator.png",
     },
     {
       numeral: "03",
       title: "Deal Qualifying Framework",
       slot: "Screenshot: qualifying framework",
-      body: "[TBD]",
+      step: 2 as PhaseId,
+      body: "The questions a lead has to pass before it becomes a deal. They double as your discovery script and live as fields in your CRM.",
       image: "/images/deliverables/qualifying-framework.png",
     },
     {
       numeral: "04",
       title: "Competitive Intel Agent",
       slot: "Screenshot: competitive intel agent",
-      body: "[TBD]",
+      step: 3 as PhaseId,
+      body: "Watches your competitors' sites, pricing and messaging, flags what changed, and keeps a battlecard your reps can use on the next call.",
       image: "/images/deliverables/competitive-intel-agent.png",
     },
     {
       numeral: "05",
       title: "Product Marketing Toolkit",
       slot: "Screenshot: PMM toolkit",
-      body: "[TBD]",
+      step: 3 as PhaseId,
+      body: "Messaging, personas, objection handling and proof in one place that your team, your website and your next hire all pull from.",
       image: "/images/deliverables/pmm-toolkit.png",
     },
     {
       numeral: "06",
       title: "Marketing Budget & Your First Hire",
       slot: "Screenshot: budget & hiring plan",
-      body: "[TBD]",
+      step: 3 as PhaseId,
+      body: "What to spend, where, and who to hire first. Includes the job description, a 90-day plan, and a scorecard to hire against.",
       image: "/images/deliverables/budget-first-hire.png",
     },
   ],
   imageAspect: "4/3",
-  status: "draft" as CopyStatus, // titles final; bodies and screenshots pending
+  status: "draft" as CopyStatus, // titles final; bodies are draft copy; screenshots pending
 };
 
 /* ------------------------------------------------------------------ */
@@ -359,7 +368,7 @@ export const whatYouGet = {
 
 export const pricing = {
   kicker: "Pricing",
-  heading: "Pricing based on where your marketing is",
+  heading: "Pricing based on where your marketing is.",
   intro: "Tiers are set by where your marketing stands today, not headcount, revenue or number of contacts.",
   badge: "Most founders start here", // on the featured tier
   emptyPrice: "TBD", // fills a null price
@@ -445,7 +454,7 @@ export const faq = {
     {
       question: "Will you hire our first marketer?",
       answer:
-        "Not as a search firm, but the Step 3 handoff playbook is written to be the job description and the first 90 days. Several clients have hired directly off it.",
+        "Not as a search firm. Step 3 includes a budget and a first-hire plan: the job description, the first 90 days, and a scorecard to hire against.",
       status: "final",
       show: true,
     },
@@ -522,9 +531,8 @@ export const proof = {
 /* ------------------------------------------------------------------ */
 
 export const diagnostic = {
-  heading: "What should you fix first?",
-  intro:
-    "Complete ten questions and you'll get an email with the three things to fix first, how to fix them.",
+  heading: "See what to fix first.",
+  intro: "Ten quick questions about your pipeline. Results and the three things to fix first will be emailed to you.",
   startLabel: "See what to fix first",
   comesBack: {
     label: "What comes back",
@@ -535,25 +543,33 @@ export const diagnostic = {
     ],
     note: "Your answers are used to write your results and nothing else.",
   },
-  stageNote: "We ask about your stage, not your revenue.",
   netlifyFormName: "diagnostic",
-  progressLabel: "Question {current} of {total}", // stepper only
-  lastStepLabel: "Last step", // stepper only: the contact screen
-  nextLabel: "Next",
-  backLabel: "Back",
-  contact: {
-    heading: "Where should we send it?",
-    fields: [
-      { id: "name", label: "Name", type: "text", required: true },
-      { id: "company", label: "Company", type: "text", required: true },
-      { id: "email", label: "Work email", type: "email", required: true },
-    ],
-    submitLabel: "Send me what to fix first",
-  },
-  thankYou: {
-    heading: "It's on its way.",
-    body: "Within two business days you'll have the three things to fix first. Want to walk through them together?",
-    bookingLabel: site.bookingLabel,
+  netlifyStartFormName: "diagnostic-start", // the email alone, saved before question 1
+  // The popup: email first, then the questions one at a time, then done
+  modal: {
+    closeLabel: "Close",
+    email: {
+      kicker: "Free · 10 questions · 5 minutes",
+      heading: "See what to fix first.",
+      body: "Ten quick questions about your pipeline. Results and the three things to fix first will be emailed to you.",
+      label: "Work email",
+      placeholder: "you@company.com",
+      invalid: "That email doesn't look right.",
+      submitLabel: "Start the 10 questions",
+    },
+    progressLabel: "Question {current} of {total}",
+    backLabel: "Back",
+    nextLabel: "Next",
+    finishLabel: "Finish",
+    sendFailed: "That didn't send. Please try again, or email Sophie at {email}.",
+    done: {
+      kicker: "{total} of {total}",
+      heading: "That's all ten.",
+      bodyBefore: "Your three things to fix first will land in ",
+      bodyAfter: " within two business days.",
+      closeLabel: "Back to the site",
+      bookingLabel: site.bookingLabel, // shown only when site.bookingUrl is set
+    },
   },
 
   questions: [
@@ -610,15 +626,15 @@ export const diagnostic = {
       ],
       gap: "ICP undefined",
       freeFix: "One page: the five things your best ten customers have in common.",
-      phase: "1→2",
+      phase: "2",
     },
     {
       id: 5,
       prompt: "How many contacts are in your CRM, and how many would you email tomorrow?",
       kind: "twoNumbers",
       fields: [
-        { id: "contactsTotal", label: "Contacts in the CRM" },
-        { id: "contactsEmailable", label: "You'd email tomorrow" },
+        { id: "contactsTotal", label: "Contacts in the CRM", placeholder: "e.g. 17,000" },
+        { id: "contactsEmailable", label: "You'd email tomorrow", placeholder: "e.g. 900" },
       ],
       gap: "Contacts ≠ pipeline",
       freeFix: "Run a deliverability check; archive what bounces.",
@@ -635,7 +651,7 @@ export const diagnostic = {
       ],
       gap: "Messaging inconsistent",
       freeFix: "Agree one sentence and put it at the top of the deck.",
-      phase: "1",
+      phase: "3",
     },
     {
       id: 7,
