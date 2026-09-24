@@ -32,8 +32,10 @@ npm run lint
 `netlify.toml` carries the build settings and the Next.js runtime plugin.
 One-time setup in the Netlify dashboard:
 
-1. **Forms → Enable form detection**, then trigger a deploy. A form named
-   `diagnostic` appears (its definition is `public/__forms.html`).
+1. **Forms → Enable form detection**, then trigger a deploy. Two forms appear
+   (their definitions are in `public/__forms.html`): `diagnostic`, the full
+   answers, and `diagnostic-start`, the email alone, saved as soon as it's
+   entered so partial completions can be followed up.
 2. Open that form → **Notifications** → email notification to Sophie's address.
 3. **Domain management** → add `thefoundersmarketer.com` (DNS is pointed
    separately).

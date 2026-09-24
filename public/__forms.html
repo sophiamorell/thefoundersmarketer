@@ -2,7 +2,7 @@
   Netlify Forms definition for the diagnostic.
 
   Netlify's build bot can't see forms rendered by React, so it reads this
-  static file at deploy time to learn the form's name and its fields. The
+  static file at deploy time to learn the forms' names and their fields. The
   diagnostic popup (src/components/DiagnosticModal.tsx) POSTs urlencoded data,
   including form-name, to this file's URL. Keep the field names in sync with
   the component: they are the long-run contract for the v1 scoring function.
@@ -23,6 +23,12 @@
       <input name="q8" type="text" />
       <input name="q9" type="text" />
       <textarea name="q10"></textarea>
+      <input name="email" type="email" />
+    </form>
+
+    <!-- The email alone, posted as soon as it's entered (before question 1). -->
+    <form name="diagnostic-start" data-netlify="true" netlify hidden>
+      <input type="hidden" name="form-name" value="diagnostic-start" />
       <input name="email" type="email" />
     </form>
   </body>

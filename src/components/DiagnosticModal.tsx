@@ -32,6 +32,10 @@ import { track } from "@/lib/track";
  * q1…q10 (choice value = option id), q5_contactsTotal / q5_contactsEmailable,
  * and email. They must match public/__forms.html. Submission goes to Netlify
  * Forms: a urlencoded POST, including form-name, to that static file.
+ *
+ * The email is also saved on its own (the diagnostic-start form) as soon as
+ * it's entered, so people who stop partway can still be followed up. That
+ * post is fire-and-forget: a failure never holds up the questions.
  */
 
 type Step = "email" | number | "done"; // a number is the question index
@@ -54,13 +58,22 @@ export function fieldNamesFor(question: DiagnosticQuestion): string[] {
   return [`q${question.id}`];
 }
 
+async function postForm(fields: Record<string, string>): Promise<void> {
+  const res = await fetch(FORM_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(fields).toString(),
+  });
+  if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+}
+
 function questionAnswered(question: DiagnosticQuestion, answers: Answers): boolean {
   if (question.required === false) return true;
   return fieldNamesFor(question).every((name) => (answers[name] ?? "").trim() !== "");
 }
 
 export function DiagnosticModal() {
-  const { questions, modal, netlifyFormName } = diagnostic;
+  const { questions, modal, netlifyFormName, netlifyStartFormName } = diagnostic;
   const total = questions.length;
   const uid = useId();
 
@@ -182,20 +195,16 @@ export function DiagnosticModal() {
       return;
     }
     track(START_EVENT);
+    postForm({ "form-name": netlifyStartFormName, email: email.trim() }).catch(() => {});
     setStep(0);
   };
 
   const send = async () => {
     setStatus("submitting");
     try {
-      const body = new URLSearchParams({ "form-name": netlifyFormName, email: email.trim() });
-      for (const name of questions.flatMap(fieldNamesFor)) body.set(name, answers[name] ?? "");
-      const res = await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body.toString(),
-      });
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      const fields: Record<string, string> = { "form-name": netlifyFormName, email: email.trim() };
+      for (const name of questions.flatMap(fieldNamesFor)) fields[name] = answers[name] ?? "";
+      await postForm(fields);
       track(SUBMIT_EVENT);
       setStatus("idle");
       setStep("done");

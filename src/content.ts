@@ -537,6 +537,7 @@ export const diagnostic = {
     note: "Your answers are used to write your results and nothing else.",
   },
   netlifyFormName: "diagnostic",
+  netlifyStartFormName: "diagnostic-start", // the email alone, saved before question 1
   // The popup: email first, then the questions one at a time, then done
   modal: {
     closeLabel: "Close",
