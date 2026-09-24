@@ -980,7 +980,11 @@ textarea.input {
 /* 4 · How it works (the step accordion) ------------------------------- */
 
 .how__heading {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+}
+
+.how__intro {
+  margin-bottom: 28px;
 }
 
 .accordion {
@@ -1000,11 +1004,14 @@ textarea.input {
   background: var(--card);
 }
 
+/* Numeral, head, price, sign. Below 600px the price drops under the question. */
 .accordion__trigger {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-areas: "num head price sign";
   align-items: center;
-  gap: clamp(14px, 2vw, 28px);
+  column-gap: clamp(14px, 2vw, 28px);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -1013,7 +1020,7 @@ textarea.input {
 }
 
 .accordion__numeral {
-  flex: none;
+  grid-area: num;
   font-family: var(--fm-slab);
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   line-height: 1;
@@ -1026,13 +1033,31 @@ textarea.input {
 }
 
 .accordion__head {
-  flex: 1;
+  grid-area: head;
   min-width: 0;
 }
 
-.accordion__tag {
-  display: block;
+.accordion__tagline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
   margin-bottom: 7px;
+}
+
+.accordion__badge {
+  padding: 4px 10px;
+  font-size: 10px;
+}
+
+.accordion__price {
+  grid-area: price;
+  font-family: var(--fm-head);
+  font-weight: 800;
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  white-space: nowrap;
 }
 
 .accordion__title {
@@ -1045,7 +1070,7 @@ textarea.input {
 }
 
 .accordion__sign {
-  flex: none;
+  grid-area: sign;
   width: 38px;
   height: 38px;
   border-radius: 999px;
@@ -1068,6 +1093,83 @@ textarea.input {
 
 .accordion__panel[hidden] {
   display: none;
+}
+
+@media (max-width: 600px) {
+  .accordion__trigger {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "num head sign"
+      "num price sign";
+    row-gap: 8px;
+  }
+  .accordion__price {
+    justify-self: start;
+  }
+}
+
+/* The total under the accordion (#pricing) */
+.how__total {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 2px solid var(--ink);
+  scroll-margin-top: var(--nav-h);
+}
+
+.how__total-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 clamp(20px, 3vw, 30px);
+}
+
+.how__total-label {
+  font-family: var(--fm-head);
+  font-weight: 800;
+  font-size: clamp(1.125rem, 2vw, 1.4375rem);
+  letter-spacing: -0.02em;
+}
+
+.how__total-note {
+  margin: 10px 0 22px;
+  padding: 0 clamp(20px, 3vw, 30px);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 62ch;
+}
+
+/* The yellow CTA, from the old featured pricing card */
+.how__cta {
+  display: inline-block;
+  text-align: center;
+  margin-left: clamp(20px, 3vw, 30px);
+  font-family: var(--fm-head);
+  background: var(--yellow);
+  color: var(--ink);
+  border: 2px solid var(--yellow);
+  border-radius: 999px;
+  padding: 13px 26px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.how__cta:hover {
+  opacity: 0.88;
+  color: var(--ink);
+}
+
+.how__fineprint {
+  margin-top: 20px;
+  padding: 0 clamp(20px, 3vw, 30px);
+}
+
+@media (max-width: 600px) {
+  .how__cta {
+    display: block;
+    margin-right: clamp(20px, 3vw, 30px);
+  }
 }
 
 .accordion__summary {
@@ -1208,152 +1310,6 @@ textarea.input {
 
 @media (max-width: 900px) {
   .tools {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* 6 · Pricing --------------------------------------------------------- */
-
-.tiers {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(18px, 2.5vw, 26px);
-  align-items: stretch;
-}
-
-.tier {
-  border: 2px solid var(--ink);
-  border-radius: 24px;
-  background: var(--card);
-  padding: 30px 30px 34px;
-  display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
-  align-content: start;
-}
-
-.tier--featured {
-  background: var(--ink);
-  box-shadow: 6px 6px 0 var(--yellow);
-  color: var(--mint);
-}
-
-.tier .badge {
-  justify-self: start;
-  padding: 6px 14px;
-  margin-bottom: 18px;
-  visibility: hidden;
-}
-
-.tier--featured .badge {
-  visibility: visible;
-}
-
-.tier__label {
-  color: var(--terracotta);
-  margin-bottom: 10px;
-}
-
-.tier--featured .tier__label {
-  color: var(--yellow);
-}
-
-.tier h3 {
-  font-size: 1.3125rem;
-  letter-spacing: -0.02em;
-  margin-bottom: 10px;
-}
-
-.tier__who {
-  font-size: 15.5px;
-  line-height: 1.5;
-  color: var(--ink-2);
-  margin-bottom: 24px;
-}
-
-.tier--featured .tier__who {
-  color: var(--ink-body-on-dark);
-}
-
-.tier__rows {
-  display: grid;
-  gap: 10px;
-  padding-top: 20px;
-  border-top: 1px solid var(--rule);
-}
-
-.tier--featured .tier__rows {
-  border-top-color: var(--rule-on-ink);
-}
-
-.tier__row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.tier__row span:first-child {
-  font-size: 15px;
-  color: var(--ink-2);
-}
-
-.tier--featured .tier__row span:first-child {
-  color: var(--ink-body-on-dark);
-}
-
-.tier__price {
-  font-family: var(--fm-head);
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.tier__price--first {
-  font-weight: 700;
-  font-size: 1.0625rem;
-}
-
-.tier__price--total {
-  font-weight: 800;
-  font-size: 1.125rem;
-}
-
-.tier__cta {
-  display: block;
-  text-align: center;
-  margin-top: 26px;
-  font-family: var(--fm-head);
-  background: transparent;
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  padding: 13px 22px;
-  font-weight: 700;
-  font-size: 15px;
-}
-
-.tier__cta:hover {
-  opacity: 0.88;
-  color: var(--ink);
-}
-
-.tier--featured .tier__cta {
-  background: var(--yellow);
-  border-color: var(--yellow);
-  color: var(--ink);
-}
-
-.pricing__intro {
-  max-width: none;
-}
-
-.pricing__terms {
-  margin-top: 26px;
-}
-
-@media (max-width: 900px) {
-  .tiers {
     grid-template-columns: minmax(0, 1fr);
   }
 }

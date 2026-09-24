@@ -9,9 +9,9 @@ deployed on Netlify. Built to `BUILD.md`; every word on the page comes from
 Edit `src/content.ts`. Components never carry copy of their own, so that file
 is the only place text, prices, lists and the diagnostic questions live.
 
-- A phase's price row only appears once at least one tier has a price for it;
-  any remaining `null` in that row renders as `pricing.emptyPrice`. Set
-  `pricing.floor` to show "Phase 1 from …".
+- Each step has one price in `pricing.steps`, shown on its row in How it
+  works. A `null` price renders as `pricing.emptyPrice`, and the "All three
+  steps" total only appears when every step has a price.
 - The diagnostic runs in a popup (`diagnostic.modal`): email first, then the
   questions one at a time. Any link to `#diagnostic` opens it.
 - Text in `[square brackets]` or marked `status: "placeholder"` renders muted so
