@@ -3,8 +3,7 @@ import { HeckYes } from "@/components/HeckYes";
 
 /**
  * 1 · Hero (#top): two columns. Left, the opener line with its tooltip, the
- * highlighted headline, subhead, three coral-dot bullets, two buttons and
- * the microcopy. Right, the quiz preview card: question 5's prompt and
+ * highlighted headline, subhead, three coral-dot bullets, and two buttons. Right, the quiz preview card: question 5's prompt and
  * fields with sample values, and a yellow Next that leads to the diagnostic.
  */
 export function Hero() {
@@ -33,7 +32,6 @@ export function Hero() {
             {hero.secondaryCta.label}
           </a>
         </div>
-        <p className="hero__microcopy">{hero.microcopy}</p>
       </div>
 
       {preview && (
