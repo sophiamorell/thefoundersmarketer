@@ -11,11 +11,12 @@ import { Faq } from "@/components/Faq";
 import { Testimonials } from "@/components/Testimonials";
 import { Diagnostic } from "@/components/Diagnostic";
 import { Footer } from "@/components/Footer";
+import { DiagnosticModal } from "@/components/DiagnosticModal";
 
 /**
  * The one route, in the v2 design's order: header, hero, why now, the
  * checklist, how it works, what you get, pricing, about, FAQ, testimonials,
- * the diagnostic, footer. Sections behind a release flag exist in code and
+ * the diagnostic, footer, and the diagnostic popup. Sections behind a release flag exist in code and
  * render only when the flag is true.
  */
 export default function HomePage() {
@@ -35,6 +36,7 @@ export default function HomePage() {
         <Diagnostic />
       </main>
       <Footer />
+      <DiagnosticModal />
     </div>
   );
 }

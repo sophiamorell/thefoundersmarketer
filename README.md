@@ -12,8 +12,8 @@ is the only place text, prices, lists and the diagnostic questions live.
 - A phase's price row only appears once at least one tier has a price for it;
   any remaining `null` in that row renders as `pricing.emptyPrice`. Set
   `pricing.floor` to show "Phase 1 from …".
-- `release.diagnostic` switches the diagnostic between the wizard ("stepper")
-  and the single-screen form ("form"). Both post to the same Netlify form.
+- The diagnostic runs in a popup (`diagnostic.modal`): email first, then the
+  questions one at a time. Any link to `#diagnostic` opens it.
 - Text in `[square brackets]` or marked `status: "placeholder"` renders muted so
   it's obvious on the preview what still needs writing.
 - `release.*` flags turn v1 sections on. The components already exist.
@@ -45,7 +45,7 @@ are needed.
 
 ```
 src/app/            layout (font, meta), page (section order), icon, robots
-src/components/     one file per section; DiagnosticForm is the form
+src/components/     one file per section; DiagnosticModal is the diagnostic
 src/content.ts      all the words
 src/lib/            copy helpers, track() analytics seam, public-file check
 public/__forms.html Netlify Forms definition (field names must match the form)

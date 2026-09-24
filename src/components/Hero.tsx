@@ -1,14 +1,13 @@
-import { anchors, diagnostic, hero } from "@/content";
+import { anchors, hero } from "@/content";
+import { DiagnosticCard } from "@/components/DiagnosticCard";
 import { HeckYes } from "@/components/HeckYes";
 
 /**
  * 1 · Hero (#top): two columns. Left, the opener line with its tooltip, the
- * highlighted headline, subhead, three coral-dot bullets, and two buttons. Right, the quiz preview card: question 5's prompt and
- * fields with sample values, and a yellow Next that leads to the diagnostic.
+ * highlighted headline, subhead, three coral-dot bullets and two buttons.
+ * Right, the stacked question card that opens the diagnostic popup.
  */
 export function Hero() {
-  const preview = diagnostic.questions.find((q) => q.id === hero.preview.questionId);
-
   return (
     <section id={anchors.top} className="section hero" aria-labelledby="hero-heading">
       <div>
@@ -34,26 +33,7 @@ export function Hero() {
         </div>
       </div>
 
-      {preview && (
-        <div className="preview" aria-hidden="true">
-          <p className="label preview__label">{hero.preview.label}</p>
-          <h3>{preview.prompt}</h3>
-          <div className="preview__fields">
-            {(preview.fields ?? []).map((field, i) => (
-              <label key={field.id} className="field">
-                <span className="field__label">{field.label}</span>
-                <input className="input" value={hero.preview.values[i] ?? ""} readOnly tabIndex={-1} />
-              </label>
-            ))}
-          </div>
-          <div className="preview__foot">
-            <span />
-            <a href={hero.preview.nextHref} className="button button--yellow button--small" tabIndex={-1}>
-              {hero.preview.nextLabel}
-            </a>
-          </div>
-        </div>
-      )}
+      <DiagnosticCard />
     </section>
   );
 }
