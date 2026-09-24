@@ -5,7 +5,6 @@ import { WhyNow } from "@/components/WhyNow";
 import { Checklist } from "@/components/Checklist";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Deliverables } from "@/components/Deliverables";
-import { Pricing } from "@/components/Pricing";
 import { About } from "@/components/About";
 import { Faq } from "@/components/Faq";
 import { Testimonials } from "@/components/Testimonials";
@@ -14,9 +13,9 @@ import { Footer } from "@/components/Footer";
 import { DiagnosticModal } from "@/components/DiagnosticModal";
 
 /**
- * The one route, in the v2 design's order: header, hero, why now, the
- * checklist, how it works, what you get, pricing, about, FAQ, testimonials,
- * the diagnostic, footer, and the diagnostic popup. Sections behind a release flag exist in code and
+ * The one route: header, hero, why now, the checklist, how it works (with
+ * pricing), what you get, about, FAQ, testimonials, the diagnostic, footer,
+ * and the diagnostic popup. Sections behind a release flag exist in code and
  * render only when the flag is true.
  */
 export default function HomePage() {
@@ -29,7 +28,6 @@ export default function HomePage() {
         <Checklist />
         <HowItWorks />
         {release.showWhatYouGet && <Deliverables />}
-        <Pricing />
         <About />
         <Faq />
         {release.showProof && <Testimonials />}

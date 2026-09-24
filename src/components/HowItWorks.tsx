@@ -1,16 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { anchors, howItWorks, phases, release, type PhaseId } from "@/content";
-import { mutedClass } from "@/lib/copy";
+import { anchors, howItWorks, phases, pricing, release, type PhaseId } from "@/content";
+import { formatPrice, mutedClass } from "@/lib/copy";
 
 /**
- * 4 · How it works (#how): the three-row step accordion. One row open at a
- * time (or none); Step 1 open by default. The open row takes the card
- * background and a terracotta numeral, and its +/− flips.
+ * 4 · How it works (#how): steps and pricing in one section. The intro line,
+ * then the three-row step accordion: one row open at a time (or none), Step 1
+ * open by default. The open row takes the card background and a terracotta
+ * numeral, and its +/− flips. Each row's header carries the step's price
+ * (visible open or closed) and the featured step's badge.
+ *
+ * Under the accordion, the total block (#pricing): "All three steps" and the
+ * total, computed from the step prices and shown only when all are set, then
+ * the note, the CTA, and the locals note and payment terms behind their
+ * release flags.
  */
 export function HowItWorks() {
   const [openId, setOpenId] = useState<PhaseId | null>(1);
+
+  const stepPrice = (id: PhaseId) => pricing.steps.find((step) => step.phase === id);
+  const allPriced = pricing.steps.every((step) => step.price !== null);
+  const total = allPriced ? pricing.steps.reduce((sum, step) => sum + (step.price ?? 0), 0) : null;
 
   return (
     <section id={anchors.howItWorks} className="section" aria-labelledby="how-heading">
@@ -18,11 +29,13 @@ export function HowItWorks() {
       <h2 id="how-heading" className="h2 how__heading">
         {howItWorks.heading}
       </h2>
+      <p className="intro how__intro">{howItWorks.intro}</p>
       <div className="accordion">
         {phases.map((phase) => {
           const open = phase.id === openId;
           const panelId = `phase-panel-${phase.id}`;
           const triggerId = `phase-trigger-${phase.id}`;
+          const price = stepPrice(phase.id);
           return (
             <div key={phase.id} className={open ? "accordion__row accordion__row--open" : "accordion__row"}>
               <h3>
@@ -38,13 +51,17 @@ export function HowItWorks() {
                     {phase.numeral}
                   </span>
                   <span className="accordion__head">
-                    <span className="label accordion__tag">
-                      {phase.tag} · <span className="nowrap">{phase.duration}</span>
+                    <span className="accordion__tagline">
+                      <span className="label accordion__tag">
+                        {phase.tag} · <span className="nowrap">{phase.duration}</span>
+                      </span>
+                      {price?.featured && <span className="badge accordion__badge">{pricing.badge}</span>}
                     </span>
                     <span className={["accordion__title", mutedClass(phase.question, phase.status)].filter(Boolean).join(" ")}>
                       {phase.question}
                     </span>
                   </span>
+                  {price && <span className="accordion__price">{formatPrice(price.price, pricing.emptyPrice)}</span>}
                   <span className="accordion__sign" aria-hidden="true">
                     {open ? "−" : "+"}
                   </span>
@@ -88,6 +105,19 @@ export function HowItWorks() {
             </div>
           );
         })}
+      </div>
+
+      <div id={anchors.pricing} className="how__total">
+        <div className="how__total-row">
+          <span className="how__total-label">{pricing.total.label}</span>
+          <span className="accordion__price">{formatPrice(total, pricing.emptyPrice)}</span>
+        </div>
+        <p className="how__total-note">{pricing.total.note}</p>
+        <a href={pricing.cta.href} className="how__cta">
+          {pricing.cta.label}
+        </a>
+        {release.showLocalsNote && <p className="fineprint how__fineprint">{pricing.localsNote}</p>}
+        {release.showPricingTerms && <p className="fineprint how__fineprint">{pricing.terms}</p>}
       </div>
     </section>
   );

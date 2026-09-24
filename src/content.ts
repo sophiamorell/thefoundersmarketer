@@ -19,7 +19,6 @@
 /* ------------------------------------------------------------------ */
 
 export type PhaseId = 1 | 2 | 3;
-export type TierId = "who" | "sortOf" | "nextHire";
 export type CopyStatus = "final" | "draft" | "placeholder";
 
 export interface Phase {
@@ -35,19 +34,16 @@ export interface Phase {
   status: CopyStatus;
 }
 
-export interface Tier {
-  id: TierId;
-  label: string; // "Tier 1"
-  name: string; // "Marketing, who?"
-  whoLine: string;
-  prices: Record<`phase${PhaseId}`, number | null>;
-  featured?: boolean;
+export interface StepPrice {
+  phase: PhaseId;
+  price: number | null;
+  featured?: boolean; // gets the badge
 }
 
 export interface DiagnosticOption {
   id: string;
   label: string;
-  score: number | null; // null = not scored (tier / free text)
+  score: number | null; // null = not scored (hiring intent / free text)
 }
 
 export interface DiagnosticQuestion {
@@ -78,7 +74,8 @@ export const release = {
   directDiagnosticRoute: false, // /diagnostic
   showWhatYouGet: true, // the deliverables grid (titles final, bodies and screenshots pending)
   showProof: true, // testimonials (placeholders until quotes arrive)
-  showPricingTerms: false, // payment terms + add-ons under the tiers
+  showPricingTerms: false, // payment terms + add-ons under the total
+  showLocalsNote: true, // the Durango locals asterisk under the total
   showPhase1WeekByWeek: false,
   showExclusionsFaq: false, // until exclusions are decided
 };
@@ -122,9 +119,8 @@ export const logo = {
 
 export const nav = {
   links: [
-    { label: "How it works", href: `#${anchors.howItWorks}` },
+    { label: "Steps & pricing", href: `#${anchors.howItWorks}` },
     { label: "What you get", href: `#${anchors.deliverables}` },
-    { label: "Pricing", href: `#${anchors.pricing}` },
     { label: "About", href: `#${anchors.about}` },
   ],
   cta: { label: "What to fix first", href: `#${anchors.diagnostic}` },
@@ -146,14 +142,14 @@ export const hero = {
     "The CRM is a contact list, not a pipeline",
   ],
   primaryCta: { label: "See what to fix first", href: `#${anchors.diagnostic}` },
-  secondaryCta: { label: "How it works", href: `#${anchors.howItWorks}` },
+  secondaryCta: { label: "Steps & pricing", href: `#${anchors.howItWorks}` },
   // The clickable card on the right: a picture of question 1 that opens the diagnostic popup
   card: {
     ariaLabel: "See what to fix first: start the 10-question diagnostic",
     progressLabel: "Question 1 of 10",
     timeLabel: "About 5 min",
     prompt: "Who owns marketing at your company today?",
-    options: ["Nobody. Marketing, who?", "Someone, on the side", "We're about to hire for it"], // the three tier names
+    options: ["Nobody. Marketing, who?", "Someone, on the side", "We're about to hire for it"], // the three answers founders give most
     selectedIndex: 1, // drawn as selected
     buttonLabel: "See what to fix first",
     caption: "Nine more like this.",
@@ -232,6 +228,7 @@ export const checklist = {
 export const howItWorks = {
   kicker: "How it works",
   heading: "Three steps, starting with wins",
+  intro: "One price per step. Fixed scope, fixed price. Buy one step at a time, and stop after any of them.*",
   yourTimeLabel: "Your time",
   youGetLabel: "You get",
 };
@@ -363,44 +360,27 @@ export const whatYouGet = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  6 · Pricing                                                        */
+/*  Pricing (rendered inside 4 · How it works)                         */
 /* ------------------------------------------------------------------ */
 
 export const pricing = {
-  kicker: "Pricing",
-  heading: "Pricing based on where your marketing is.",
-  intro: "Tiers are set by where your marketing stands today, not headcount, revenue or number of contacts.",
-  badge: "Most founders start here", // on the featured tier
+  badge: "Start here", // on the featured step
   emptyPrice: "TBD", // fills a null price
-  tiers: [
-    {
-      id: "who",
-      label: "Tier 1",
-      name: "Marketing, who?",
-      whoLine: "Nobody's job. The founder sells, and the CRM is a contact list.",
-      prices: { phase1: 7000, phase2: 12000, phase3: 12000 },
-    },
-    {
-      id: "sortOf",
-      label: "Tier 2",
-      name: "Marketing, sort of",
-      whoLine: "Someone does it on the side: ops, sales, or the founder on Fridays.",
-      prices: { phase1: 10000, phase2: 18000, phase3: 18000 },
-      featured: true,
-    },
-    {
-      id: "nextHire",
-      label: "Tier 3",
-      name: "Marketing, next hire",
-      whoLine: "You've budgeted for a marketer, or you're writing the job description now.",
-      prices: { phase1: 14000, phase2: 24000, phase3: 24000 },
-    },
-  ] as Tier[],
-  rowLabels: { phase: "Step {n}", total: "All three" },
-  cta: { label: "Find your tier", href: `#${anchors.diagnostic}` },
+  steps: [
+    { phase: 1, price: 7000, featured: true },
+    { phase: 2, price: 14000 },
+    { phase: 3, price: 14000 },
+  ] as StepPrice[],
+  total: {
+    label: "All three steps",
+    note: "About half what a senior marketer costs over the same four months, and no three-month search.",
+  },
+  cta: { label: "See where to start", href: `#${anchors.diagnostic}` },
+  // Shown while release.showLocalsNote is true. The asterisk in howItWorks.intro points here.
+  localsNote: "*Early-stage company in the Durango area? There's a locals discount. Mention it when we talk.",
   // Shown while release.showPricingTerms is true
   terms:
-    "50% of each step at kickoff, 50% on delivery. Net 15. Add-ons by change order: conference-to-pipeline, regulated-buyer messaging, community setup, website.",
+    "50% of each step at kickoff, 50% on delivery. Net 15. Ad spend, data and tool costs are passed through at cost. Add-ons by change order: conference-to-pipeline, regulated-buyer messaging, community setup, website.",
 };
 
 /* ------------------------------------------------------------------ */
@@ -539,7 +519,7 @@ export const diagnostic = {
     items: [
       "Your three biggest gaps, prioritized",
       "One fix per gap you can run yourself",
-      "Your tier, and a straight yes or no on Step 1",
+      "A straight yes or no on Step 1",
     ],
     note: "Your answers are used to write your results and nothing else.",
   },
@@ -688,8 +668,8 @@ export const diagnostic = {
         { id: "maybe", label: "Maybe within a year", score: null },
         { id: "yes", label: "Yes, budgeted or hiring now", score: null },
       ],
-      gap: "Sets the tier, with Q1",
-      phase: "Pricing",
+      gap: "Hiring intent; shapes the walkthrough and the Step 3 hiring plan",
+      phase: "3",
     },
     {
       id: 10,
@@ -720,20 +700,13 @@ export const diagnostic = {
       { minScore: 13, maxScore: 16, id: "dontNeed", label: "You don't need this program", requires: { q1: "marketer" } },
       { minScore: 13, maxScore: 16, id: "phase1", label: "Step 1 is the right next step" }, // 13-16 without a marketer
     ],
-    // Evaluated in order; first match wins. Option ids refer to questions[].options[].id
-    tierRules: [
-      { when: { q1: ["marketer"] }, tier: null, note: "don't-need verdict; no tier" },
-      { when: { q9: ["yes"] }, tier: "nextHire" as TierId },
-      { when: { q1: ["generalist"] }, tier: "sortOf" as TierId },
-      { when: { q1: ["nobody", "founder"] }, tier: "who" as TierId },
-    ],
     q9MaybeNote: "Noted in the results email as the hiring conversation to have after Step 1.",
   },
 
   /* Results email: hand-written for now, templated later */
   resultsEmail: {
     includes: [
-      "Stage label (the tier)",
+      "Where their marketing stands today (from Q1)",
       "The three things to fix first, one line each on what they cost",
       "The free-fix list in full",
       "The verdict",
