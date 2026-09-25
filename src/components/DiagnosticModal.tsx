@@ -198,7 +198,6 @@ export function DiagnosticModal() {
     const errorId = `${uid}-email-error`;
     screen = (
       <form onSubmit={onEmailSubmit} noValidate>
-        <p className="kicker">{modal.email.kicker}</p>
         <h2 id={headingId} className="modal__heading">
           {modal.email.heading}
         </h2>

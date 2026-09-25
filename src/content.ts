@@ -557,7 +557,6 @@ export const diagnostic = {
   modal: {
     closeLabel: "Close",
     email: {
-      kicker: "Free · 10 questions · 5 minutes",
       heading: "See what to fix first.",
       body: "Ten quick questions about your pipeline. Results and the three things to fix first will be emailed to you.",
       label: "Work email",
