@@ -987,13 +987,29 @@ textarea.input {
   background: var(--pink);
 }
 
-.verdict--some p,
-.verdict--many p {
+.verdict--some p {
   color: var(--ink);
 }
 
 .verdict .button {
   flex: none;
+}
+
+/* 3 or more checked: white text on the pink bar, and a white button with pink text. */
+.verdict--many p {
+  color: #fff;
+}
+
+.verdict--many .button {
+  background: #fff;
+  border-color: #fff;
+  color: var(--pink);
+}
+
+.verdict--many .button:hover {
+  background: var(--pink-tint);
+  border-color: var(--pink-tint);
+  color: var(--pink);
 }
 
 /* 4 · How it works: step cards and the bundle row (option 1a) ---------- */
