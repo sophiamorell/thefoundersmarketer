@@ -4,8 +4,8 @@
    and is never restated here. */
 
 :root {
-  /* Colors: Sea Glass. Sea glass carries the actions, sunflower is the
-     highlight, pink is a spice for small marks only. */
+  /* Colors: Sea Glass, with two site overrides: every pill (buttons,
+     answers, badges) is sunflower, and text highlights are light pink. */
   --ink: #1d2a29;
   --ink-2: #3a4947; /* body copy */
   --muted: #647270;
@@ -23,6 +23,7 @@
   --sunflower-tint: #fdeec4;
   --pink: #ec6f88;
   --pink-tint: #fbe0e6;
+  --pink-light: #f8c9d4; /* text highlights */
   --rule: rgba(29, 42, 41, 0.14);
   --track: rgba(29, 42, 41, 0.12); /* empty progress segments */
 
@@ -146,7 +147,7 @@ img {
 }
 
 ::selection {
-  background: var(--sunflower);
+  background: var(--pink-light);
   color: var(--ink);
 }
 
@@ -210,14 +211,14 @@ img {
 /* The highlighter */
 .hl {
   display: inline;
-  background: linear-gradient(180deg, transparent 28%, var(--sunflower) 28%, var(--sunflower) 76%, transparent 76%);
+  background: linear-gradient(180deg, transparent 28%, var(--pink-light) 28%, var(--pink-light) 76%, transparent 76%);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   padding: 0 0.1em;
 }
 
 .hl--wide {
-  background: linear-gradient(transparent 22%, var(--sunflower) 22%, var(--sunflower) 82%, transparent 82%);
+  background: linear-gradient(transparent 22%, var(--pink-light) 22%, var(--pink-light) 82%, transparent 82%);
   padding: 0 0.12em;
 }
 
@@ -244,7 +245,7 @@ img {
   font-size: 16px;
   line-height: 1.2;
   border-radius: 999px;
-  border: 2px solid transparent;
+  border: 2px solid var(--ink);
   padding: 15px 28px;
   text-align: center;
   cursor: pointer;
@@ -255,24 +256,24 @@ img {
 }
 
 .button--primary {
-  background: var(--primary);
-  color: var(--on-primary);
+  background: var(--sunflower);
+  color: var(--ink);
   padding: 17px 30px;
 }
 
 .button--primary:hover {
-  background: var(--primary-dark);
-  color: var(--on-primary);
+  background: var(--sunflower-dark);
+  color: var(--ink);
 }
 
 .button--outline {
-  background: transparent;
+  background: var(--sunflower);
   border-color: var(--ink);
   color: var(--ink);
 }
 
 .button--outline:hover {
-  background: var(--mist);
+  background: var(--sunflower-dark);
   color: var(--ink);
 }
 
@@ -287,13 +288,13 @@ img {
 }
 
 .button--dark {
-  background: var(--ink);
-  color: var(--on-primary);
+  background: var(--sunflower);
+  color: var(--ink);
 }
 
 .button--dark:hover {
-  background: var(--ink-2);
-  color: var(--on-primary);
+  background: var(--sunflower-dark);
+  color: var(--ink);
 }
 
 .button--small {
@@ -344,16 +345,17 @@ img {
 }
 
 .nav__links .nav__cta {
-  background: var(--primary);
-  color: #fff;
+  background: var(--sunflower);
+  color: var(--ink);
+  border: 2px solid var(--ink);
   border-radius: 999px;
   padding: 11px 20px;
   font-weight: 700;
 }
 
 .nav__links .nav__cta:hover {
-  background: var(--primary-dark);
-  color: #fff;
+  background: var(--sunflower-dark);
+  color: var(--ink);
 }
 
 /* The logo (v4, 3e): three slashes and the wordmark. Static. */
@@ -508,8 +510,8 @@ img {
   position: absolute;
   right: -8px;
   top: -30px;
-  background: var(--ink);
-  color: var(--on-primary);
+  background: var(--sunflower);
+  color: var(--ink);
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 13px;
@@ -533,7 +535,7 @@ img {
   bottom: -5px;
   width: 10px;
   height: 10px;
-  background: var(--ink);
+  background: var(--sunflower);
   transform: rotate(45deg);
   border-radius: 2px;
 }
@@ -721,11 +723,11 @@ textarea.input {
   border-radius: 999px;
   padding: 12px 18px;
   font-size: 15.5px;
-  background: var(--ground);
+  background: var(--sunflower);
 }
 
 .dcard__option--on {
-  background: var(--sunflower);
+  background: var(--sunflower-dark);
   font-weight: 700;
 }
 
@@ -737,8 +739,9 @@ textarea.input {
   margin-top: 24px;
   padding: 15px 24px;
   border-radius: 999px;
-  background: var(--primary);
-  color: var(--on-primary);
+  background: var(--sunflower);
+  border: 2px solid var(--ink);
+  color: var(--ink);
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 16px;
@@ -1167,7 +1170,7 @@ textarea.input {
   font-family: var(--fm-head);
   background: var(--sunflower);
   color: var(--ink);
-  border: 2px solid var(--sunflower);
+  border: 2px solid var(--ink);
   border-radius: 999px;
   padding: 13px 26px;
   font-weight: 700;
@@ -1175,7 +1178,7 @@ textarea.input {
 }
 
 .how__cta:hover {
-  opacity: 0.88;
+  background: var(--sunflower-dark);
   color: var(--ink);
 }
 
@@ -1657,7 +1660,7 @@ textarea.input {
   padding: 11px 18px;
   border: 2px solid var(--ink);
   border-radius: 999px;
-  background: var(--ground);
+  background: var(--sunflower);
   text-align: left;
   font-family: var(--fm-body);
   font-size: 16px;
@@ -1669,11 +1672,11 @@ textarea.input {
 }
 
 .choice__option:hover {
-  background: var(--mist);
+  background: var(--sunflower-dark);
 }
 
 .choice__option[aria-checked="true"] {
-  background: var(--sunflower);
+  background: var(--sunflower-dark);
   font-weight: 700;
 }
 
@@ -1689,7 +1692,7 @@ textarea.input {
 .choice__option[aria-checked="true"] .choice__radio,
 .dcard__option--on .choice__radio {
   background: var(--ink);
-  box-shadow: inset 0 0 0 3px var(--sunflower);
+  box-shadow: inset 0 0 0 3px var(--sunflower-dark);
 }
 
 /* The diagnostic popup ------------------------------------------------ */
@@ -1786,10 +1789,10 @@ textarea.input {
   width: 100%;
   margin-top: 20px;
   padding: 15px 24px;
-  border: 0;
+  border: 2px solid var(--ink);
   border-radius: 999px;
-  background: var(--primary);
-  color: var(--on-primary);
+  background: var(--sunflower);
+  color: var(--ink);
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 16px;
@@ -1799,7 +1802,7 @@ textarea.input {
 }
 
 .modal__submit:hover {
-  background: var(--primary-dark);
+  background: var(--sunflower-dark);
 }
 
 .modal__progress-label {
