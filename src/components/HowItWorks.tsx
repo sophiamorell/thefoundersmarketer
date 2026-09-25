@@ -7,7 +7,7 @@ import { formatPrice, mutedClass } from "@/lib/copy";
 /**
  * 4 · How it works (#how): steps and pricing in one section. The intro line,
  * then the three-row step accordion: one row open at a time (or none), Step 1
- * open by default. The open row takes the card background and a terracotta
+ * open by default. The open row takes the card background and a sea-glass
  * numeral, and its +/− flips. Each row's header carries the step's price
  * (visible open or closed) and the featured step's badge.
  *

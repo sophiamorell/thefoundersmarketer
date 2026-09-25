@@ -5,9 +5,9 @@ import { checklist } from "@/content";
 import { fill } from "@/lib/copy";
 
 /**
- * 3 · Does this sound like you? A teal band of six toggle checkboxes; checked
- * boxes fill coral. The verdict bar below changes with the count: sage at
- * zero, butter at one or two, yellow at three or more. State lives in React.
+ * 3 · Does this sound like you? A sea-glass band of six toggle checkboxes;
+ * checked boxes fill pink. The verdict bar below changes with the count:
+ * mist at zero, sunflower tint at one or two, sunflower at three or more. State lives in React.
  */
 export function Checklist() {
   const [on, setOn] = useState<boolean[]>(() => checklist.items.map(() => false));
@@ -46,7 +46,7 @@ export function Checklist() {
                 <button type="button" className="checklist__item" aria-pressed={on[i]} onClick={() => toggle(i)}>
                   <span className="checklist__box" aria-hidden="true">
                     {on[i] && (
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff8ef" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f6faf9" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
                     )}

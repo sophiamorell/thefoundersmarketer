@@ -6,7 +6,7 @@ import { mutedClass } from "@/lib/copy";
 
 /**
  * 8 · FAQ: an accordion of the items whose `show` is true, all closed by
- * default, one open at a time, with a terracotta +/−.
+ * default, one open at a time, with a sea-glass +/−.
  */
 export function Faq() {
   const items = faq.items.filter((item) => item.show);

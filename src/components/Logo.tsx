@@ -1,29 +1,45 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { anchors, logo } from "@/content";
 
 /**
- * The sticker wordmark (logo option 2a). Unscrolled it hangs below the
- * header into the hero, deep teal with "Marketer" on a yellow block; past
- * 24px of scroll it settles into the bar as a cream sticker with a
- * highlighter under "Marketer". Passive scroll listener.
+ * The header logo (v4, option 3e): three skewed slashes in sea glass,
+ * sunflower and pink, then the Montserrat wordmark with "Marketer" in sea
+ * glass. Static; it no longer changes on scroll.
  */
 export function Logo() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <a href={`#${anchors.top}`} className={scrolled ? "logo logo--scrolled" : "logo"}>
-      <span>
+    <a href={`#${anchors.top}`} className="logo" aria-label={logo.ariaLabel}>
+      <Slashes />
+      <span className="logo__word" aria-hidden="true">
         {logo.lead} <span className="logo__mark">{logo.highlight}</span>
       </span>
     </a>
+  );
+}
+
+/** The three-slash mark on its own. */
+export function Slashes() {
+  return (
+    <span className="slashes" aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </span>
+  );
+}
+
+/**
+ * The contained logo (v4, option 3f): the wordmark on a deep-sea plate with
+ * the three stripes running through its right edge. Used in the footer.
+ */
+export function Nameplate() {
+  return (
+    <span className="nameplate">
+      <span className="nameplate__stripe" aria-hidden="true" />
+      <span className="nameplate__stripe" aria-hidden="true" />
+      <span className="nameplate__stripe" aria-hidden="true" />
+      <span className="nameplate__word">
+        {logo.lead} {logo.highlight}
+      </span>
+    </span>
   );
 }
