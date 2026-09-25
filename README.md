@@ -9,7 +9,7 @@ deployed on Netlify. Built to `BUILD.md`; every word on the page comes from
 Edit `src/content.ts`. Components never carry copy of their own, so that file
 is the only place text, prices, lists and the diagnostic questions live.
 
-- Each step has one price in `pricing.steps`, shown on its row in How it
+- Each step has one price in `pricing.steps`, shown on its card in How it
   works. A `null` price renders as `pricing.emptyPrice`, and the "All three
   steps" total only appears when every step has a price.
 - The diagnostic runs in a popup (`diagnostic.modal`): email first, then the
