@@ -1366,11 +1366,12 @@ textarea.input {
 
 /* 7 · About ----------------------------------------------------------- */
 
+/* Full width: a larger portrait, and the text column runs to the edge. */
 .about {
   display: grid;
-  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
-  gap: clamp(28px, 4vw, 60px);
-  align-items: start;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
 }
 
 .portrait {
@@ -1378,7 +1379,7 @@ textarea.input {
   aspect-ratio: 3 / 4;
   background: var(--mist);
   border: 2px solid var(--ink);
-  border-radius: 150px 150px 20px 20px;
+  border-radius: 50% 50% 22px 22px / 37.5% 37.5% 22px 22px; /* a true semicircle at 3:4 */
   display: grid;
   place-items: center;
   text-align: center;
@@ -1392,9 +1393,9 @@ textarea.input {
   overflow: hidden;
 }
 
-/* A fine halftone over the photo, so it reads less airbrushed. */
-/* The photo treatment: a sea glass, sunflower and pink wash, and a halftone
-   whose dots grow from top to bottom, so it reads less airbrushed. */
+/* The photo treatment: a soft sea glass, sunflower and pink wash over the
+   whole photo, and a pink halftone that dissolves the bottom of the arch,
+   its dots growing toward the base (public/images/portrait-halftone.svg). */
 .portrait::before,
 .portrait::after {
   content: "";
@@ -1405,34 +1406,24 @@ textarea.input {
 }
 
 .portrait::before {
-  background: linear-gradient(160deg, var(--primary) 0%, var(--sunflower) 50%, var(--pink) 100%);
-  mix-blend-mode: overlay;
-  opacity: 0.55;
+  background: linear-gradient(160deg, rgba(61, 107, 100, 0.9) 0%, rgba(247, 187, 58, 0.45) 50%, rgba(236, 111, 136, 0.9) 100%);
+  mix-blend-mode: soft-light;
 }
 
-/* Halftone that grows toward the bottom: a dot grid screened with a
-   top-to-bottom gradient, then thresholded (contrast) so each dot's size
-   follows the gradient. White drops out under multiply; opacity sets the ink. */
 .portrait::after {
-  background:
-    radial-gradient(closest-side, #000, #fff) 0 0 / 6px 6px,
-    linear-gradient(180deg, #8f8f8f 0%, #000 100%);
-  background-blend-mode: screen;
-  filter: contrast(40);
-  mix-blend-mode: multiply;
-  opacity: 0.22;
+  top: auto;
+  height: 42%;
+  background: url("/images/portrait-halftone.svg") 0 0 / 100% 100% no-repeat;
 }
 
 .about__heading {
   margin-bottom: 22px;
-  max-width: 26ch;
 }
 
 .about__text p.about__para {
   font-size: 1.125rem;
   line-height: 1.6;
   color: var(--ink-2);
-  max-width: 60ch;
   margin-bottom: 16px;
 }
 
@@ -1444,7 +1435,6 @@ textarea.input {
   background: var(--mist);
   border-radius: 20px;
   padding: 26px 30px;
-  max-width: 60ch;
 }
 
 .quote-slot .label {
