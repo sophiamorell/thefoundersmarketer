@@ -23,14 +23,13 @@ export type CopyStatus = "final" | "draft" | "placeholder";
 
 export interface Phase {
   id: PhaseId;
-  numeral: string; // "01", the slab numeral on the accordion row
   tag: string; // "Step 1"
   duration: string;
-  question: string; // the step's name on the page
-  summary: string;
+  weeks: number; // this step's share of the duration bar (4, then about 6 for a 4-8 week step)
+  question: string;
+  outcome: string; // what you have at the end of the step: the card's heading
   yourTime: string | null;
-  youGet: string[];
-  weekByWeek?: { period: string; activity: string }[]; // v1, Step 1 only
+  youKeep: string[];
   status: CopyStatus;
 }
 
@@ -74,9 +73,8 @@ export const release = {
   directDiagnosticRoute: false, // /diagnostic
   showWhatYouGet: true, // the deliverables grid (titles final, bodies and screenshots pending)
   showProof: true, // testimonials (placeholders until quotes arrive)
-  showPricingTerms: false, // payment terms + add-ons under the total
-  showLocalsNote: true, // the Durango locals asterisk under the total
-  showPhase1WeekByWeek: false,
+  showPricingTerms: false, // payment terms + add-ons under the bundle row
+  showLocalsNote: true, // the Durango locals footnote under the bundle row
   showExclusionsFaq: false, // until exclusions are decided
 };
 
@@ -222,75 +220,66 @@ export const checklist = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  4 · How it works (the step accordion)                              */
+/*  4 · How it works: three step cards and the bundle row (option 1a)  */
 /* ------------------------------------------------------------------ */
 
 export const howItWorks = {
   kicker: "How it works",
-  heading: "Three steps, starting with wins",
-  intro: "One price per step. Fixed scope, fixed price. Buy one step at a time, and stop after any of them.*",
-  yourTimeLabel: "Your time",
-  youGetLabel: "You get",
+  heading: "A marketing function in about four months.",
+  intro: "Three steps, starting with wins.",
+  youKeepLabel: "You keep",
+  yourTimeLabel: "Your time: {time}",
 };
 
 export const phases: Phase[] = [
   {
     id: 1,
-    numeral: "01",
-    tag: "Step 1 · Quick Wins",
+    tag: "Step 1",
     duration: "4 weeks",
+    weeks: 4,
     question: "What can we win now?",
-    summary:
-      "Get a campaign into market inside a month, built on the proof you already have, and see first results before you decide on Step 2.",
-    yourTime: "About 5 hours in meetings, plus async approvals.",
-    youGet: [
+    outcome: "A campaign in market and first results inside a month.",
+    yourTime: "about 5 hours in meetings, plus async approvals.",
+    youKeep: [
       "A triage of your contact database: what's usable, what isn't, what to suppress",
       "Provisional sales stages and lead qualification criteria",
       "A prioritized list of near-term segments",
       "One campaign live, built from the proof you already have",
       "A campaign dashboard and baseline report",
     ],
-    weekByWeek: [
-      { period: "Pre", activity: "Diagnostic results, intake, CRM exports" },
-      { period: "Week 1", activity: "Kickoff, systems walkthrough, database triage" },
-      { period: "Week 2", activity: "Provisional stages and qualifications; segments chosen; campaign drafted" },
-      { period: "Week 3", activity: "Build, QA and launch" },
-      { period: "Week 4", activity: "Dashboard, baseline report and first-results readout" },
-    ],
     status: "final",
   },
   {
     id: 2,
-    numeral: "02",
-    tag: "Step 2 · CRM & Documentation",
-    duration: "4-8 weeks",
+    tag: "Step 2",
+    duration: "4–8 weeks",
+    weeks: 6,
     question: "Who do we sell to, and how?",
-    summary:
-      "Turn what Step 1 learned into the proof, ICP and qualification your sales team runs on, built into your CRM.",
-    yourTime: "About 8 hours, mostly with you and whoever owns the CRM.",
-    youGet: [
-      "Your Product Market Fit & Customer Proof Study",
-      "Your ICP rubric and AI evaluator",
-      "A deal qualifying framework, built into your CRM",
+    outcome: "A sales process and CRM your team actually runs on.",
+    yourTime: "about 8 hours, mostly with you and whoever owns the CRM.",
+    youKeep: [
+      "ICP and persona definitions",
+      "A scored qualification rubric",
       "Sales stages with entry criteria",
       "A CRM you can report from",
+      "An objection and proof library",
     ],
     status: "final",
   },
   {
     id: 3,
-    numeral: "03",
-    tag: "Step 3 · Segments & Campaigns",
-    duration: "4-8 weeks",
+    tag: "Step 3",
+    duration: "4–8 weeks",
+    weeks: 6,
     question: "How do we reach them?",
-    summary: "Activate the segments, write the messaging on proven ground, and hand the whole function over.",
-    yourTime: "About 6 hours, plus one weekly 30-minute review.",
-    youGet: [
-      "Activated segments and a referral motion you run monthly",
-      "A competitive intel agent",
-      "Your product marketing toolkit: messaging, personas, objections and proof",
-      "A marketing budget and a plan for your first hire",
-      "A handoff playbook and a 90-day plan",
+    outcome: "A marketing function you own, ready for your first hire.",
+    yourTime: "about 6 hours, plus one weekly 30-minute review.",
+    youKeep: [
+      "Activated segments",
+      "A referral motion you run monthly",
+      "A weekly dashboard",
+      "A handoff playbook",
+      "A 90-day plan for whoever takes it on",
     ],
     status: "final",
   },
@@ -360,27 +349,61 @@ export const whatYouGet = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Pricing (rendered inside 4 · How it works)                         */
+/*  Pricing (rendered inside 4 · How it works) and the contact popup   */
 /* ------------------------------------------------------------------ */
 
 export const pricing = {
   badge: "Start here", // on the featured step
   emptyPrice: "TBD", // fills a null price
+  fixedLabel: "fixed", // beside each step's price
   steps: [
     { phase: 1, price: 7000, featured: true },
     { phase: 2, price: 14000 },
     { phase: 3, price: 14000 },
   ] as StepPrice[],
-  total: {
+  // The bundle row (#pricing). Its total is computed from steps, shown only when every step has a price.
+  bundle: {
     label: "All three steps",
-    note: "About half what a senior marketer costs over the same four months, and no three-month search.",
+    comparison: [
+      { label: "Senior marketer, 4 months", share: 1 }, // bar width as a share of the row
+      { label: "All three steps", share: 0.5, ours: true },
+    ],
+    caption: "About half the cost, with no three-month search first.",
   },
-  cta: { label: "See where to start", href: `#${anchors.diagnostic}` },
-  // Shown while release.showLocalsNote is true. The asterisk in howItWorks.intro points here.
-  localsNote: "*Early-stage company in the Durango area? There's a locals discount. Mention it when we talk.",
+  ctaLabel: "Talk to Sophie", // opens the contact popup
+  // Shown while release.showLocalsNote is true
+  localsNote: "Early-stage company in the Durango area? There's a locals discount. Mention it when we talk.",
   // Shown while release.showPricingTerms is true
   terms:
     "50% of each step at kickoff, 50% on delivery. Net 15. Ad spend, data and tool costs are passed through at cost. Add-ons by change order: conference-to-pipeline, regulated-buyer messaging, community setup, website.",
+};
+
+/* The "Talk to Sophie" popup: a short contact form posted to Netlify Forms */
+export const contact = {
+  netlifyFormName: "contact",
+  closeLabel: "Close",
+  kicker: "Talk to Sophie",
+  heading: "Tell me where marketing stands.",
+  sub: "I'll reply within two business days, usually with a time to talk.", // TODO(sophie): confirm the reply time
+  fields: [
+    { id: "name", label: "Name", type: "text", required: true },
+    { id: "email", label: "Work email", type: "email", required: true },
+    { id: "company", label: "Company", type: "text", required: false },
+    { id: "message", label: "What's going on?", type: "textarea", required: false },
+  ],
+  errors: {
+    required: "Please fill this in.",
+    email: "That email doesn't look right.",
+  },
+  submitLabel: "Send to Sophie",
+  sendingLabel: "Sending…",
+  sendFailed: "That didn't send. Email {email} directly.",
+  sent: {
+    kicker: "Sent",
+    heading: "Thanks. I'll be in touch.",
+    sub: "Expect a reply within two business days.",
+    closeLabel: "Close",
+  },
 };
 
 /* ------------------------------------------------------------------ */
@@ -754,6 +777,7 @@ export const content = {
   phases,
   whatYouGet,
   pricing,
+  contact,
   about,
   faq,
   proof,

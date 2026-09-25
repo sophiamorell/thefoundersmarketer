@@ -1,24 +1,19 @@
 "use client";
 
-import { useState } from "react";
 import { anchors, howItWorks, phases, pricing, release, type PhaseId } from "@/content";
-import { formatPrice, mutedClass } from "@/lib/copy";
+import { fill, formatPrice, mutedClass } from "@/lib/copy";
+import { openContact } from "@/lib/contact-modal";
 
 /**
- * 4 · How it works (#how): steps and pricing in one section. The intro line,
- * then the three-row step accordion: one row open at a time (or none), Step 1
- * open by default. The open row takes the card background and a sea-glass
- * numeral, and its +/− flips. Each row's header carries the step's price
- * (visible open or closed) and the featured step's badge.
- *
- * Under the accordion, the total block (#pricing): "All three steps" and the
- * total, computed from the step prices and shown only when all are set, then
- * the note, the CTA, and the locals note and payment terms behind their
- * release flags.
+ * 4 · How it works (#how), option 1a: steps and pricing in one section.
+ * Kicker, heading and lead; a duration bar sized by each step's weeks; three
+ * step cards with every deliverable visible (Step 1 featured, with the
+ * badge); then the bundle row (#pricing): the total, computed from the step
+ * prices and shown only when all are set, a cost comparison with a senior
+ * marketer, and the "Talk to Sophie" button that opens the contact popup.
+ * The locals note and payment terms sit under it behind release flags.
  */
 export function HowItWorks() {
-  const [openId, setOpenId] = useState<PhaseId | null>(1);
-
   const stepPrice = (id: PhaseId) => pricing.steps.find((step) => step.phase === id);
   const allPriced = pricing.steps.every((step) => step.price !== null);
   const total = allPriced ? pricing.steps.reduce((sum, step) => sum + (step.price ?? 0), 0) : null;
@@ -26,99 +21,79 @@ export function HowItWorks() {
   return (
     <section id={anchors.howItWorks} className="section" aria-labelledby="how-heading">
       <p className="kicker">{howItWorks.kicker}</p>
-      <h2 id="how-heading" className="h2 how__heading">
+      <h2 id="how-heading" className="h2">
         {howItWorks.heading}
       </h2>
       <p className="intro how__intro">{howItWorks.intro}</p>
-      <div className="accordion">
-        {phases.map((phase) => {
-          const open = phase.id === openId;
-          const panelId = `phase-panel-${phase.id}`;
-          const triggerId = `phase-trigger-${phase.id}`;
-          const price = stepPrice(phase.id);
-          return (
-            <div key={phase.id} className={open ? "accordion__row accordion__row--open" : "accordion__row"}>
-              <h3>
-                <button
-                  type="button"
-                  id={triggerId}
-                  className="accordion__trigger"
-                  aria-expanded={open}
-                  aria-controls={panelId}
-                  onClick={() => setOpenId(open ? null : phase.id)}
-                >
-                  <span className="accordion__numeral" aria-hidden="true">
-                    {phase.numeral}
-                  </span>
-                  <span className="accordion__head">
-                    <span className="accordion__tagline">
-                      <span className="label accordion__tag">
-                        {phase.tag} · <span className="nowrap">{phase.duration}</span>
-                      </span>
-                      {price?.featured && <span className="badge accordion__badge">{pricing.badge}</span>}
-                    </span>
-                    <span className={["accordion__title", mutedClass(phase.question, phase.status)].filter(Boolean).join(" ")}>
-                      {phase.question}
-                    </span>
-                  </span>
-                  {price && <span className="accordion__price">{formatPrice(price.price, pricing.emptyPrice)}</span>}
-                  <span className="accordion__sign" aria-hidden="true">
-                    {open ? "−" : "+"}
-                  </span>
-                </button>
-              </h3>
-              <div id={panelId} role="region" aria-labelledby={triggerId} className="accordion__panel" hidden={!open}>
-                <div>
-                  <p className={["accordion__summary", mutedClass(phase.summary, phase.status)].filter(Boolean).join(" ")}>
-                    {phase.summary}
-                  </p>
-                  {phase.yourTime !== null && (
-                    <>
-                      <span className="label">{howItWorks.yourTimeLabel}</span>
-                      <p className="accordion__effort">{phase.yourTime}</p>
-                    </>
-                  )}
-                  {release.showPhase1WeekByWeek && phase.weekByWeek && (
-                    <table className="week-table">
-                      <tbody>
-                        {phase.weekByWeek.map((row) => (
-                          <tr key={row.period}>
-                            <th scope="row">{row.period}</th>
-                            <td>{row.activity}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  )}
-                </div>
-                <div>
-                  <span className="label label--list">{howItWorks.youGetLabel}</span>
-                  <ul className="teal-dots">
-                    {phase.youGet.map((item) => (
-                      <li key={item} className={mutedClass(item)}>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+
+      <div className="how__bar" aria-hidden="true" style={{ gridTemplateColumns: phases.map((p) => `${p.weeks}fr`).join(" ") }}>
+        {phases.map((phase) => (
+          <span key={phase.id} />
+        ))}
       </div>
 
-      <div id={anchors.pricing} className="how__total">
-        <div className="how__total-row">
-          <span className="how__total-label">{pricing.total.label}</span>
-          <span className="accordion__price">{formatPrice(total, pricing.emptyPrice)}</span>
+      <ol className="steps">
+        {phases.map((phase) => {
+          const price = stepPrice(phase.id);
+          return (
+            <li key={phase.id} className={price?.featured ? "stepcard stepcard--featured" : "stepcard"}>
+              <div className="stepcard__meta">
+                <span className="label">
+                  {phase.tag} · {phase.duration}
+                </span>
+                {price?.featured && <span className="badge">{pricing.badge}</span>}
+              </div>
+              <p className="stepcard__question">{phase.question}</p>
+              <h3 className={["stepcard__outcome", mutedClass(phase.outcome, phase.status)].filter(Boolean).join(" ")}>
+                {phase.outcome}
+              </h3>
+              <p className="label stepcard__keep">{howItWorks.youKeepLabel}</p>
+              <ul className="stepcard__list">
+                {phase.youKeep.map((item) => (
+                  <li key={item} className={mutedClass(item)}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              {phase.yourTime !== null && (
+                <p className="stepcard__time">{fill(howItWorks.yourTimeLabel, { time: phase.yourTime })}</p>
+              )}
+              {price && (
+                <div className="stepcard__price">
+                  <span className="stepcard__amount">{formatPrice(price.price, pricing.emptyPrice)}</span>
+                  <span className="stepcard__fixed">{pricing.fixedLabel}</span>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+
+      <div id={anchors.pricing} className="bundle">
+        <div>
+          <p className="bundle__total">
+            <span>{pricing.bundle.label}</span>
+            <span>{formatPrice(total, pricing.emptyPrice)}</span>
+          </p>
+          <div className="bundle__compare">
+            {pricing.bundle.comparison.map((row) => (
+              <div key={row.label} className={row.ours ? "bundle__row bundle__row--ours" : "bundle__row"}>
+                <span className="bundle__label">{row.label}</span>
+                <span className="bundle__track" aria-hidden="true">
+                  <span className="bundle__bar" style={{ width: `${row.share * 100}%` }} />
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="bundle__caption">{pricing.bundle.caption}</p>
         </div>
-        <p className="how__total-note">{pricing.total.note}</p>
-        <a href={pricing.cta.href} className="how__cta">
-          {pricing.cta.label}
-        </a>
-        {release.showLocalsNote && <p className="fineprint how__fineprint">{pricing.localsNote}</p>}
-        {release.showPricingTerms && <p className="fineprint how__fineprint">{pricing.terms}</p>}
+        <button type="button" className="bundle__cta" onClick={openContact}>
+          {pricing.ctaLabel}
+        </button>
       </div>
+
+      {release.showLocalsNote && <p className="how__footnote">{pricing.localsNote}</p>}
+      {release.showPricingTerms && <p className="how__footnote">{pricing.terms}</p>}
     </section>
   );
 }
