@@ -1,17 +1,49 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { anchors, howItWorks, phases, pricing, release, type PhaseId } from "@/content";
 import { fill, formatPrice, mutedClass } from "@/lib/copy";
 import { openContact } from "@/lib/contact-modal";
 
+const longDate = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" });
+
+/** `date` plus `months`, clamped to the last day of the target month (Nov 30 + 3 is Feb 28/29). */
+function addMonths(date: Date, months: number): Date {
+  const target = new Date(date.getFullYear(), date.getMonth() + months, 1);
+  const lastDay = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
+  target.setDate(Math.min(date.getDate(), lastDay));
+  return target;
+}
+
+/**
+ * The lead under the heading. The page is prebuilt, so the dates are filled
+ * in the browser after it loads; until then (and without JavaScript) it
+ * shows the undated intro.
+ */
+function DatedIntro() {
+  const text = useSyncExternalStore(noSubscribe, datedIntro, () => howItWorks.intro);
+  return <p className="intro how__intro">{text}</p>;
+}
+
+const noSubscribe = () => () => {};
+
+function datedIntro(): string {
+  const today = new Date();
+  return fill(howItWorks.datedIntro, {
+    today: longDate.format(today),
+    target: longDate.format(addMonths(today, howItWorks.targetMonths)),
+  });
+}
+
 /**
  * 4 · How it works (#how), option 1a: steps and pricing in one section.
- * Kicker, heading and lead; a duration bar sized by each step's weeks; three
- * step cards with every deliverable visible (Step 1 featured, with the
- * badge); then the bundle row (#pricing): the total, computed from the step
- * prices and shown only when all are set, a cost comparison with a senior
- * marketer, and the "Let's talk" button that opens the contact popup.
- * The locals note and payment terms sit under it behind release flags.
+ * Kicker, heading and a dated lead (today, and today plus three months); a
+ * duration bar sized by each step's weeks; three step cards with every
+ * deliverable visible (Step 1 featured, with the badge); then the bundle row
+ * (#pricing): the total, computed from the step prices and shown only when
+ * all are set, a cost comparison with a senior marketer, and the "Let's
+ * talk" button that opens the contact popup. The locals note and payment
+ * terms sit under it behind release flags.
  */
 export function HowItWorks() {
   const stepPrice = (id: PhaseId) => pricing.steps.find((step) => step.phase === id);
@@ -24,7 +56,7 @@ export function HowItWorks() {
       <h2 id="how-heading" className="h2">
         {howItWorks.heading}
       </h2>
-      <p className="intro how__intro">{howItWorks.intro}</p>
+      <DatedIntro />
 
       <div className="how__bar" aria-hidden="true" style={{ gridTemplateColumns: phases.map((p) => `${p.weeks}fr`).join(" ") }}>
         {phases.map((phase) => (
