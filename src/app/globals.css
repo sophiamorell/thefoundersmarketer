@@ -1541,9 +1541,29 @@ textarea.input {
   display: block;
 }
 
+/* Phones and narrow tablets: a swipeable gallery. Cards snap into place,
+   the next one peeks in from the right, and the row runs to the screen
+   edges while its first and last cards line up with the page text. */
 @media (max-width: 900px) {
   .tools {
-    grid-template-columns: minmax(0, 1fr);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(80%, 340px);
+    grid-template-columns: none;
+    gap: 16px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--page-x);
+    margin-inline: calc(var(--page-x) * -1);
+    padding: 4px var(--page-x) 12px;
+    scrollbar-width: none;
+  }
+  .tools::-webkit-scrollbar {
+    display: none;
+  }
+  .tool {
+    scroll-snap-align: start;
   }
 }
 
