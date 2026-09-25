@@ -26,6 +26,15 @@
       <input name="email" type="email" />
     </form>
 
+    <!-- The "Talk to Sophie" contact popup (src/components/ContactModal.tsx). -->
+    <form name="contact" data-netlify="true" netlify hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input name="name" type="text" />
+      <input name="email" type="email" />
+      <input name="company" type="text" />
+      <textarea name="message"></textarea>
+    </form>
+
     <!-- The email alone, posted as soon as it's entered (before question 1). -->
     <form name="diagnostic-start" data-netlify="true" netlify hidden>
       <input type="hidden" name="form-name" value="diagnostic-start" />

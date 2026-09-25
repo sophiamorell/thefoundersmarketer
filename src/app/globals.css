@@ -17,6 +17,7 @@
   --primary-dark: #2c4a46; /* deep sea */
   --sea-ink: #35605a; /* accent text on tints */
   --mist: #cfe8e3;
+  --sea-mid: #8fb8b0; /* the duration bar's middle step */
   --on-primary: #f6faf9;
   --sunflower: #f7bb3a;
   --sunflower-dark: #e0a42a;
@@ -36,7 +37,7 @@
   /* Layout */
   --page-x: clamp(20px, 4vw, 52px);
   --section-y: clamp(56px, 7vw, 92px);
-  --container: 1488px; /* the handoff's 1240px, 20% wider */
+  --container: 1340px; /* the handoff's 1240px, widened */
 
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --nav-h: 84px;
@@ -197,10 +198,6 @@ img {
   line-height: 1.5;
   color: var(--muted);
   max-width: 72ch;
-}
-
-.nowrap {
-  white-space: nowrap;
 }
 
 /* Copy that still needs writing: rendered as-is, muted. */
@@ -999,273 +996,258 @@ textarea.input {
   flex: none;
 }
 
-/* 4 · How it works (the step accordion) ------------------------------- */
-
-.how__heading {
-  margin-bottom: 14px;
-}
+/* 4 · How it works: step cards and the bundle row (option 1a) ---------- */
 
 .how__intro {
-  margin-bottom: 28px;
+  margin-bottom: 40px;
 }
 
-.accordion {
+/* Step lengths in weeks, as pills: 4, then about 6 and 6. */
+.how__bar {
   display: grid;
-  gap: 14px;
-}
-
-.accordion__row {
-  border: 2px solid var(--ink);
-  border-radius: 20px;
-  background: transparent;
-  overflow: hidden;
-  transition: background-color 160ms var(--ease);
-}
-
-.accordion__row--open {
-  background: var(--surface);
-}
-
-/* Numeral, head, price, sign. Below 600px the price drops under the question. */
-.accordion__trigger {
-  width: 100%;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  grid-template-areas: "num head price sign";
-  align-items: center;
-  column-gap: clamp(14px, 2vw, 28px);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  padding: clamp(20px, 2.4vw, 26px) clamp(20px, 3vw, 30px);
-}
-
-.accordion__numeral {
-  grid-area: num;
-  font-family: var(--fm-slab);
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-  line-height: 1;
-  color: var(--muted);
-  transition: color 160ms var(--ease);
-}
-
-.accordion__row--open .accordion__numeral {
-  color: var(--primary);
-}
-
-.accordion__head {
-  grid-area: head;
-  min-width: 0;
-}
-
-.accordion__tagline {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 10px;
-  margin-bottom: 7px;
-}
-
-.accordion__badge {
-  padding: 4px 10px;
-  font-size: 10px;
-}
-
-.accordion__price {
-  grid-area: price;
-  font-family: var(--fm-head);
-  font-weight: 800;
-  font-size: clamp(1.125rem, 2vw, 1.375rem);
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-.accordion__title {
-  display: block;
-  font-family: var(--fm-head);
-  font-weight: 800;
-  font-size: clamp(1.125rem, 2vw, 1.4375rem);
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-
-.accordion__sign {
-  grid-area: sign;
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
-  border: 2px solid var(--ink);
-  display: grid;
-  place-items: center;
-  font-family: var(--fm-head);
-  font-weight: 700;
-  font-size: 19px;
-  line-height: 1;
-  color: var(--ink);
-}
-
-.accordion__panel {
-  padding: 0 clamp(20px, 3vw, 30px) clamp(24px, 3vw, 32px);
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 28px 40px;
-}
-
-.accordion__panel[hidden] {
-  display: none;
-}
-
-@media (max-width: 600px) {
-  .accordion__trigger {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-areas:
-      "num head sign"
-      "num price sign";
-    row-gap: 8px;
-  }
-  .accordion__price {
-    justify-self: start;
-  }
-}
-
-/* The total under the accordion (#pricing) */
-.how__total {
-  margin-top: 28px;
-  padding-top: 22px;
-  border-top: 2px solid var(--ink);
-  scroll-margin-top: var(--nav-h);
-}
-
-.how__total-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 0 clamp(20px, 3vw, 30px);
-}
-
-.how__total-label {
-  font-family: var(--fm-head);
-  font-weight: 800;
-  font-size: clamp(1.125rem, 2vw, 1.4375rem);
-  letter-spacing: -0.02em;
-}
-
-.how__total-note {
-  margin: 10px 0 22px;
-  padding: 0 clamp(20px, 3vw, 30px);
-  font-size: 1.0625rem;
-  line-height: 1.55;
-  color: var(--ink-2);
-  max-width: 62ch;
-}
-
-/* The yellow CTA, from the old featured pricing card */
-.how__cta {
-  display: inline-block;
-  text-align: center;
-  margin-left: clamp(20px, 3vw, 30px);
-  font-family: var(--fm-head);
-  background: var(--sunflower);
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  padding: 13px 26px;
-  font-weight: 700;
-  font-size: 15px;
-}
-
-.how__cta:hover {
-  background: var(--sunflower-dark);
-  color: var(--ink);
-}
-
-.how__fineprint {
-  margin-top: 20px;
-  padding: 0 clamp(20px, 3vw, 30px);
-}
-
-@media (max-width: 600px) {
-  .how__cta {
-    display: block;
-    margin-right: clamp(20px, 3vw, 30px);
-  }
-}
-
-.accordion__summary {
-  font-size: 1.0625rem;
-  line-height: 1.55;
-  color: var(--ink-2);
+  gap: 6px;
   margin-bottom: 18px;
 }
 
-.accordion__panel .label {
-  display: block;
-  margin-bottom: 8px;
+.how__bar span {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--primary);
 }
 
-.accordion__effort {
-  font-size: 15.5px;
-  line-height: 1.5;
-  color: var(--ink-2);
+.how__bar span:nth-child(2) {
+  background: var(--sea-mid);
 }
 
-.accordion__panel .label--list {
+.how__bar span:nth-child(3) {
+  background: var(--mist);
+}
+
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  align-items: stretch;
+}
+
+.stepcard {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--ink);
+  border-radius: 24px;
+  padding: 28px 28px 26px;
+  background: var(--ground);
+}
+
+.stepcard--featured {
+  background: var(--surface);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.stepcard__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stepcard__meta .badge {
+  padding: 5px 12px;
+}
+
+.stepcard__question {
+  font-family: var(--fm-head);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.stepcard__outcome {
+  font-size: 1.375rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin-bottom: 22px;
+}
+
+.stepcard .stepcard__keep {
   margin-bottom: 12px;
 }
 
-.teal-dots {
+/* Grows so the price rows line up across the cards. */
+.stepcard__list {
+  flex: 1;
   list-style: none;
   padding: 0;
+  margin: 0 0 20px;
   display: grid;
+  align-content: start;
   gap: 10px;
 }
 
-.teal-dots li {
+.stepcard__list li {
   display: flex;
   gap: 12px;
   align-items: baseline;
-  font-size: 15.5px;
+  font-size: 15px;
   line-height: 1.4;
   color: var(--ink-2);
 }
 
-.teal-dots li::before {
+.stepcard__list li::before {
   content: "";
   flex: none;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
   background: var(--primary);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
-.week-table {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 15.5px;
-  color: var(--ink-2);
-  margin-top: 18px;
-}
-
-.week-table th,
-.week-table td {
-  text-align: left;
-  vertical-align: top;
-  padding: 8px 14px 8px 0;
-  border-bottom: 1px solid var(--rule);
-  font-weight: 400;
-}
-
-.week-table th {
-  font-family: var(--fm-label);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.stepcard__time {
+  font-size: 14px;
+  line-height: 1.45;
   color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.stepcard__price {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(29, 42, 41, 0.16);
+}
+
+.stepcard__amount {
+  font-family: var(--fm-head);
+  font-weight: 800;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+.stepcard__fixed {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+/* The bundle row (#pricing) */
+.bundle {
+  margin-top: 26px;
+  background: var(--mist);
+  border-radius: 24px;
+  padding: 30px 34px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px;
+  align-items: center;
+  scroll-margin-top: var(--nav-h);
+}
+
+.bundle__total {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-family: var(--fm-head);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+.bundle__compare {
+  display: grid;
+  gap: 8px;
+  max-width: 560px;
+}
+
+.bundle__row {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 8px 14px;
+  align-items: center;
+}
+
+.bundle__label {
+  font-size: 14.5px;
+  color: var(--sea-ink);
+}
+
+.bundle__row--ours .bundle__label {
+  font-weight: 700;
+}
+
+.bundle__bar {
+  display: block;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(29, 42, 41, 0.25);
+}
+
+.bundle__row--ours .bundle__bar {
+  background: var(--primary);
+}
+
+.bundle__caption {
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--sea-ink);
+}
+
+.bundle__cta {
+  font-family: var(--fm-head);
+  font-weight: 700;
+  font-size: 16px;
+  background: var(--sunflower);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 16px 28px;
+  cursor: pointer;
   white-space: nowrap;
+  transition: background-color 160ms var(--ease);
+}
+
+.bundle__cta:hover {
+  background: #f3ad17;
+}
+
+.how__footnote {
+  margin-top: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 72ch;
+}
+
+@media (max-width: 900px) {
+  .how__bar {
+    display: none;
+  }
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bundle {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 620px) {
+  .bundle {
+    padding: 26px 22px;
+  }
+  .bundle__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
 }
 
 /* 5 · What you get ---------------------------------------------------- */
@@ -1886,6 +1868,92 @@ textarea.input {
   gap: 12px;
 }
 
+/* Wider screens: the diagnostic popup at 1.5x (width, padding, type and controls). */
+@media (min-width: 840px) {
+  .modal__dialog--diag {
+    max-width: 780px;
+    padding: 45px 45px 42px;
+    border-radius: 32px;
+    box-shadow: 12px 12px 0 var(--ink);
+  }
+  .modal__dialog--diag .modal__close {
+    top: 22px;
+    right: 22px;
+    width: 56px;
+    height: 56px;
+    font-size: 30px;
+  }
+  .modal__dialog--diag .kicker,
+  .modal__dialog--diag .modal__progress-label {
+    font-size: 16px;
+    padding-right: 72px;
+    margin-bottom: 18px;
+  }
+  .modal__dialog--diag .modal__heading {
+    font-size: min(3rem, 7.2cqi);
+    margin-bottom: 18px;
+  }
+  .modal__dialog--diag .modal__body {
+    font-size: 1.5rem;
+    margin-bottom: 32px;
+  }
+  .modal__dialog--diag .field__label {
+    font-size: 15px;
+  }
+  .modal__dialog--diag .input {
+    font-size: 22px;
+    padding: 16px 26px;
+  }
+  .modal__dialog--diag .modal__input,
+  .modal__dialog--diag input.input {
+    height: 72px;
+  }
+  .modal__dialog--diag .modal__error {
+    font-size: 19px;
+  }
+  .modal__dialog--diag .modal__submit {
+    margin-top: 28px;
+    padding: 22px 36px;
+    font-size: 22px;
+  }
+  .modal__dialog--diag .modal__progress {
+    height: 9px;
+    margin-bottom: 32px;
+  }
+  .modal__dialog--diag .question legend,
+  .modal__dialog--diag .question__label {
+    font-size: 2rem;
+    margin-bottom: 22px;
+  }
+  .modal__dialog--diag .choice {
+    gap: 14px;
+  }
+  .modal__dialog--diag .choice__option {
+    min-height: 68px;
+    padding: 16px 26px;
+    font-size: 22px;
+    gap: 16px;
+  }
+  .modal__dialog--diag .choice__radio {
+    width: 26px;
+    height: 26px;
+  }
+  .modal__dialog--diag .numbers {
+    gap: 20px;
+  }
+  .modal__dialog--diag .modal__actions {
+    margin-top: 32px;
+    padding-top: 26px;
+  }
+  .modal__dialog--diag .modal__back {
+    font-size: 22px;
+  }
+  .modal__dialog--diag .button {
+    font-size: 22px;
+    padding: 18px 36px;
+  }
+}
+
 @media (min-width: 600px) {
   .numbers {
     grid-template-columns: repeat(2, 1fr);
@@ -1955,4 +2023,137 @@ textarea.input {
 
 .footer__email svg {
   flex: none;
+}
+
+/* The "Talk to Sophie" popup ------------------------------------------ */
+
+.modal--contact {
+  background: rgba(29, 42, 41, 0.45);
+  padding: 24px;
+}
+
+.cdialog {
+  position: relative;
+  width: min(520px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 24px;
+  box-shadow: 8px 8px 0 var(--ink);
+  padding: 32px 32px 28px;
+  color: var(--ink);
+}
+
+.cdialog__close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cdialog__close:hover {
+  background: var(--mist);
+}
+
+.cdialog__kicker {
+  padding-right: 44px;
+  margin-bottom: 10px;
+}
+
+.cdialog__heading {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.cdialog__heading:focus {
+  outline: none;
+}
+
+.cdialog__sub {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.cdialog__fields {
+  display: grid;
+  gap: 14px;
+}
+
+.cdialog .input {
+  height: 46px;
+  padding: 0 18px;
+}
+
+.cdialog textarea.input {
+  height: auto;
+  min-height: 0;
+  padding: 12px 18px;
+  border-radius: 18px;
+  resize: vertical;
+}
+
+.cdialog__error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.cdialog__error::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--pink);
+}
+
+.cdialog__failed {
+  margin-top: 16px;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+
+.cdialog__submit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 22px;
+  padding: 15px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-family: var(--fm-head);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 160ms var(--ease);
+}
+
+.cdialog__submit:hover {
+  background: var(--primary-dark);
+}
+
+.cdialog__submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
 }

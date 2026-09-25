@@ -12,7 +12,9 @@ import {
 } from "react";
 import { analytics, anchors, diagnostic, site, type DiagnosticQuestion } from "@/content";
 import { fill, mutedClass } from "@/lib/copy";
+import { useDialog } from "@/lib/dialog";
 import { OPEN_EVENT } from "@/lib/diagnostic-modal";
+import { postForm } from "@/lib/forms";
 import { track } from "@/lib/track";
 
 /**
@@ -45,26 +47,15 @@ type Answers = Record<string, string>;
 /* analytics.v0 = ["diagnostic_start", "diagnostic_step", "diagnostic_submit", "booking_click"] */
 const [START_EVENT, STEP_EVENT, SUBMIT_EVENT, BOOKING_EVENT] = analytics.v0;
 
-const FORM_ENDPOINT = "/__forms.html";
 const AUTO_ADVANCE_MS = 250;
 const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const DIAGNOSTIC_LINK = `a[href="#${anchors.diagnostic}"]`;
-const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export function fieldNamesFor(question: DiagnosticQuestion): string[] {
   if (question.kind === "twoNumbers") {
     return (question.fields ?? []).map((field) => `q${question.id}_${field.id}`);
   }
   return [`q${question.id}`];
-}
-
-async function postForm(fields: Record<string, string>): Promise<void> {
-  const res = await fetch(FORM_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams(fields).toString(),
-  });
-  if (!res.ok) throw new Error(`Request failed: ${res.status}`);
 }
 
 function questionAnswered(question: DiagnosticQuestion, answers: Answers): boolean {
@@ -132,42 +123,7 @@ export function DiagnosticModal() {
   }, [show]);
 
   /* While open: lock page scroll, Escape closes, Tab stays inside. */
-  useEffect(() => {
-    if (!open) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const onKeyDown = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        close();
-        return;
-      }
-      if (event.key !== "Tab" || !dialogRef.current) return;
-      const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
-        (el) => el.offsetParent !== null && getComputedStyle(el).visibility !== "hidden",
-      );
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      const inside = dialogRef.current.contains(document.activeElement);
-      if (event.shiftKey && (document.activeElement === first || !inside)) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && (document.activeElement === last || !inside)) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-    document.addEventListener("keydown", onKeyDown);
-
-    const opener = openerRef.current;
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", onKeyDown);
-      opener?.focus({ preventScroll: true });
-    };
-  }, [open, close]);
+  useDialog(open, close, dialogRef, openerRef);
 
   /* Move focus to each new screen's first thing to act on. */
   useEffect(() => {
@@ -396,7 +352,7 @@ export function DiagnosticModal() {
         if (event.target === event.currentTarget) close();
       }}
     >
-      <div ref={dialogRef} className="modal__dialog" role="dialog" aria-modal="true" aria-labelledby={headingId}>
+      <div ref={dialogRef} className="modal__dialog modal__dialog--diag" role="dialog" aria-modal="true" aria-labelledby={headingId}>
         <button type="button" className="modal__close" aria-label={modal.closeLabel} onClick={close}>
           <span aria-hidden="true">×</span>
         </button>

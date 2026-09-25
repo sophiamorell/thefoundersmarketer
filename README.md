@@ -9,7 +9,7 @@ deployed on Netlify. Built to `BUILD.md`; every word on the page comes from
 Edit `src/content.ts`. Components never carry copy of their own, so that file
 is the only place text, prices, lists and the diagnostic questions live.
 
-- Each step has one price in `pricing.steps`, shown on its row in How it
+- Each step has one price in `pricing.steps`, shown on its card in How it
   works. A `null` price renders as `pricing.emptyPrice`, and the "All three
   steps" total only appears when every step has a price.
 - The diagnostic runs in a popup (`diagnostic.modal`): email first, then the
@@ -36,6 +36,8 @@ One-time setup in the Netlify dashboard:
    (their definitions are in `public/__forms.html`): `diagnostic`, the full
    answers, and `diagnostic-start`, the email alone, saved as soon as it's
    entered so partial completions can be followed up.
+   A third form, `contact`, holds the "Talk to Sophie" messages from the
+   pricing section.
 2. Open that form → **Notifications** → email notification to Sophie's address.
 3. **Domain management** → add `thefoundersmarketer.com` (DNS is pointed
    separately).
