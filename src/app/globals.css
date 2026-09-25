@@ -1394,7 +1394,7 @@ textarea.input {
 
 /* A fine halftone over the photo, so it reads less airbrushed. */
 /* The photo treatment: a sea glass, sunflower and pink wash, and a halftone
-   that fades in from top to bottom, so it reads less airbrushed. */
+   whose dots grow from top to bottom, so it reads less airbrushed. */
 .portrait::before,
 .portrait::after {
   content: "";
@@ -1410,12 +1410,17 @@ textarea.input {
   opacity: 0.55;
 }
 
+/* Halftone that grows toward the bottom: a dot grid screened with a
+   top-to-bottom gradient, then thresholded (contrast) so each dot's size
+   follows the gradient. White drops out under multiply; opacity sets the ink. */
 .portrait::after {
-  background-image: radial-gradient(rgba(29, 42, 41, 0.3) 0.8px, transparent 1.4px);
-  background-size: 5px 5px;
+  background:
+    radial-gradient(closest-side, #000, #fff) 0 0 / 6px 6px,
+    linear-gradient(180deg, #8f8f8f 0%, #000 100%);
+  background-blend-mode: screen;
+  filter: contrast(40);
   mix-blend-mode: multiply;
-  -webkit-mask-image: linear-gradient(180deg, transparent 15%, #000 100%);
-  mask-image: linear-gradient(180deg, transparent 15%, #000 100%);
+  opacity: 0.22;
 }
 
 .about__heading {
