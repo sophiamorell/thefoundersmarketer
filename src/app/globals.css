@@ -37,7 +37,7 @@
   /* Layout */
   --page-x: clamp(20px, 4vw, 52px);
   --section-y: clamp(56px, 7vw, 92px);
-  --container: 1340px; /* the handoff's 1240px, widened */
+  --container: 1407px; /* the handoff's 1240px, widened */
 
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --nav-h: 84px;
