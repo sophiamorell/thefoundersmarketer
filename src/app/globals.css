@@ -1133,6 +1133,32 @@ textarea.input {
   margin-bottom: 18px;
 }
 
+/* The +/− that collapses a card: phones only. */
+.stepcard__toggle {
+  display: none;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--fm-head);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Grows so the price rows line up across the cards. */
+.stepcard__details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .stepcard__meta .badge {
   padding: 5px 12px;
 }
@@ -1157,7 +1183,6 @@ textarea.input {
   margin-bottom: 12px;
 }
 
-/* Grows so the price rows line up across the cards. */
 .stepcard__list {
   flex: 1;
   list-style: none;
@@ -1327,6 +1352,102 @@ textarea.input {
     grid-template-columns: minmax(0, 1fr);
     justify-items: start;
     gap: 24px;
+  }
+  /* Collapsed cards: one line with the step, badge, price and +/−, then the
+     outcome. Opening a card adds the question, what you keep and your time. */
+  .how__intro {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .steps {
+    gap: 10px;
+  }
+  .stepcard {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "label . price toggle"
+      "question question question question"
+      "outcome outcome outcome outcome"
+      "details details details details";
+    column-gap: 10px;
+    align-items: center;
+    padding: 14px 16px 16px;
+    cursor: pointer;
+  }
+  .stepcard--open {
+    cursor: auto;
+  }
+  .stepcard--featured {
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .stepcard__meta {
+    display: contents;
+  }
+  .stepcard__meta .label {
+    grid-area: label;
+    white-space: nowrap;
+  }
+  /* "Start here" sits on the featured card's top edge, like a sticker. */
+  .stepcard__meta .badge {
+    position: absolute;
+    top: -11px;
+    right: 58px;
+    padding: 3px 9px;
+    font-size: 9.5px;
+    border: 2px solid var(--ink);
+  }
+  .stepcard__toggle {
+    grid-area: toggle;
+    display: grid;
+    margin-left: 0;
+  }
+  .stepcard__price {
+    grid-area: price;
+    padding: 0;
+    border-top: 0;
+  }
+  .stepcard__amount {
+    font-size: 1.0625rem;
+  }
+  .stepcard__question {
+    grid-area: question;
+    margin: 12px 0 0;
+  }
+  .stepcard__outcome {
+    grid-area: outcome;
+    font-size: 1rem;
+    margin: 8px 0 0;
+  }
+  .stepcard__details {
+    grid-area: details;
+    margin-top: 16px;
+  }
+  .stepcard:not(.stepcard--open) .stepcard__question,
+  .stepcard:not(.stepcard--open) .stepcard__details {
+    display: none;
+  }
+}
+
+/* The smallest phones: a tighter first line so the +/− stays inside the card. */
+@media (max-width: 360px) {
+  .stepcard {
+    column-gap: 6px;
+    padding-left: 14px;
+    padding-right: 12px;
+  }
+  .stepcard__meta .label {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+  .stepcard__amount {
+    font-size: 1rem;
+  }
+  .stepcard__toggle {
+    width: 28px;
+    height: 28px;
   }
 }
 

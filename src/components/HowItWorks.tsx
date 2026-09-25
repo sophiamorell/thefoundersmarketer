@@ -1,9 +1,12 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore, type MouseEvent } from "react";
 import { anchors, howItWorks, phases, pricing, release, type PhaseId } from "@/content";
 import { fill, formatPrice, mutedClass } from "@/lib/copy";
 import { openContact } from "@/lib/contact-modal";
+
+/* Matches the CSS breakpoint where step cards collapse. */
+const COLLAPSE_QUERY = "(max-width: 900px)";
 
 const longDate = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" });
 
@@ -39,7 +42,8 @@ function datedIntro(): string {
  * 4 · How it works (#how), option 1a: steps and pricing in one section.
  * Kicker, heading and a dated lead (today, and today plus three months); a
  * duration bar sized by each step's weeks; three step cards with every
- * deliverable visible (Step 1 featured, with the badge); then the bundle row
+ * deliverable visible (Step 1 featured, with the badge; on phones each card
+ * collapses to its step, outcome and price, with a +/− to open it); then the bundle row
  * (#pricing): the total, computed from the step prices and shown only when
  * all are set, a cost comparison with a senior marketer, and the "Let's
  * talk" button that opens the contact popup. The locals note and payment
@@ -47,6 +51,21 @@ function datedIntro(): string {
  */
 export function HowItWorks() {
   const stepPrice = (id: PhaseId) => pricing.steps.find((step) => step.phase === id);
+
+  /* Phones: which step cards are open (all start collapsed). Desktop ignores it. */
+  const [open, setOpen] = useState<ReadonlySet<PhaseId>>(new Set());
+  const toggle = (id: PhaseId) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  /* A tap anywhere on a collapsed card opens it, on phones only. */
+  const onCardClick = (event: MouseEvent, id: PhaseId) => {
+    if ((event.target as Element).closest("button")) return;
+    if (window.matchMedia(COLLAPSE_QUERY).matches) toggle(id);
+  };
   const allPriced = pricing.steps.every((step) => step.price !== null);
   const total = allPriced ? pricing.steps.reduce((sum, step) => sum + (step.price ?? 0), 0) : null;
 
@@ -67,29 +86,46 @@ export function HowItWorks() {
       <ol className="steps">
         {phases.map((phase) => {
           const price = stepPrice(phase.id);
+          const isOpen = open.has(phase.id);
+          const detailsId = `step-details-${phase.id}`;
+          const className = ["stepcard", price?.featured && "stepcard--featured", isOpen && "stepcard--open"]
+            .filter(Boolean)
+            .join(" ");
           return (
-            <li key={phase.id} className={price?.featured ? "stepcard stepcard--featured" : "stepcard"}>
+            <li key={phase.id} className={className} onClick={(event) => onCardClick(event, phase.id)}>
               <div className="stepcard__meta">
                 <span className="label">
                   {phase.tag} · {phase.duration}
                 </span>
                 {price?.featured && <span className="badge">{pricing.badge}</span>}
+                <button
+                  type="button"
+                  className="stepcard__toggle"
+                  aria-expanded={isOpen}
+                  aria-controls={detailsId}
+                  aria-label={fill(isOpen ? howItWorks.toggleHide : howItWorks.toggleShow, { step: phase.tag })}
+                  onClick={() => toggle(phase.id)}
+                >
+                  <span aria-hidden="true">{isOpen ? "−" : "+"}</span>
+                </button>
               </div>
               <p className="stepcard__question">{phase.question}</p>
               <h3 className={["stepcard__outcome", mutedClass(phase.outcome, phase.status)].filter(Boolean).join(" ")}>
                 {phase.outcome}
               </h3>
-              <p className="label stepcard__keep">{howItWorks.youKeepLabel}</p>
-              <ul className="stepcard__list">
-                {phase.youKeep.map((item) => (
-                  <li key={item} className={mutedClass(item)}>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              {phase.yourTime !== null && (
-                <p className="stepcard__time">{fill(howItWorks.yourTimeLabel, { time: phase.yourTime })}</p>
-              )}
+              <div id={detailsId} className="stepcard__details">
+                <p className="label stepcard__keep">{howItWorks.youKeepLabel}</p>
+                <ul className="stepcard__list">
+                  {phase.youKeep.map((item) => (
+                    <li key={item} className={mutedClass(item)}>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                {phase.yourTime !== null && (
+                  <p className="stepcard__time">{fill(howItWorks.yourTimeLabel, { time: phase.yourTime })}</p>
+                )}
+              </div>
               {price && (
                 <div className="stepcard__price">
                   <span className="stepcard__amount">{formatPrice(price.price, pricing.emptyPrice)}</span>
