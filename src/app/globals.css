@@ -1886,6 +1886,92 @@ textarea.input {
   gap: 12px;
 }
 
+/* Wider screens: the popup at 1.5x (width, padding, type and controls). */
+@media (min-width: 840px) {
+  .modal__dialog {
+    max-width: 780px;
+    padding: 45px 45px 42px;
+    border-radius: 32px;
+    box-shadow: 12px 12px 0 var(--ink);
+  }
+  .modal__close {
+    top: 22px;
+    right: 22px;
+    width: 56px;
+    height: 56px;
+    font-size: 30px;
+  }
+  .modal__dialog .kicker,
+  .modal__progress-label {
+    font-size: 16px;
+    padding-right: 72px;
+    margin-bottom: 18px;
+  }
+  .modal__heading {
+    font-size: min(3rem, 7.2cqi);
+    margin-bottom: 18px;
+  }
+  .modal__body {
+    font-size: 1.5rem;
+    margin-bottom: 32px;
+  }
+  .modal__dialog .field__label {
+    font-size: 15px;
+  }
+  .modal__dialog .input {
+    font-size: 22px;
+    padding: 16px 26px;
+  }
+  .modal__dialog .modal__input,
+  .modal__dialog input.input {
+    height: 72px;
+  }
+  .modal__error {
+    font-size: 19px;
+  }
+  .modal__submit {
+    margin-top: 28px;
+    padding: 22px 36px;
+    font-size: 22px;
+  }
+  .modal__progress {
+    height: 9px;
+    margin-bottom: 32px;
+  }
+  .modal__dialog .question legend,
+  .modal__dialog .question__label {
+    font-size: 2rem;
+    margin-bottom: 22px;
+  }
+  .modal__dialog .choice {
+    gap: 14px;
+  }
+  .modal__dialog .choice__option {
+    min-height: 68px;
+    padding: 16px 26px;
+    font-size: 22px;
+    gap: 16px;
+  }
+  .modal__dialog .choice__radio {
+    width: 26px;
+    height: 26px;
+  }
+  .modal__dialog .numbers {
+    gap: 20px;
+  }
+  .modal__actions {
+    margin-top: 32px;
+    padding-top: 26px;
+  }
+  .modal__back {
+    font-size: 22px;
+  }
+  .modal__dialog .button {
+    font-size: 22px;
+    padding: 18px 36px;
+  }
+}
+
 @media (min-width: 600px) {
   .numbers {
     grid-template-columns: repeat(2, 1fr);
