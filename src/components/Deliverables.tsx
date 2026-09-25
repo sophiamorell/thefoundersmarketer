@@ -5,8 +5,9 @@ import { publicFileExists } from "@/lib/public-file";
 
 /**
  * 5 · What you get (#deliverables): six deliverables in a three-column grid,
- * each with a 4:3 image slot, a title, the step that builds it and a body. A slot shows its caption until the screenshot
- * exists in public/. Bracketed titles and bodies render muted.
+ * each with a 4:3 image slot, then the numeral beside the title, a pill
+ * naming the step that builds it, and the body. A slot shows its caption
+ * until the screenshot exists in public/. Bracketed titles and bodies render muted.
  */
 export function Deliverables() {
   return (
@@ -15,7 +16,7 @@ export function Deliverables() {
       <h2 id="deliverables-heading" className={["h2", mutedClass(whatYouGet.heading)].filter(Boolean).join(" ")}>
         {whatYouGet.heading}
       </h2>
-      <p className={["intro", mutedClass(whatYouGet.intro)].filter(Boolean).join(" ")}>{whatYouGet.intro}</p>
+      <p className={["intro", "tools__intro", mutedClass(whatYouGet.intro)].filter(Boolean).join(" ")}>{whatYouGet.intro}</p>
       <ul className="tools">
         {whatYouGet.items.map((item) => {
           const hasImage = publicFileExists(item.image);
@@ -28,14 +29,16 @@ export function Deliverables() {
                   <span>{item.slot}</span>
                 )}
               </div>
-              <div className="tool__head">
+              <div className="tool__body">
                 <span className="tool__numeral" aria-hidden="true">
                   {item.numeral}
                 </span>
-                <h3 className={mutedClass(item.title)}>{item.title}</h3>
+                <div>
+                  <h3 className={mutedClass(item.title)}>{item.title}</h3>
+                  <span className="tool__step">{fill(whatYouGet.stepLabel, { n: item.step })}</span>
+                  <p className={mutedClass(item.body)}>{item.body}</p>
+                </div>
               </div>
-              <p className="label tool__step">{fill(whatYouGet.stepLabel, { n: item.step })}</p>
-              <p className={mutedClass(item.body)}>{item.body}</p>
             </li>
           );
         })}

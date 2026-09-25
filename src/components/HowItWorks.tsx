@@ -10,7 +10,7 @@ import { openContact } from "@/lib/contact-modal";
  * step cards with every deliverable visible (Step 1 featured, with the
  * badge); then the bundle row (#pricing): the total, computed from the step
  * prices and shown only when all are set, a cost comparison with a senior
- * marketer, and the "Talk to Sophie" button that opens the contact popup.
+ * marketer, and the "Let's talk" button that opens the contact popup.
  * The locals note and payment terms sit under it behind release flags.
  */
 export function HowItWorks() {
@@ -92,7 +92,13 @@ export function HowItWorks() {
         </button>
       </div>
 
-      {release.showLocalsNote && <p className="how__footnote">{pricing.localsNote}</p>}
+      {release.showLocalsNote && (
+        <p className="how__locals">
+          {pricing.localsNote.before}
+          <strong>{pricing.localsNote.emphasis}</strong>
+          {pricing.localsNote.after}
+        </p>
+      )}
       {release.showPricingTerms && <p className="how__footnote">{pricing.terms}</p>}
     </section>
   );

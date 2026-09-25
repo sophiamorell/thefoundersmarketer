@@ -319,7 +319,7 @@ img {
   justify-content: space-between;
   gap: 24px;
   padding: 18px var(--page-x);
-  background: rgba(245, 246, 243, 0.9);
+  background: rgba(245, 246, 243, 0.98);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -1226,6 +1226,22 @@ textarea.input {
   max-width: 72ch;
 }
 
+/* The Durango note: bigger, ink, a pink rule to set it apart. */
+.how__locals {
+  margin-top: 22px;
+  padding-left: 14px;
+  border-left: 4px solid var(--pink);
+  font-family: var(--fm-head);
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.how__locals strong {
+  font-weight: 800;
+}
+
 @media (max-width: 900px) {
   .how__bar {
     display: none;
@@ -1280,11 +1296,12 @@ textarea.input {
   overflow: hidden;
 }
 
-.tool__head {
-  display: flex;
-  gap: 12px;
+/* The numeral in its own column, so the title, pill and body share one edge. */
+.tool__body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 12px;
   align-items: baseline;
-  margin-bottom: 8px;
 }
 
 .tool__numeral {
@@ -1296,6 +1313,7 @@ textarea.input {
 .tool h3 {
   font-size: 1.125rem;
   letter-spacing: -0.015em;
+  margin-bottom: 10px;
 }
 
 .tool p {
@@ -1304,12 +1322,24 @@ textarea.input {
   color: var(--ink-2);
 }
 
-/* "Built in Step 2": the label style, which .tool p would otherwise override */
-.tool .tool__step {
-  font-size: 11px;
-  line-height: 1.4;
+/* "Built in Step 2", as a mist pill */
+.tool__step {
+  display: inline-block;
+  font-family: var(--fm-label);
+  font-weight: 600;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--sea-ink);
-  margin-bottom: 8px;
+  background: var(--mist);
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin-bottom: 10px;
+}
+
+/* One line on desktop; wraps on narrower screens. */
+.tools__intro {
+  max-width: none;
 }
 
 @media (max-width: 900px) {
@@ -1347,14 +1377,29 @@ textarea.input {
 }
 
 /* A fine halftone over the photo, so it reads less airbrushed. */
+/* The photo treatment: a sea glass, sunflower and pink wash, and a halftone
+   that fades in from top to bottom, so it reads less airbrushed. */
+.portrait::before,
 .portrait::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
-  background-image: radial-gradient(rgba(29, 42, 41, 0.16) 0.6px, transparent 1.1px);
-  background-size: 4px 4px;
+}
+
+.portrait::before {
+  background: linear-gradient(160deg, var(--primary) 0%, var(--sunflower) 50%, var(--pink) 100%);
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+}
+
+.portrait::after {
+  background-image: radial-gradient(rgba(29, 42, 41, 0.3) 0.8px, transparent 1.4px);
+  background-size: 5px 5px;
   mix-blend-mode: multiply;
+  -webkit-mask-image: linear-gradient(180deg, transparent 15%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 15%, #000 100%);
 }
 
 .about__heading {
@@ -2025,7 +2070,7 @@ textarea.input {
   flex: none;
 }
 
-/* The "Talk to Sophie" popup ------------------------------------------ */
+/* The "Let's talk" popup ---------------------------------------------- */
 
 .modal--contact {
   background: rgba(29, 42, 41, 0.45);

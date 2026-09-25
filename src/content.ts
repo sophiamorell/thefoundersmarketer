@@ -148,7 +148,7 @@ export const hero = {
     timeLabel: "About 5 min",
     prompt: "Who owns marketing at your company today?",
     options: ["Nobody. Marketing, who?", "Someone, on the side", "We're about to hire for it"], // the three answers founders give most
-    selectedIndex: 1, // drawn as selected
+    selectedIndex: 0, // drawn as selected
     buttonLabel: "See what to fix first",
     caption: "Nine more like this.",
   },
@@ -212,7 +212,7 @@ export const checklist = {
     none: "Nothing checked yet. Most founders check three.",
     one: "{n} of {total}. Definitely worth a free check.",
     two: "{n} of {total}. Yeah ... probably want to see what to fix first.",
-    threeOrMore: "{n} of {total}. This is your sign to click the button ➡️",
+    threeOrMore: "{n} of {total}. This is your sign to click the button",
   },
   threshold: 3,
   ctaLabel: "See what to fix first",
@@ -292,7 +292,7 @@ export const phases: Phase[] = [
 export const whatYouGet = {
   kicker: "What you get",
   heading: "The tools you keep",
-  intro: "Step 1 ships results. Steps 2 and 3 ship the tools, built on your data, and they stay with you when we're done.",
+  intro: "You get quick wins in Step 1, Steps 2 and 3 ship the tools, built on your data, and they stay with you when we're done.",
   stepLabel: "Built in Step {n}",
   items: [
     {
@@ -370,19 +370,23 @@ export const pricing = {
     ],
     caption: "About half the cost, with no three-month search first.",
   },
-  ctaLabel: "Talk to Sophie", // opens the contact popup
+  ctaLabel: "Let's talk", // opens the contact popup
   // Shown while release.showLocalsNote is true
-  localsNote: "Early-stage company in the Durango area? There's a locals discount. Mention it when we talk.",
+  localsNote: {
+    before: "Early-stage company in Durango, CO? Let's ",
+    emphasis: "definitely", // bold
+    after: " talk.",
+  },
   // Shown while release.showPricingTerms is true
   terms:
     "50% of each step at kickoff, 50% on delivery. Net 15. Ad spend, data and tool costs are passed through at cost. Add-ons by change order: conference-to-pipeline, regulated-buyer messaging, community setup, website.",
 };
 
-/* The "Talk to Sophie" popup: a short contact form posted to Netlify Forms */
+/* The "Let's talk" popup: a short contact form posted to Netlify Forms */
 export const contact = {
   netlifyFormName: "contact",
   closeLabel: "Close",
-  kicker: "Talk to Sophie",
+  kicker: "Let's talk",
   heading: "Tell me where marketing stands.",
   sub: "I'll reply within two business days, usually with a time to talk.", // TODO(sophie): confirm the reply time
   fields: [
