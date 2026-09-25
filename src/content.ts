@@ -388,7 +388,7 @@ export const pricing = {
 /* ------------------------------------------------------------------ */
 
 export const about = {
-  kicker: "Who you'd work with",
+  kicker: "Who you'll work with",
   heading: "The founder who had to do it without a marketer.",
   photo: "/images/sophie.jpg", // renders as the arch placeholder if the file is missing
   photoAlt: "Sophie, founder of The Founder’s Marketer",
@@ -482,7 +482,7 @@ export const faq = {
 
 export const proof = {
   kicker: "From our customers",
-  heading: "Founders & CEOS ... that finally said uncle",
+  heading: "Our Founders & CEOs",
   // TODO(sophie): real quotes, names and photos. These are the design's slots.
   testimonials: [
     {
