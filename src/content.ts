@@ -232,6 +232,9 @@ export const howItWorks = {
     "Today is {today} ... wouldn't it be great to have a marketing function in place by {target}? Start with these 3 steps, starting with wins.",
   targetMonths: 3,
   youKeepLabel: "You keep",
+  // Phones: each step card collapses; the +/− button's accessible names
+  toggleShow: "Show what {step} includes",
+  toggleHide: "Hide what {step} includes",
   yourTimeLabel: "Your time: {time}",
 };
 

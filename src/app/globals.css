@@ -756,6 +756,11 @@ textarea.input {
   .hero {
     grid-template-columns: minmax(0, 1fr);
   }
+  /* On phones and narrow tablets the hero goes straight from the buttons
+     to the next section; the preview card is desktop only. */
+  .dcard {
+    display: none;
+  }
 }
 
 /* 2 · Why marketing, why now ------------------------------------------ */
@@ -871,12 +876,69 @@ textarea.input {
   max-width: 30ch;
 }
 
+/* Phones and narrow tablets: a compact vertical timeline. The rail runs
+   down the left through the dots (solid for the built steps, dashed for
+   what's next); each step's label, badge, title and text sit beside its
+   dot, so the whole section fits on one screen. */
 @media (max-width: 900px) {
-  .timeline__steps {
-    grid-template-columns: minmax(0, 1fr);
+  .why__heading {
+    margin-bottom: 26px;
   }
   .timeline__rail {
-    display: none;
+    left: 13px;
+    right: auto;
+    top: 14px;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+    background:
+      linear-gradient(180deg, var(--primary) 0%, var(--primary) 62%, transparent 62%),
+      repeating-linear-gradient(180deg, var(--ink) 0 6px, transparent 6px 12px);
+  }
+  .timeline__steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 28px auto minmax(0, 1fr);
+    grid-template-areas:
+      "dot label badge"
+      "dot title title"
+      "dot body body";
+    column-gap: 14px;
+    align-items: center;
+  }
+  .step__marker {
+    display: contents;
+  }
+  .step__dot {
+    grid-area: dot;
+    align-self: start;
+    position: relative;
+    z-index: 1;
+  }
+  .step .badge {
+    grid-area: badge;
+    justify-self: start;
+    padding: 3px 9px;
+    font-size: 9.5px;
+  }
+  .step__label {
+    grid-area: label;
+    margin: 0;
+    line-height: 28px;
+  }
+  .step h3 {
+    grid-area: title;
+    font-size: 1.25rem;
+    margin: 0 0 4px;
+  }
+  .step__body {
+    grid-area: body;
+    font-size: 15px;
+    line-height: 1.45;
+    max-width: none;
   }
 }
 
@@ -1071,6 +1133,32 @@ textarea.input {
   margin-bottom: 18px;
 }
 
+/* The +/− that collapses a card: phones only. */
+.stepcard__toggle {
+  display: none;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--fm-head);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Grows so the price rows line up across the cards. */
+.stepcard__details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .stepcard__meta .badge {
   padding: 5px 12px;
 }
@@ -1095,7 +1183,6 @@ textarea.input {
   margin-bottom: 12px;
 }
 
-/* Grows so the price rows line up across the cards. */
 .stepcard__list {
   flex: 1;
   list-style: none;
@@ -1266,6 +1353,102 @@ textarea.input {
     justify-items: start;
     gap: 24px;
   }
+  /* Collapsed cards: one line with the step, badge, price and +/−, then the
+     outcome. Opening a card adds the question, what you keep and your time. */
+  .how__intro {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .steps {
+    gap: 10px;
+  }
+  .stepcard {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "label . price toggle"
+      "question question question question"
+      "outcome outcome outcome outcome"
+      "details details details details";
+    column-gap: 10px;
+    align-items: center;
+    padding: 14px 16px 16px;
+    cursor: pointer;
+  }
+  .stepcard--open {
+    cursor: auto;
+  }
+  .stepcard--featured {
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .stepcard__meta {
+    display: contents;
+  }
+  .stepcard__meta .label {
+    grid-area: label;
+    white-space: nowrap;
+  }
+  /* "Start here" sits on the featured card's top edge, like a sticker. */
+  .stepcard__meta .badge {
+    position: absolute;
+    top: -11px;
+    right: 58px;
+    padding: 3px 9px;
+    font-size: 9.5px;
+    border: 2px solid var(--ink);
+  }
+  .stepcard__toggle {
+    grid-area: toggle;
+    display: grid;
+    margin-left: 0;
+  }
+  .stepcard__price {
+    grid-area: price;
+    padding: 0;
+    border-top: 0;
+  }
+  .stepcard__amount {
+    font-size: 1.0625rem;
+  }
+  .stepcard__question {
+    grid-area: question;
+    margin: 12px 0 0;
+  }
+  .stepcard__outcome {
+    grid-area: outcome;
+    font-size: 1rem;
+    margin: 8px 0 0;
+  }
+  .stepcard__details {
+    grid-area: details;
+    margin-top: 16px;
+  }
+  .stepcard:not(.stepcard--open) .stepcard__question,
+  .stepcard:not(.stepcard--open) .stepcard__details {
+    display: none;
+  }
+}
+
+/* The smallest phones: a tighter first line so the +/− stays inside the card. */
+@media (max-width: 360px) {
+  .stepcard {
+    column-gap: 6px;
+    padding-left: 14px;
+    padding-right: 12px;
+  }
+  .stepcard__meta .label {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+  .stepcard__amount {
+    font-size: 1rem;
+  }
+  .stepcard__toggle {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 @media (max-width: 620px) {
@@ -1356,12 +1539,6 @@ textarea.input {
 
 .tools__intro span {
   display: block;
-}
-
-@media (max-width: 900px) {
-  .tools {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 /* 7 · About ----------------------------------------------------------- */
@@ -1464,7 +1641,9 @@ textarea.input {
     grid-template-columns: minmax(0, 1fr);
   }
   .portrait {
+    width: 100%;
     max-width: 300px;
+    justify-self: center;
   }
 }
 
@@ -1605,9 +1784,35 @@ textarea.input {
   margin-top: 3px;
 }
 
+
+
+/* Phones and narrow tablets: the tools and the testimonials become
+   swipeable galleries. Cards snap into place, the next one peeks in from
+   the right, and the row runs to the screen edges while its first and last
+   cards line up with the page text. */
 @media (max-width: 900px) {
+  .tools,
   .quotes {
-    grid-template-columns: minmax(0, 1fr);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(80%, 340px);
+    grid-template-columns: none;
+    gap: 16px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--page-x);
+    margin-inline: calc(var(--page-x) * -1);
+    padding: 4px var(--page-x) 12px;
+    scrollbar-width: none;
+  }
+  .tools::-webkit-scrollbar,
+  .quotes::-webkit-scrollbar {
+    display: none;
+  }
+  .tool,
+  .quotes > li {
+    scroll-snap-align: start;
   }
 }
 

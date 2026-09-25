@@ -4,8 +4,9 @@ import { mutedClass } from "@/lib/copy";
 
 /**
  * 9 · Testimonials (#testimonials): three quote cards with an 84px circular
- * photo slot. Rendered while release.showProof is true; the quotes, names
- * and photos are the design's slots until real ones arrive.
+ * photo slot (a swipeable gallery on phones, focusable so arrow keys scroll
+ * it). Rendered while release.showProof is true; the quotes, names and
+ * photos are the design's slots until real ones arrive.
  */
 export function Testimonials() {
   const muted = mutedClass("", proof.status);
@@ -15,7 +16,7 @@ export function Testimonials() {
       <h2 id="testimonials-heading" className="h2 testimonials__heading">
         {proof.heading}
       </h2>
-      <ul className="quotes">
+      <ul className="quotes" tabIndex={0} aria-label={proof.heading}>
         {proof.testimonials.map((t, i) => (
           <li key={i}>
             <figure className="quote">

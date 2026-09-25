@@ -4,7 +4,8 @@ import { fill, mutedClass } from "@/lib/copy";
 import { publicFileExists } from "@/lib/public-file";
 
 /**
- * 5 · What you get (#deliverables): six deliverables in a three-column grid,
+ * 5 · What you get (#deliverables): six deliverables in a three-column grid
+ * (a swipeable gallery on phones, focusable so arrow keys scroll it),
  * each with a 4:3 image slot, then the numeral beside the title, a pill
  * naming the step that builds it, and the body. A slot shows its caption
  * until the screenshot exists in public/. Bracketed titles and bodies render muted.
@@ -21,7 +22,7 @@ export function Deliverables() {
           <span key={line}>{line}</span>
         ))}
       </p>
-      <ul className="tools">
+      <ul className="tools" tabIndex={0} aria-label={whatYouGet.heading}>
         {whatYouGet.items.map((item) => {
           const hasImage = publicFileExists(item.image);
           return (
