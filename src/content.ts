@@ -438,7 +438,7 @@ export const about = {
 /* ------------------------------------------------------------------ */
 
 export const faq = {
-  heading: "Questions founders ask",
+  heading: "Maybe you're wondering ...",
   items: [
     {
       question: "What do you need from us before Step 1?",
