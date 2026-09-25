@@ -16,7 +16,7 @@ export function About() {
       <div className="about">
         <div className="portrait" aria-hidden={!hasPhoto || undefined}>
           {hasPhoto ? (
-            <Image src={about.photo} alt={about.photoAlt} fill sizes="(max-width: 900px) 300px, 540px" style={{ objectFit: "cover" }} />
+            <Image src={about.photo} alt={about.photoAlt} fill sizes="300px" style={{ objectFit: "cover" }} />
           ) : (
             <span>{about.photoPlaceholder}</span>
           )}

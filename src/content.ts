@@ -145,7 +145,7 @@ export const hero = {
   card: {
     ariaLabel: "See what to fix first: start the 10-question diagnostic",
     progressLabel: "Question 1 of 10",
-    timeLabel: "About 5 min",
+    timeLabel: "About 2 min",
     prompt: "Who owns marketing at your company today?",
     options: ["Nobody. Marketing, who?", "Someone, on the side", "We're about to hire for it"], // the three answers founders give most
     selectedIndex: 0, // drawn as selected
@@ -226,7 +226,11 @@ export const checklist = {
 export const howItWorks = {
   kicker: "How it works",
   heading: "A marketing function in about four months.",
-  intro: "Three steps, starting with wins.",
+  intro: "Three steps, starting with wins.", // shown until the dated line below renders in the browser
+  // {today} and {target} are filled in the visitor's browser: today, and today plus targetMonths
+  datedIntro:
+    "Today is {today} ... wouldn't it be great to have a marketing function in place by {target}? Start with these 3 steps, starting with wins.",
+  targetMonths: 3,
   youKeepLabel: "You keep",
   yourTimeLabel: "Your time: {time}",
 };
