@@ -1237,11 +1237,12 @@ textarea.input {
   max-width: 72ch;
 }
 
-/* The Durango note: bigger, ink, a pink rule to set it apart. */
+/* The Durango note: bigger, ink, right-aligned, with a pink rule on its right. */
 .how__locals {
   margin-top: 22px;
-  padding-left: 14px;
-  border-left: 4px solid var(--pink);
+  padding-right: 14px;
+  border-right: 4px solid var(--pink);
+  text-align: right;
   font-family: var(--fm-head);
   font-weight: 600;
   font-size: 1.125rem;
