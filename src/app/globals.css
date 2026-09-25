@@ -1148,11 +1148,6 @@ textarea.input {
   letter-spacing: -0.02em;
 }
 
-.stepcard__fixed {
-  font-size: 13.5px;
-  color: var(--muted);
-}
-
 /* The bundle row (#pricing) */
 .bundle {
   margin-top: 26px;

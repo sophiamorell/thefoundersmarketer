@@ -355,7 +355,6 @@ export const whatYouGet = {
 export const pricing = {
   badge: "Start here", // on the featured step
   emptyPrice: "TBD", // fills a null price
-  fixedLabel: "fixed", // beside each step's price
   steps: [
     { phase: 1, price: 7000, featured: true },
     { phase: 2, price: 14000 },
