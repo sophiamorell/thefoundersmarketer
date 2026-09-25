@@ -756,6 +756,11 @@ textarea.input {
   .hero {
     grid-template-columns: minmax(0, 1fr);
   }
+  /* On phones and narrow tablets the hero goes straight from the buttons
+     to the next section; the preview card is desktop only. */
+  .dcard {
+    display: none;
+  }
 }
 
 /* 2 · Why marketing, why now ------------------------------------------ */
