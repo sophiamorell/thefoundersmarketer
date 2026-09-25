@@ -4,8 +4,8 @@
    and is never restated here. */
 
 :root {
-  /* Colors: Sea Glass, with two site overrides: every pill (buttons,
-     answers, badges) is sunflower, and text highlights are light pink. */
+  /* Colors: Sea Glass, with two site overrides: the main buttons and the
+     answer pills are sunflower, and text highlights are light pink. */
   --ink: #1d2a29;
   --ink-2: #3a4947; /* body copy */
   --muted: #647270;
@@ -267,13 +267,13 @@ img {
 }
 
 .button--outline {
-  background: var(--sunflower);
+  background: transparent;
   border-color: var(--ink);
   color: var(--ink);
 }
 
 .button--outline:hover {
-  background: var(--sunflower-dark);
+  background: var(--mist);
   color: var(--ink);
 }
 
@@ -288,13 +288,13 @@ img {
 }
 
 .button--dark {
-  background: var(--sunflower);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--on-primary);
 }
 
 .button--dark:hover {
-  background: var(--sunflower-dark);
-  color: var(--ink);
+  background: var(--ink-2);
+  color: var(--on-primary);
 }
 
 .button--small {
@@ -510,8 +510,8 @@ img {
   position: absolute;
   right: -8px;
   top: -30px;
-  background: var(--sunflower);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--on-primary);
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 13px;
@@ -535,7 +535,7 @@ img {
   bottom: -5px;
   width: 10px;
   height: 10px;
-  background: var(--sunflower);
+  background: var(--ink);
   transform: rotate(45deg);
   border-radius: 2px;
 }
