@@ -37,7 +37,7 @@
   /* Layout */
   --page-x: clamp(20px, 4vw, 52px);
   --section-y: clamp(56px, 7vw, 92px);
-  --container: 1340px; /* the handoff's 1240px, widened */
+  --container: 1407px; /* the handoff's 1240px, widened */
 
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --nav-h: 84px;
@@ -507,8 +507,8 @@ img {
   position: absolute;
   right: -8px;
   top: -30px;
-  background: var(--ink);
-  color: var(--on-primary);
+  background: var(--pink-light);
+  color: var(--ink);
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 13px;
@@ -532,7 +532,7 @@ img {
   bottom: -5px;
   width: 10px;
   height: 10px;
-  background: var(--ink);
+  background: var(--pink-light);
   transform: rotate(45deg);
   border-radius: 2px;
 }
@@ -987,13 +987,29 @@ textarea.input {
   background: var(--pink);
 }
 
-.verdict--some p,
-.verdict--many p {
+.verdict--some p {
   color: var(--ink);
 }
 
 .verdict .button {
   flex: none;
+}
+
+/* 3 or more checked: white text on the pink bar, and a white button with pink text. */
+.verdict--many p {
+  color: #fff;
+}
+
+.verdict--many .button {
+  background: #fff;
+  border-color: #fff;
+  color: var(--pink);
+}
+
+.verdict--many .button:hover {
+  background: var(--pink-tint);
+  border-color: var(--pink-tint);
+  color: var(--pink);
 }
 
 /* 4 · How it works: step cards and the bundle row (option 1a) ---------- */
@@ -1132,11 +1148,6 @@ textarea.input {
   letter-spacing: -0.02em;
 }
 
-.stepcard__fixed {
-  font-size: 13.5px;
-  color: var(--muted);
-}
-
 /* The bundle row (#pricing) */
 .bundle {
   margin-top: 26px;
@@ -1226,11 +1237,12 @@ textarea.input {
   max-width: 72ch;
 }
 
-/* The Durango note: bigger, ink, a pink rule to set it apart. */
+/* The Durango note: bigger, ink, right-aligned, with a pink rule on its right. */
 .how__locals {
   margin-top: 22px;
-  padding-left: 14px;
-  border-left: 4px solid var(--pink);
+  padding-right: 14px;
+  border-right: 4px solid var(--pink);
+  text-align: right;
   font-family: var(--fm-head);
   font-weight: 600;
   font-size: 1.125rem;
@@ -1337,9 +1349,13 @@ textarea.input {
   margin-bottom: 10px;
 }
 
-/* One line on desktop; wraps on narrower screens. */
+/* Two lines, one per sentence; each wraps on narrower screens. */
 .tools__intro {
   max-width: none;
+}
+
+.tools__intro span {
+  display: block;
 }
 
 @media (max-width: 900px) {
@@ -1378,7 +1394,7 @@ textarea.input {
 
 /* A fine halftone over the photo, so it reads less airbrushed. */
 /* The photo treatment: a sea glass, sunflower and pink wash, and a halftone
-   that fades in from top to bottom, so it reads less airbrushed. */
+   whose dots grow from top to bottom, so it reads less airbrushed. */
 .portrait::before,
 .portrait::after {
   content: "";
@@ -1394,12 +1410,17 @@ textarea.input {
   opacity: 0.55;
 }
 
+/* Halftone that grows toward the bottom: a dot grid screened with a
+   top-to-bottom gradient, then thresholded (contrast) so each dot's size
+   follows the gradient. White drops out under multiply; opacity sets the ink. */
 .portrait::after {
-  background-image: radial-gradient(rgba(29, 42, 41, 0.3) 0.8px, transparent 1.4px);
-  background-size: 5px 5px;
+  background:
+    radial-gradient(closest-side, #000, #fff) 0 0 / 6px 6px,
+    linear-gradient(180deg, #8f8f8f 0%, #000 100%);
+  background-blend-mode: screen;
+  filter: contrast(40);
   mix-blend-mode: multiply;
-  -webkit-mask-image: linear-gradient(180deg, transparent 15%, #000 100%);
-  mask-image: linear-gradient(180deg, transparent 15%, #000 100%);
+  opacity: 0.22;
 }
 
 .about__heading {

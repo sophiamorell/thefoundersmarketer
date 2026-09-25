@@ -61,7 +61,6 @@ export function HowItWorks() {
               {price && (
                 <div className="stepcard__price">
                   <span className="stepcard__amount">{formatPrice(price.price, pricing.emptyPrice)}</span>
-                  <span className="stepcard__fixed">{pricing.fixedLabel}</span>
                 </div>
               )}
             </li>

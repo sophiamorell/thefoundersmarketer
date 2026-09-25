@@ -292,7 +292,10 @@ export const phases: Phase[] = [
 export const whatYouGet = {
   kicker: "What you get",
   heading: "The tools you keep",
-  intro: "You get quick wins in Step 1, Steps 2 and 3 ship the tools, built on your data, and they stay with you when we're done.",
+  introLines: [
+    "You get quick wins in Step 1.",
+    "Steps 2 and 3 ship the tools, built on your data, and they stay with you when we're done.",
+  ], // each on its own line
   stepLabel: "Built in Step {n}",
   items: [
     {
@@ -355,7 +358,6 @@ export const whatYouGet = {
 export const pricing = {
   badge: "Start here", // on the featured step
   emptyPrice: "TBD", // fills a null price
-  fixedLabel: "fixed", // beside each step's price
   steps: [
     { phase: 1, price: 7000, featured: true },
     { phase: 2, price: 14000 },
@@ -436,7 +438,7 @@ export const about = {
 /* ------------------------------------------------------------------ */
 
 export const faq = {
-  heading: "Questions founders ask",
+  heading: "Maybe you're wondering ...",
   items: [
     {
       question: "What do you need from us before Step 1?",
@@ -557,7 +559,6 @@ export const diagnostic = {
   modal: {
     closeLabel: "Close",
     email: {
-      kicker: "Free · 10 questions · 5 minutes",
       heading: "See what to fix first.",
       body: "Ten quick questions about your pipeline. Results and the three things to fix first will be emailed to you.",
       label: "Work email",
