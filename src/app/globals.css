@@ -876,12 +876,69 @@ textarea.input {
   max-width: 30ch;
 }
 
+/* Phones and narrow tablets: a compact vertical timeline. The rail runs
+   down the left through the dots (solid for the built steps, dashed for
+   what's next); each step's label, badge, title and text sit beside its
+   dot, so the whole section fits on one screen. */
 @media (max-width: 900px) {
-  .timeline__steps {
-    grid-template-columns: minmax(0, 1fr);
+  .why__heading {
+    margin-bottom: 26px;
   }
   .timeline__rail {
-    display: none;
+    left: 13px;
+    right: auto;
+    top: 14px;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+    background:
+      linear-gradient(180deg, var(--primary) 0%, var(--primary) 62%, transparent 62%),
+      repeating-linear-gradient(180deg, var(--ink) 0 6px, transparent 6px 12px);
+  }
+  .timeline__steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 28px auto minmax(0, 1fr);
+    grid-template-areas:
+      "dot label badge"
+      "dot title title"
+      "dot body body";
+    column-gap: 14px;
+    align-items: center;
+  }
+  .step__marker {
+    display: contents;
+  }
+  .step__dot {
+    grid-area: dot;
+    align-self: start;
+    position: relative;
+    z-index: 1;
+  }
+  .step .badge {
+    grid-area: badge;
+    justify-self: start;
+    padding: 3px 9px;
+    font-size: 9.5px;
+  }
+  .step__label {
+    grid-area: label;
+    margin: 0;
+    line-height: 28px;
+  }
+  .step h3 {
+    grid-area: title;
+    font-size: 1.25rem;
+    margin: 0 0 4px;
+  }
+  .step__body {
+    grid-area: body;
+    font-size: 15px;
+    line-height: 1.45;
+    max-width: none;
   }
 }
 
