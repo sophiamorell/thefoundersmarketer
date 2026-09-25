@@ -1667,7 +1667,9 @@ textarea.input {
     grid-template-columns: minmax(0, 1fr);
   }
   .portrait {
+    width: 100%;
     max-width: 300px;
+    justify-self: center;
   }
 }
 
