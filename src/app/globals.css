@@ -1366,10 +1366,10 @@ textarea.input {
 
 /* 7 · About ----------------------------------------------------------- */
 
-/* Full width: a larger portrait, and the text column runs to the edge. */
+/* The portrait in a 300px column; the text runs to the edge. */
 .about {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
   gap: clamp(32px, 5vw, 72px);
   align-items: center;
 }
@@ -1379,7 +1379,7 @@ textarea.input {
   aspect-ratio: 3 / 4;
   background: var(--mist);
   border: 2px solid var(--ink);
-  border-radius: 50% 50% 22px 22px / 37.5% 37.5% 22px 22px; /* a true semicircle at 3:4 */
+  border-radius: 50% 50% 24px 24px / 37.5% 37.5% 24px 24px; /* a true semicircle at 3:4 */
   display: grid;
   place-items: center;
   text-align: center;
@@ -1391,29 +1391,37 @@ textarea.input {
   text-transform: uppercase;
   color: var(--sea-ink);
   overflow: hidden;
+  isolation: isolate; /* keeps the blend modes inside the frame */
 }
 
-/* The photo treatment: a soft sea glass, sunflower and pink wash over the
-   whole photo, and a pink halftone that dissolves the bottom of the arch,
-   its dots growing toward the base (public/images/portrait-halftone.svg). */
-.portrait::before,
+/* The photo treatment (portrait handoff, option 2b): the photo slightly
+   softened, a warm gold, pink and teal soft-light wash, and a fine ink
+   grain to break up the smooth skin. */
+.portrait img {
+  object-position: 50% 20% !important; /* next/image sets object-fit inline */
+  filter: contrast(0.92) saturate(0.85) brightness(1.03);
+}
+
 .portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(155deg, #f7bb3a 0%, #ec6f88 60%, #3d6b64 100%);
+  mix-blend-mode: soft-light;
+  opacity: 0.45;
+}
+
+/* Keep the grain at 3px on every screen: it should read as texture, not dots. */
+.portrait::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-}
-
-.portrait::before {
-  background: linear-gradient(160deg, rgba(61, 107, 100, 0.9) 0%, rgba(247, 187, 58, 0.45) 50%, rgba(236, 111, 136, 0.9) 100%);
-  mix-blend-mode: soft-light;
-}
-
-.portrait::after {
-  top: auto;
-  height: 42%;
-  background: url("/images/portrait-halftone.svg") 0 0 / 100% 100% no-repeat;
+  background: radial-gradient(rgba(29, 42, 41, 0.22) 0.8px, transparent 1.2px) 0 0 / 3px 3px;
+  mix-blend-mode: multiply;
+  opacity: 0.6;
 }
 
 .about__heading {
