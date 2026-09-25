@@ -507,8 +507,8 @@ img {
   position: absolute;
   right: -8px;
   top: -30px;
-  background: var(--ink);
-  color: var(--on-primary);
+  background: var(--pink-light);
+  color: var(--ink);
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 13px;
@@ -532,7 +532,7 @@ img {
   bottom: -5px;
   width: 10px;
   height: 10px;
-  background: var(--ink);
+  background: var(--pink-light);
   transform: rotate(45deg);
   border-radius: 2px;
 }
