@@ -4,7 +4,7 @@ import { anchors, diagnostic } from "@/content";
 import { openDiagnostic } from "@/lib/diagnostic-modal";
 
 /**
- * 10 · The diagnostic (#diagnostic): the teal block. Left, the heading,
+ * 10 · The diagnostic (#diagnostic): the mist block. Left, the heading,
  * intro and the yellow "See what to fix first" button, which opens the
  * diagnostic popup. Right, the "What comes back" card.
  */
@@ -27,7 +27,7 @@ export function Diagnostic() {
             {diagnostic.comesBack.items.map((item) => (
               <li key={item}>
                 <span className="check" aria-hidden="true">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#effaf7" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f6faf9" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 6 9 17l-5-5" />
                   </svg>
                 </span>

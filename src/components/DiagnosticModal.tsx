@@ -17,7 +17,7 @@ import { track } from "@/lib/track";
 
 /**
  * The diagnostic popup: email first, then the questions one at a time, then
- * a done screen. Opened by openDiagnostic() (the hero card, the teal
+ * a done screen. Opened by openDiagnostic() (the hero card, the mist
  * section's button) and by any link to #diagnostic.
  *
  * Closing (×, backdrop, Escape) keeps the step, answers and email; reopening

@@ -108,13 +108,13 @@ export const anchors = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Logo (final: option 2a) and nav                                    */
+/*  Logo (final: v4 option 3e, 3f in the footer) and nav               */
 /* ------------------------------------------------------------------ */
 
 export const logo = {
   lead: "The Founder’s", // curly apostrophe, per the logo spec
   highlight: "Marketer",
-  coin: "FM",
+  ariaLabel: "The Founder’s Marketer, home",
 };
 
 export const nav = {
@@ -390,7 +390,8 @@ export const pricing = {
 export const about = {
   kicker: "Who you'd work with",
   heading: "The founder who had to do it without a marketer.",
-  photo: "/images/sophie.jpg", // TODO(sophie): renders as the arch placeholder until supplied
+  photo: "/images/sophie.jpg", // renders as the arch placeholder if the file is missing
+  photoAlt: "Sophie, founder of The Founder’s Marketer",
   photoPlaceholder: "Portrait goes here",
   paragraphs: [
     "Co-founded and ran an enterprise mentoring software company for eleven years, through acquisition. Wrote the positioning, built the decks, ran the launches, closed the deals, the whole marketing job before there was a title.",

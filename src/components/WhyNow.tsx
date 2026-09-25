@@ -2,7 +2,7 @@ import { whyNow } from "@/content";
 
 function Check() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#effaf7" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f6faf9" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M20 6 9 17l-5-5" />
     </svg>
   );
@@ -10,8 +10,8 @@ function Check() {
 
 /**
  * 2 · Why marketing, why now: the timeline. Product and Sales are built
- * (teal check dots), Marketing is next (ringed dot, "You are here" badge).
- * The rail is solid teal for two thirds, then dashed.
+ * (sea-glass check dots), Marketing is next (pink-ringed dot, "You are here"
+ * badge). The rail is solid sea glass for two thirds, then dashed.
  */
 export function WhyNow() {
   return (

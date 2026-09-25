@@ -1,35 +1,31 @@
 /* The Founder's Marketer: styles.
-   Visual system: "Founders Marketer Site v2" design handoff. Each rule here
+   Visual system: "Founders Marketer Site v4" design handoff (Sea Glass). Each rule here
    reproduces an inline style from that reference. Copy comes from content.ts
    and is never restated here. */
 
 :root {
-  /* Colors */
-  --ink: #1c2a29;
-  --ink-2: #33403f;
-  --muted: #5d6b6a;
-  --page: #f0eae1;
-  --desk: #e7dfd3;
-  --card: #f7f3ec;
-  --cream: #fff8ef;
-  --terracotta: #a43f24;
-  --terracotta-dark: #7c2f1b;
-  --coral: #e36849;
-  --blush: #fbe6e0;
-  --yellow: #ffbe2f;
-  --yellow-dark: #dc9d0d;
-  --butter: #fff2cf;
-  --teal: #137c78;
-  --teal-deep: #0c605d;
-  --mint: #effaf7;
-  --sage: #e2ebe7;
-  --sage-ink: #365550;
-  --sage-ink-2: #263635;
-  --rule: rgba(28, 42, 41, 0.14);
-  --rule-on-ink: rgba(239, 250, 247, 0.22);
-  --teal-text: #f3f2f2;
-  --teal-text-2: #eae9e9;
-  --ink-body-on-dark: #c3ccca;
+  /* Colors: Sea Glass, with two site overrides: every pill (buttons,
+     answers, badges) is sunflower, and text highlights are light pink. */
+  --ink: #1d2a29;
+  --ink-2: #3a4947; /* body copy */
+  --muted: #647270;
+  --muted-2: #8a9694; /* input placeholders */
+  --ground: #f5f6f3; /* page background */
+  --desk: #e9ebe8; /* outside the 1240px column */
+  --surface: #fdfdfc; /* cards, open rows, modal */
+  --primary: #3d6b64; /* sea glass */
+  --primary-dark: #2c4a46; /* deep sea */
+  --sea-ink: #35605a; /* accent text on tints */
+  --mist: #cfe8e3;
+  --on-primary: #f6faf9;
+  --sunflower: #f7bb3a;
+  --sunflower-dark: #e0a42a;
+  --sunflower-tint: #fdeec4;
+  --pink: #ec6f88;
+  --pink-tint: #fbe0e6;
+  --pink-light: #f8c9d4; /* text highlights */
+  --rule: rgba(29, 42, 41, 0.14);
+  --track: rgba(29, 42, 41, 0.12); /* empty progress segments */
 
   /* Type: next/font supplies the self-hosted families as variables */
   --fm-slab: var(--font-slab), Georgia, serif;
@@ -83,7 +79,7 @@ body {
 .page {
   max-width: var(--container);
   margin: 0 auto;
-  background: var(--page);
+  background: var(--ground);
   overflow-x: clip;
 }
 
@@ -109,7 +105,7 @@ h4 {
 }
 
 a {
-  color: var(--teal);
+  color: var(--primary);
   text-decoration: none;
   transition:
     color 160ms var(--ease),
@@ -117,7 +113,7 @@ a {
 }
 
 a:hover {
-  color: var(--teal-deep);
+  color: var(--sea-ink);
 }
 
 button {
@@ -137,7 +133,7 @@ img {
 }
 
 :focus-visible {
-  outline: 2px solid var(--teal);
+  outline: 2px solid var(--primary);
   outline-offset: 3px;
 }
 
@@ -145,8 +141,13 @@ img {
   outline: none;
 }
 
+::placeholder {
+  color: var(--muted-2);
+  opacity: 1;
+}
+
 ::selection {
-  background: var(--yellow);
+  background: var(--pink-light);
   color: var(--ink);
 }
 
@@ -163,7 +164,7 @@ img {
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--terracotta);
+  color: var(--primary);
   margin-bottom: 16px;
 }
 
@@ -210,14 +211,14 @@ img {
 /* The highlighter */
 .hl {
   display: inline;
-  background: linear-gradient(180deg, transparent 28%, var(--yellow) 28%, var(--yellow) 76%, transparent 76%);
+  background: linear-gradient(180deg, transparent 28%, var(--pink-light) 28%, var(--pink-light) 76%, transparent 76%);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   padding: 0 0.1em;
 }
 
 .hl--wide {
-  background: linear-gradient(transparent 22%, var(--yellow) 22%, var(--yellow) 82%, transparent 82%);
+  background: linear-gradient(transparent 22%, var(--pink-light) 22%, var(--pink-light) 82%, transparent 82%);
   padding: 0 0.12em;
 }
 
@@ -227,7 +228,7 @@ img {
   width: 24px;
   height: 24px;
   border-radius: 999px;
-  background: var(--teal);
+  background: var(--primary);
   display: grid;
   place-items: center;
 }
@@ -244,7 +245,7 @@ img {
   font-size: 16px;
   line-height: 1.2;
   border-radius: 999px;
-  border: 2px solid transparent;
+  border: 2px solid var(--ink);
   padding: 15px 28px;
   text-align: center;
   cursor: pointer;
@@ -255,45 +256,45 @@ img {
 }
 
 .button--primary {
-  background: var(--terracotta);
-  color: var(--cream);
+  background: var(--sunflower);
+  color: var(--ink);
   padding: 17px 30px;
 }
 
 .button--primary:hover {
-  background: var(--terracotta-dark);
-  color: var(--cream);
+  background: var(--sunflower-dark);
+  color: var(--ink);
 }
 
 .button--outline {
-  background: transparent;
+  background: var(--sunflower);
   border-color: var(--ink);
   color: var(--ink);
 }
 
 .button--outline:hover {
-  background: var(--sage);
+  background: var(--sunflower-dark);
   color: var(--ink);
 }
 
 .button--yellow {
-  background: var(--yellow);
+  background: var(--sunflower);
   color: var(--ink);
 }
 
 .button--yellow:hover {
-  background: var(--yellow-dark);
+  background: var(--sunflower-dark);
   color: var(--ink);
 }
 
 .button--dark {
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--sunflower);
+  color: var(--ink);
 }
 
 .button--dark:hover {
-  background: var(--ink-2);
-  color: var(--cream);
+  background: var(--sunflower-dark);
+  color: var(--ink);
 }
 
 .button--small {
@@ -321,7 +322,7 @@ img {
   justify-content: space-between;
   gap: 24px;
   padding: 18px var(--page-x);
-  background: rgba(240, 234, 225, 0.93);
+  background: rgba(245, 246, 243, 0.93);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -340,84 +341,107 @@ img {
 }
 
 .nav__links a:hover {
-  color: var(--teal-deep);
+  color: var(--sea-ink);
 }
 
 .nav__links .nav__cta {
-  background: var(--terracotta);
-  color: #fff;
+  background: var(--sunflower);
+  color: var(--ink);
+  border: 2px solid var(--ink);
   border-radius: 999px;
   padding: 11px 20px;
   font-weight: 700;
 }
 
 .nav__links .nav__cta:hover {
-  background: var(--terracotta-dark);
-  color: #fff;
+  background: var(--sunflower-dark);
+  color: var(--ink);
 }
 
-/* The sticker logo (option 2a): hangs into the hero, sits in the bar once scrolled. */
+/* The logo (v4, 3e): three slashes and the wordmark. Static. */
 .logo {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  position: relative;
-  z-index: 2;
-  align-self: flex-start;
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  padding: 8px 20px;
-  font-family: var(--fm-slab);
-  font-size: clamp(18px, 1.8vw, 22px);
-  white-space: nowrap;
-  transform-origin: left center;
-  background: var(--teal-deep);
-  color: var(--cream);
-  letter-spacing: 0.005em;
-  box-shadow: 4px 4px 0 var(--ink);
-  transform: translateY(14px) rotate(-3.15deg) scale(1.05);
-  margin: 0 0 -28px;
-  transition:
-    transform 260ms var(--ease),
-    margin 260ms var(--ease),
-    box-shadow 260ms,
-    background-color 260ms,
-    color 260ms;
+  gap: 12px;
+  color: var(--ink);
 }
 
 .logo:hover {
-  color: var(--cream);
+  color: var(--ink);
+}
+
+.slashes {
+  display: flex;
+  flex: none;
+  gap: 4px;
+}
+
+.slashes span {
+  width: 7px;
+  height: 28px;
+  border-radius: 1px;
+  transform: skewX(-24deg);
+  background: var(--primary);
+}
+
+.slashes span:nth-child(2) {
+  background: var(--sunflower);
+}
+
+.slashes span:nth-child(3) {
+  background: var(--pink);
+}
+
+.logo__word {
+  font-family: var(--fm-head);
+  font-weight: 800;
+  font-size: clamp(18px, 1.8vw, 21px);
+  letter-spacing: -0.03em;
+  white-space: nowrap;
 }
 
 .logo__mark {
-  background: var(--yellow);
-  color: var(--ink);
-  padding: 0 6px 1px;
-  border-radius: 4px;
-  transition:
-    box-shadow 260ms,
-    background-color 260ms,
-    color 260ms,
-    padding 260ms;
+  color: var(--primary);
 }
 
-.logo--scrolled {
-  transform: translateY(0) rotate(0) scale(0.78);
-  margin-bottom: 0;
-  background: var(--cream);
-  color: var(--ink);
-  letter-spacing: -0.02em;
-  box-shadow: 2px 2px 0 var(--ink);
+/* The contained logo (v4, 3f): wordmark on a deep-sea plate, stripes on the right edge. */
+.nameplate {
+  position: relative;
+  display: inline-block;
+  background: var(--primary-dark);
+  border-radius: 12px;
+  padding: 12px 58px 12px 16px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-.logo--scrolled:hover {
-  color: var(--ink);
+.nameplate__stripe {
+  position: absolute;
+  top: -30px;
+  right: 34px;
+  width: 7px;
+  height: 120px;
+  background: var(--mist);
+  transform: rotate(30deg);
 }
 
-.logo--scrolled .logo__mark {
-  background: transparent;
-  color: inherit;
-  padding: 0;
-  box-shadow: inset 0 -9px 0 var(--yellow);
+.nameplate__stripe:nth-child(2) {
+  right: 22px;
+  background: var(--sunflower);
+}
+
+.nameplate__stripe:nth-child(3) {
+  right: 10px;
+  background: var(--pink);
+}
+
+.nameplate__word {
+  position: relative;
+  font-family: var(--fm-head);
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.03em;
+  color: var(--surface);
 }
 
 @media (max-width: 900px) {
@@ -430,18 +454,15 @@ img {
   .nav {
     gap: 12px;
   }
+  /* Narrow screens: the wordmark wraps to two lines beside the slashes. */
   .logo {
-    font-size: 15px;
-    padding: 7px 14px;
-    white-space: normal;
-    line-height: 1.2;
-    max-width: 12ch;
-    transform: translateY(10px) rotate(-3.15deg) scale(1);
-    margin-bottom: -18px;
+    gap: 10px;
   }
-  .logo--scrolled {
-    transform: translateY(0) rotate(0) scale(0.86);
-    margin-bottom: 0;
+  .logo__word {
+    font-size: 16px;
+    line-height: 1.1;
+    white-space: normal;
+    max-width: 9.5em;
   }
   .nav__links .nav__cta {
     flex: none;
@@ -489,8 +510,8 @@ img {
   position: absolute;
   right: -8px;
   top: -30px;
-  background: var(--ink);
-  color: var(--mint);
+  background: var(--sunflower);
+  color: var(--ink);
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 13px;
@@ -514,7 +535,7 @@ img {
   bottom: -5px;
   width: 10px;
   height: 10px;
-  background: var(--ink);
+  background: var(--sunflower);
   transform: rotate(45deg);
   border-radius: 2px;
 }
@@ -553,7 +574,7 @@ img {
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: var(--coral);
+  background: var(--pink);
   transform: translateY(-3px);
 }
 
@@ -586,7 +607,7 @@ img {
   font-family: var(--fm-body);
   font-size: 16px;
   color: var(--ink);
-  background: var(--page);
+  background: var(--ground);
   border: 2px solid var(--ink);
   border-radius: 999px;
   padding: 12px 18px;
@@ -620,19 +641,19 @@ textarea.input {
 
 .dcard__back {
   inset: 16px 0 0 16px;
-  background: var(--sage);
+  background: var(--mist);
   transform: rotate(2.6deg);
 }
 
 .dcard__mid {
   inset: 8px 6px 6px 8px;
-  background: var(--butter);
+  background: var(--sunflower-tint);
   transform: rotate(1.3deg);
 }
 
 .dcard__front {
   position: relative;
-  background: var(--card);
+  background: var(--surface);
   border: 2px solid var(--ink);
   border-radius: 24px;
   box-shadow: 6px 6px 0 var(--ink);
@@ -648,7 +669,7 @@ textarea.input {
 }
 
 .dcard:focus-visible .dcard__front {
-  outline: 2px solid var(--teal);
+  outline: 2px solid var(--primary);
   outline-offset: 6px;
 }
 
@@ -660,7 +681,7 @@ textarea.input {
 }
 
 .dcard__time {
-  color: var(--terracotta);
+  color: var(--primary);
 }
 
 .dcard__progress {
@@ -673,11 +694,11 @@ textarea.input {
 .dcard__segment {
   height: 6px;
   border-radius: 999px;
-  background: rgba(28, 42, 41, 0.12);
+  background: var(--track);
 }
 
 .dcard__segment--on {
-  background: var(--terracotta);
+  background: var(--primary);
 }
 
 .dcard__prompt {
@@ -702,11 +723,11 @@ textarea.input {
   border-radius: 999px;
   padding: 12px 18px;
   font-size: 15.5px;
-  background: var(--page);
+  background: var(--sunflower);
 }
 
 .dcard__option--on {
-  background: var(--yellow);
+  background: var(--sunflower-dark);
   font-weight: 700;
 }
 
@@ -718,8 +739,9 @@ textarea.input {
   margin-top: 24px;
   padding: 15px 24px;
   border-radius: 999px;
-  background: var(--terracotta);
-  color: var(--cream);
+  background: var(--sunflower);
+  border: 2px solid var(--ink);
+  color: var(--ink);
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 16px;
@@ -762,7 +784,7 @@ textarea.input {
 }
 
 .why__heading .why__line2 {
-  color: var(--terracotta);
+  color: var(--primary);
 }
 
 .timeline {
@@ -776,7 +798,7 @@ textarea.input {
   top: 13px;
   height: 2px;
   background:
-    linear-gradient(90deg, var(--teal) 0%, var(--teal) 66%, transparent 66%),
+    linear-gradient(90deg, var(--primary) 0%, var(--primary) 66%, transparent 66%),
     repeating-linear-gradient(90deg, var(--ink) 0 8px, transparent 8px 16px);
 }
 
@@ -802,15 +824,15 @@ textarea.input {
   width: 28px;
   height: 28px;
   border-radius: 999px;
-  background: var(--teal);
+  background: var(--primary);
   display: grid;
   place-items: center;
 }
 
 .step__dot--here {
-  background: var(--page);
-  border: 3px solid var(--terracotta);
-  box-shadow: 0 0 0 6px var(--blush);
+  background: var(--ground);
+  border: 3px solid var(--pink);
+  box-shadow: 0 0 0 6px var(--pink-tint);
 }
 
 .badge {
@@ -819,7 +841,7 @@ textarea.input {
   font-size: 10.5px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  background: var(--yellow);
+  background: var(--sunflower);
   color: var(--ink);
   border-radius: 999px;
   padding: 6px 13px;
@@ -827,12 +849,12 @@ textarea.input {
 }
 
 .step__label {
-  color: var(--teal-deep);
+  color: var(--sea-ink);
   margin-bottom: 10px;
 }
 
 .step__label--here {
-  color: var(--terracotta);
+  color: var(--primary);
 }
 
 .step h3 {
@@ -842,7 +864,7 @@ textarea.input {
 }
 
 .step h3.step__title--here {
-  color: var(--terracotta);
+  color: var(--primary);
 }
 
 .step__body {
@@ -877,7 +899,7 @@ textarea.input {
 
 .checklist__top {
   padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 44px) clamp(24px, 3vw, 32px);
-  background: var(--teal);
+  background: var(--primary);
 }
 
 .checklist__heading {
@@ -885,12 +907,12 @@ textarea.input {
   letter-spacing: -0.025em;
   line-height: 1.1;
   margin-bottom: 8px;
-  color: var(--teal-text);
+  color: var(--on-primary);
 }
 
 .checklist__sub {
   font-size: 1rem;
-  color: var(--teal-text-2);
+  color: var(--on-primary);
   margin-bottom: 28px;
 }
 
@@ -915,7 +937,7 @@ textarea.input {
   font-family: var(--fm-body);
   font-size: 1.0625rem;
   line-height: 1.4;
-  color: var(--teal-text-2);
+  color: var(--on-primary);
 }
 
 .checklist__box {
@@ -923,7 +945,7 @@ textarea.input {
   width: 24px;
   height: 24px;
   border-radius: 7px;
-  border: 2px solid var(--teal-text);
+  border: 2px solid var(--on-primary);
   display: grid;
   place-items: center;
   background: transparent;
@@ -931,7 +953,7 @@ textarea.input {
 }
 
 .checklist__item[aria-pressed="true"] .checklist__box {
-  background: var(--coral);
+  background: var(--pink);
 }
 
 .checklist__text {
@@ -947,7 +969,7 @@ textarea.input {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  background: var(--sage);
+  background: var(--mist);
   transition: background-color 160ms var(--ease);
 }
 
@@ -957,15 +979,15 @@ textarea.input {
   font-size: 1.0625rem;
   line-height: 1.4;
   max-width: 52ch;
-  color: var(--sage-ink-2);
+  color: var(--ink);
 }
 
 .verdict--some {
-  background: var(--butter);
+  background: var(--sunflower-tint);
 }
 
 .verdict--many {
-  background: var(--yellow);
+  background: var(--sunflower);
 }
 
 .verdict--some p,
@@ -1001,7 +1023,7 @@ textarea.input {
 }
 
 .accordion__row--open {
-  background: var(--card);
+  background: var(--surface);
 }
 
 /* Numeral, head, price, sign. Below 600px the price drops under the question. */
@@ -1029,7 +1051,7 @@ textarea.input {
 }
 
 .accordion__row--open .accordion__numeral {
-  color: var(--terracotta);
+  color: var(--primary);
 }
 
 .accordion__head {
@@ -1146,9 +1168,9 @@ textarea.input {
   text-align: center;
   margin-left: clamp(20px, 3vw, 30px);
   font-family: var(--fm-head);
-  background: var(--yellow);
+  background: var(--sunflower);
   color: var(--ink);
-  border: 2px solid var(--yellow);
+  border: 2px solid var(--ink);
   border-radius: 999px;
   padding: 13px 26px;
   font-weight: 700;
@@ -1156,7 +1178,7 @@ textarea.input {
 }
 
 .how__cta:hover {
-  opacity: 0.88;
+  background: var(--sunflower-dark);
   color: var(--ink);
 }
 
@@ -1216,7 +1238,7 @@ textarea.input {
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: var(--teal);
+  background: var(--primary);
   transform: translateY(-1px);
 }
 
@@ -1259,7 +1281,7 @@ textarea.input {
 .slot {
   position: relative;
   aspect-ratio: 4 / 3;
-  background: var(--sage);
+  background: var(--mist);
   border: 2px solid var(--ink);
   border-radius: 16px;
   display: grid;
@@ -1271,7 +1293,7 @@ textarea.input {
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--sage-ink);
+  color: var(--sea-ink);
   margin-bottom: 18px;
   overflow: hidden;
 }
@@ -1286,7 +1308,7 @@ textarea.input {
 .tool__numeral {
   font-family: var(--fm-slab);
   font-size: 1.125rem;
-  color: var(--terracotta);
+  color: var(--primary);
 }
 
 .tool h3 {
@@ -1304,7 +1326,7 @@ textarea.input {
 .tool .tool__step {
   font-size: 11px;
   line-height: 1.4;
-  color: var(--teal-deep);
+  color: var(--sea-ink);
   margin-bottom: 8px;
 }
 
@@ -1326,7 +1348,7 @@ textarea.input {
 .portrait {
   position: relative;
   aspect-ratio: 3 / 4;
-  background: var(--sage);
+  background: var(--mist);
   border: 2px solid var(--ink);
   border-radius: 150px 150px 20px 20px;
   display: grid;
@@ -1338,7 +1360,7 @@ textarea.input {
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--sage-ink);
+  color: var(--sea-ink);
   overflow: hidden;
 }
 
@@ -1360,7 +1382,7 @@ textarea.input {
 }
 
 .quote-slot {
-  background: var(--sage);
+  background: var(--mist);
   border-radius: 20px;
   padding: 26px 30px;
   max-width: 60ch;
@@ -1368,7 +1390,7 @@ textarea.input {
 
 .quote-slot .label {
   display: block;
-  color: var(--sage-ink);
+  color: var(--sea-ink);
   margin-bottom: 14px;
 }
 
@@ -1377,7 +1399,7 @@ textarea.input {
   font-weight: 700;
   font-size: 1.125rem;
   line-height: 1.45;
-  color: var(--sage-ink-2);
+  color: var(--ink);
 }
 
 @media (max-width: 900px) {
@@ -1423,7 +1445,7 @@ textarea.input {
 }
 
 .faq__trigger:hover {
-  color: var(--terracotta);
+  color: var(--primary);
 }
 
 .faq__sign {
@@ -1431,7 +1453,7 @@ textarea.input {
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 20px;
-  color: var(--terracotta);
+  color: var(--primary);
 }
 
 .faq__answer {
@@ -1463,7 +1485,7 @@ textarea.input {
 }
 
 .quote {
-  background: var(--card);
+  background: var(--surface);
   border: 2px solid var(--ink);
   border-radius: 24px;
   padding: 28px 28px 26px;
@@ -1476,7 +1498,7 @@ textarea.input {
   font-family: var(--fm-slab);
   font-size: 3rem;
   line-height: 0.6;
-  color: var(--coral);
+  color: var(--pink);
   height: 22px;
 }
 
@@ -1504,7 +1526,7 @@ textarea.input {
   height: 84px;
   border-radius: 999px;
   overflow: hidden;
-  background: var(--sage);
+  background: var(--mist);
 }
 
 .quote__name {
@@ -1529,8 +1551,8 @@ textarea.input {
 /* 10 · The diagnostic ------------------------------------------------- */
 
 .diag {
-  background: var(--teal);
-  color: var(--mint);
+  background: var(--mist);
+  color: var(--ink);
   border-radius: 28px;
   padding: clamp(32px, 5vw, 60px) clamp(24px, 4vw, 56px);
   display: grid;
@@ -1565,7 +1587,7 @@ textarea.input {
 }
 
 .diag__card {
-  background: var(--card);
+  background: var(--surface);
   border-radius: 20px;
   padding: 26px 28px;
   color: var(--ink);
@@ -1638,7 +1660,7 @@ textarea.input {
   padding: 11px 18px;
   border: 2px solid var(--ink);
   border-radius: 999px;
-  background: var(--page);
+  background: var(--sunflower);
   text-align: left;
   font-family: var(--fm-body);
   font-size: 16px;
@@ -1650,11 +1672,11 @@ textarea.input {
 }
 
 .choice__option:hover {
-  background: var(--sage);
+  background: var(--sunflower-dark);
 }
 
 .choice__option[aria-checked="true"] {
-  background: var(--yellow);
+  background: var(--sunflower-dark);
   font-weight: 700;
 }
 
@@ -1664,13 +1686,13 @@ textarea.input {
   height: 18px;
   border: 2px solid var(--ink);
   border-radius: 999px;
-  background: var(--card);
+  background: var(--surface);
 }
 
 .choice__option[aria-checked="true"] .choice__radio,
 .dcard__option--on .choice__radio {
   background: var(--ink);
-  box-shadow: inset 0 0 0 3px var(--yellow);
+  box-shadow: inset 0 0 0 3px var(--sunflower-dark);
 }
 
 /* The diagnostic popup ------------------------------------------------ */
@@ -1683,7 +1705,7 @@ textarea.input {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(28, 42, 41, 0.62);
+  background: rgba(29, 42, 41, 0.62);
 }
 
 .modal__dialog {
@@ -1692,7 +1714,7 @@ textarea.input {
   max-width: 520px;
   max-height: 100%;
   overflow-y: auto;
-  background: var(--card);
+  background: var(--surface);
   border: 2px solid var(--ink);
   border-radius: 24px;
   box-shadow: 8px 8px 0 var(--ink);
@@ -1719,7 +1741,7 @@ textarea.input {
 }
 
 .modal__close:hover {
-  background: var(--sage);
+  background: var(--mist);
 }
 
 .modal__dialog .kicker {
@@ -1756,7 +1778,7 @@ textarea.input {
   margin-top: 10px;
   font-size: 14px;
   font-weight: 700;
-  color: var(--terracotta);
+  color: var(--primary);
 }
 
 .modal__submit {
@@ -1767,10 +1789,10 @@ textarea.input {
   width: 100%;
   margin-top: 20px;
   padding: 15px 24px;
-  border: 0;
+  border: 2px solid var(--ink);
   border-radius: 999px;
-  background: var(--terracotta);
-  color: var(--cream);
+  background: var(--sunflower);
+  color: var(--ink);
   font-family: var(--fm-head);
   font-weight: 700;
   font-size: 16px;
@@ -1780,7 +1802,7 @@ textarea.input {
 }
 
 .modal__submit:hover {
-  background: var(--terracotta-dark);
+  background: var(--sunflower-dark);
 }
 
 .modal__progress-label {
@@ -1793,7 +1815,7 @@ textarea.input {
 .modal__progress {
   height: 6px;
   border-radius: 999px;
-  background: rgba(28, 42, 41, 0.12);
+  background: var(--track);
   margin-bottom: 22px;
   overflow: hidden;
 }
@@ -1802,7 +1824,7 @@ textarea.input {
   display: block;
   height: 100%;
   border-radius: 999px;
-  background: var(--terracotta);
+  background: var(--primary);
   transition: width 260ms var(--ease);
 }
 
@@ -1834,7 +1856,7 @@ textarea.input {
 }
 
 .modal__back:hover {
-  color: var(--teal-deep);
+  color: var(--sea-ink);
 }
 
 .modal__done-actions {
@@ -1863,36 +1885,7 @@ textarea.input {
 
 .footer__brand {
   display: flex;
-  align-items: center;
-  gap: 12px;
   margin-bottom: 16px;
-  color: var(--ink);
-}
-
-.coin {
-  width: 44px;
-  height: 44px;
-  flex: none;
-  border-radius: 999px;
-  background: var(--terracotta);
-  color: var(--cream);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--fm-slab);
-  font-size: 17px;
-  letter-spacing: -0.04em;
-  box-shadow: 3px 3px 0 var(--ink);
-}
-
-.footer__wordmark {
-  font-family: var(--fm-slab);
-  font-size: 17px;
-  letter-spacing: -0.01em;
-}
-
-.footer__wordmark span {
-  box-shadow: inset 0 -7px 0 var(--yellow);
 }
 
 .footer__tagline {
@@ -1916,7 +1909,7 @@ textarea.input {
 }
 
 .footer__links a:hover {
-  color: var(--teal-deep);
+  color: var(--sea-ink);
 }
 
 .footer__cta {
@@ -1936,7 +1929,7 @@ textarea.input {
 }
 
 .footer__email:hover {
-  color: var(--teal-deep);
+  color: var(--sea-ink);
 }
 
 .footer__email svg {

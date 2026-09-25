@@ -3,10 +3,10 @@ import { Alfa_Slab_One, Lato, Libre_Franklin, Montserrat } from "next/font/googl
 import "./globals.css";
 import { site } from "@/content";
 
-/* The v2 design system's four faces (all Google Fonts, OFL), self-hosted by
+/* The v4 design system's four faces (all Google Fonts, OFL), self-hosted by
    next/font and subset to latin:
-   FM Slab  = Alfa Slab One 400   (logo, numerals, quote marks)
-   FM Head  = Montserrat 600/700/800 (headings, nav, buttons)
+   FM Slab  = Alfa Slab One 400   (numerals and quote marks only)
+   FM Head  = Montserrat 600/700/800 (headings, nav, buttons, logo wordmark)
    FM Body  = Lato 400/700        (body copy)
    FM Label = Libre Franklin 600  (uppercase kickers and labels) */
 const slab = Alfa_Slab_One({
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "light",
-  themeColor: "#f0eae1",
+  themeColor: "#f5f6f3",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
