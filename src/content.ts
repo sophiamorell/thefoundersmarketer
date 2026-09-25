@@ -292,7 +292,10 @@ export const phases: Phase[] = [
 export const whatYouGet = {
   kicker: "What you get",
   heading: "The tools you keep",
-  intro: "You get quick wins in Step 1, Steps 2 and 3 ship the tools, built on your data, and they stay with you when we're done.",
+  introLines: [
+    "You get quick wins in Step 1.",
+    "Steps 2 and 3 ship the tools, built on your data, and they stay with you when we're done.",
+  ], // each on its own line
   stepLabel: "Built in Step {n}",
   items: [
     {

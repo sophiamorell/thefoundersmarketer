@@ -16,7 +16,11 @@ export function Deliverables() {
       <h2 id="deliverables-heading" className={["h2", mutedClass(whatYouGet.heading)].filter(Boolean).join(" ")}>
         {whatYouGet.heading}
       </h2>
-      <p className={["intro", "tools__intro", mutedClass(whatYouGet.intro)].filter(Boolean).join(" ")}>{whatYouGet.intro}</p>
+      <p className="intro tools__intro">
+        {whatYouGet.introLines.map((line) => (
+          <span key={line}>{line}</span>
+        ))}
+      </p>
       <ul className="tools">
         {whatYouGet.items.map((item) => {
           const hasImage = publicFileExists(item.image);

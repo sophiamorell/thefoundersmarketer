@@ -1349,9 +1349,13 @@ textarea.input {
   margin-bottom: 10px;
 }
 
-/* One line on desktop; wraps on narrower screens. */
+/* Two lines, one per sentence; each wraps on narrower screens. */
 .tools__intro {
   max-width: none;
+}
+
+.tools__intro span {
+  display: block;
 }
 
 @media (max-width: 900px) {
