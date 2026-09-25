@@ -1,4 +1,4 @@
-/** Opening the "Talk to Sophie" contact popup from anywhere on the page. */
+/** Opening the "Let's talk" contact popup from anywhere on the page. */
 
 export const CONTACT_OPEN_EVENT = "contact:open";
 

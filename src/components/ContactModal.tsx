@@ -7,7 +7,7 @@ import { useDialog } from "@/lib/dialog";
 import { postForm } from "@/lib/forms";
 
 /**
- * The "Talk to Sophie" popup, opened by openContact() (the bundle row's
+ * The "Let's talk" popup, opened by openContact() (the bundle row's
  * button). Name, work email, company and a free-text note, posted to the
  * Netlify "contact" form. Required and email checks run on submit and show
  * inline under each field; an error clears as soon as that field changes.
